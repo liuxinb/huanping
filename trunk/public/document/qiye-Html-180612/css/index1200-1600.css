@@ -1,0 +1,74 @@
+.phone {
+    width: 250px;
+    height: 36px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 2px;
+    margin-top: 18px;
+    display: flex;
+}
+.register_e>a>button {
+    width: 250px;
+    height: 36px;
+    background: rgba(54, 187, 88, 1);
+    border-radius: 2px;
+    border: 0px;
+    margin-top: 10px;
+    text-align: center;
+    line-height: 36px;
+    color: white;
+}
+.register {
+    width: 430px;
+    height: 323px;
+    background-image: url(../img/dlbg.png);
+    display: flex;
+    margin-left: 54%;
+    padding: 30px;
+    margin-top: 57px;
+}
+.banner_left_img_i>li {
+    width: 374px;
+    height: 321px;
+}
+#content_buttom>div {
+    width: 170px;
+    height: 348px;
+    background: white;
+    margin-top: 100px;
+}
+.Profile {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    position: relative;
+    left: 10px;
+    top: -75px;
+}
+.tree_img {
+    width: 104px;
+    height: 85px;
+    margin: 46px 107px;
+}
+#tree_actice {
+    width: 282px;
+    padding: 0 20px;
+    height: 300px;
+    margin: 0 auto;
+}
+#tree_actice>ul>li {
+    width: calc(100% - 20px );
+    padding: 0px 10px 0px 20px;
+    font-size: 14px;
+    font-family: MicrosoftYaHeiUI;
+    color: rgba(51, 51, 51, 1);
+    line-height: 35px;
+}
+.teacher_t {
+    text-align: left;
+    padding: 0px 15px 0px 15px;
+    font-size: 14px;
+    font-family: MicrosoftYaHeiUI-Bold;
+    color: rgba(51, 51, 51, 1);
+    position: relative;
+    top: -35px;
+}

@@ -1,0 +1,117 @@
+<div class="formBox">
+	<div id="setting-profile" class="setting-wrap setting-profile">
+		<div class="common-title">
+			个人信息
+			<a class="pull-right js-edit-info dialogs" id="aedit" data-toggle="click" data-target="#bianji" data-mask="1" data-width="500px"><i class="icon-pencil"></i> 编辑</a>
+		</div>
+		<div class="line"></div>
+		<div class="info-wapper">
+			<div class="info-box clearfix">
+				<label class="pull-left">手机号</label>
+				<div class="pull-left">
+					{$data.phone}
+				</div>
+			</div>
+			<div class="info-box clearfix">
+				<label class="pull-left">姓名</label>
+				<div class="pull-left">{empty name="$data.name"}请设置用户名{else}{$data.name}{/empty}</div>
+			</div>
+			<div class="info-box clearfix">
+				<label class="pull-left">身份证号</label>
+				<div class="pull-left">{empty name="$data.idnumber"}请设置身份证号{else}{$data.idnumber}{/empty}</div>
+			</div>
+			<div class="info-box clearfix">
+				<label class="pull-left">院校</label>
+				<div class="pull-left">
+					{empty name="$data.school_name"}请设置院校信息{else}{$data.school_name}{/empty}</div>
+			</div>
+			<div class="info-box clearfix">
+				<label class="pull-left">专业</label>
+				<div class="pull-left">
+					{empty name="$data.subject_name"}请设置专业信息{else}{$data.subject_name}{/empty}</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<div id="bianji">
+	<div class="dialog">
+		<div class="dialog-head">
+			<span class="close rotate-hover"></span><strong>编辑个人信息</strong>
+		</div>
+		<div class="dialog-body">
+			<form class="xiugaixueyuan">
+				<div><span>手机号码：</span><span>{$data.phone}</span></div>
+				<div><span>姓名：</span><input type="text" name="name" class="input" placeholder="请填写姓名" value="{notempty name="$data.name"}{$data.name}{/notempty}" /></div>
+				<div><span>身份证号：</span><input type="text" name="idnumber" class="input" placeholder="请填写身份证" {notempty name="$data.idnumber"} value="{$data.idnumber}"{/notempty} /></div>
+				<div><span>院校：</span>
+					{notempty name="$data.school_name"}
+						<span style="width: auto;">{$data.school_name}</span>
+					{else}
+						<select name="enterprise_id" id="school" style="width: 250px;height: 33px" onchange="sChange();">
+							<option value="">请选择院校</option>
+							{volist name="$data.allSchool" id="vo"}
+							<option value="{$vo.id}">{$vo.academy_name}</option>
+							{/volist}
+						</select>
+					{/notempty}
+				</div>
+				<div><span>专业：</span>
+                        {notempty name="$data.subject_name"}
+							<span style="width: auto;">{$data.subject_name}</span>
+						{else}
+							<select name="subjects_id" style="width: 250px;height: 33px" id="zhuanye">
+								<option value="">请选择专业</option>
+							</select>
+                        {/notempty}
+                </div>
+			</form>
+		</div>
+		<div class="dialog-foot">
+			<button class="button dialog-close">
+				取消</button>
+			<button class="button bg-main" id="submit">
+				确认</button>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/js/jquery-2.2.4.min.js"></script>
+<script src="__PUBLIC__/js/common/extensions.js"></script>
+<script>
+	$("#aedit").click(function(){
+        $(".dialog").center();
+	});
+    function sChange(){
+        var school_id = $("#school").val();
+        $.post('/own/index/getSubject',{'school_id':school_id},function (data) {
+            $('#zhuanye').empty();
+            $.each(data,function (index,item) {
+                $('#zhuanye').append('<option value='+item.id+'>'+item.academy_name+'</option>');
+            })
+        });
+    }
+    $(function () {
+        $('#submit').on('click',function () {
+            var d = {};
+            var t = $('.xiugaixueyuan').serializeArray();
+            $.each(t, function () {
+                d[this.name] = this.value;
+            });
+
+            $.post('/own/index/saveOwnMessage',d,function (res) {
+				if (res.code === 1){
+                    alert("修改成功", {
+                        callback: function () {
+                            location.href = "/own";
+                        }
+                    });
+				}else if(res.code === -1){
+                    alert(res.message);
+				}else{
+                    location.href = "/own";
+                }
+            })
+        });
+    });
+</script>

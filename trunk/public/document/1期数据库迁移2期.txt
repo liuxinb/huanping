@@ -1,0 +1,37 @@
+hp_admin 直接使用2期数据
+hp_auth_group 直接使用2期数据
+hp_auth_group_access 直接使用2期数据
+hp_auth_rule 直接使用2期数据
+hp_certificate 直接使用2期数据
+hp_enterprise_order 保留1期数据，删除status字段
+hp_evaluation 保留1期数据
+hp_exam  直接使用2期数据，新增
+hp_firm_hope 直接使用2期数据(添加create_time)
+hp_firmsign 直接使用1期数据(删除phone)
+hp_firmsign_survey 直接使用2期数据
+hp_flv_category 直接使用2期数据
+hp_flv_movie 直接使用2期数据（添加path字段替换1期表flv_picture;添加movie_url字段替换1期表flv_movie_url）
+admin_flv_picture 删除表
+admin_flv_movie_url 删除表
+hp_invoice 直接使用2期数据
+hp_message 直接使用2期数据
+hp_notice 删除表（发票表已存在：hp_invoice)
+hp_opinion  直接使用1期数据
+hp_order_order 删除表（个人订单表，暂时不用）
+hp_order_pay  直接使用1期数据
+hp_plug_list  直接使用2期数据（plug_id => id）
+admin_powers 删除表（企业菜单表）
+hp_record  直接使用1期数据
+admin_relation 删除表（企业角色表）
+hp_tea_teacher 直接使用1期数据
+hp_test_base 直接使用1期数据
+hp_train 直接使用2期数据，新增
+hp_user 直接使用1期数据，加3个字段（create_time、update_time、in_time=1期user_detail表的create_time）
+hp_user_detail 直接使用1期数据(删除wechat、qq)
+hp_user_plan(直接使用1期数据:(1)原来的所有cid改为null,pid改为1(2)添加总进度记录：计算每个人（group）的总进度sum(complete) * 100 / 26)
+hp_version 直接使用1期数据
+admin_users 直接使用2期数据(改名为：hp_admin）
+hp_videoplayer 直接使用2期数据，新增
+
+
+1期30表，2期27表（新增3个删除6个）

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link rel="stylesheet" type="text/css" href="css/xiangqingmydangan.css"/>
+	<script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script class="resources library" src="js/area.js" type="text/javascript"></script>
+	<script src="js/mydangan.js" type="text/javascript" charset="utf-8"></script>
+	<title>我的档案</title>
+</head>
+<body>
+	<div class="content">
+		<div class="content_header_red">
+			<div class="content_header_red_text">企业信息</div>
+			
+		</div>
+		<div class="content_jiben">
+			<div class="content_jiben_tou">企业基本信息</div>
+			<div class="content_jiben_main">
+				<div class="signup_item signup_item_one">
+					<div class="signup_item_left">企业名称</div>
+					<div class="signup_item_right"> 
+						<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+						<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+					</div>
+				</div>
+			</div>
+			<div class="info">
+				<div class="info_xuanze">
+				<select id="s_province" name="s_province"></select>  
+			    <select id="s_city" name="s_city" ></select>  
+			    <select id="s_county" name="s_county"></select>
+			    <script type="text/javascript">_init_area();</script>
+			    </div>
+			</div>
+			<div class="signup_item signup_item_one">
+				<div class="signup_item_left">办公地址</div>
+				<div class="signup_item_right"> 
+					<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+					<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+				</div>
+			</div>
+			<div class="signup_item signup_item_one">
+				<div class="signup_item_left">注册地址</div>
+				<div class="signup_item_right"> 
+					<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+					<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+				</div>
+			</div>
+			<div class="signup_item signup_item_one">
+				<div class="signup_item_left">注册地址</div>
+				<div class="signup_item_textarea">
+					<textarea  id="anan" onmousedown="(event,this)">					
+					</textarea>
+				</div>
+			</div>
+			<div class="signup_item signup_item_one">
+				<div class="signup_item_left">纳税人识别号</div>
+				<div class="signup_item_right"> 
+					<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+					<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+				</div>
+			</div>
+		</div>
+		<!--<div class="content_lianxiren">
+			<div class="content_jiben">
+				<div class="content_jiben_tou">企业发票信息</div>
+				<div class="content_jiben_main">
+					<div class="signup_item signup_item_one">
+						<div class="signup_item_left">发票名称</div>
+						<div class="signup_item_right"> 
+							<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+							<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+						</div>
+					</div>
+				</div>
+				
+				<div class="signup_item signup_item_one">
+					<div class="signup_item_left">纳税人识别号</div>
+					<div class="signup_item_right"> 
+						<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+						<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+					</div>
+				</div>
+				<div class="signup_item signup_item_one">
+					<div class="signup_item_left">地址电话</div>
+					<div class="signup_item_right"> 
+						<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+						<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+					</div>
+				</div>
+				<div class="signup_item signup_item_one">
+					<div class="signup_item_left">开户行及账号</div>
+					<div class="signup_item_right"> 
+						<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+						<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+					</div>
+				</div>
+			
+			</div>
+		</div>-->
+		<div class="content_lianxiren">
+			<div class="content_jiben">
+				<div class="content_jiben_tou">企业联系人信息</div>
+				<div class="content_jiben_main">
+					<div class="signup_item signup_item_one">
+						<div class="signup_item_left">姓名</div>
+						<div class="signup_item_right"> 
+							<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+							<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+						</div>
+					</div>
+				</div>
+				
+				<div class="signup_item signup_item_one">
+					<div class="signup_item_left">手机</div>
+					<div class="signup_item_right"> 
+						<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+						<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+					</div>
+				</div>
+				<div class="signup_item signup_item_one">
+					<div class="signup_item_left">邮箱</div>
+					<div class="signup_item_right"> 
+						<div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+						<input type="text" class="signup_item_input" name="mobile" data-default=""> 
+					</div>
+				</div>
+			
+			</div>
+		</div>
+		<div class="content_zhengjian">
+			<div class="content_jiben">
+				<div class="content_jiben_tou">上传证件</div>
+				<div class="content_jiben_tous">
+					
+						<div class="con4">
+							<canvas id="cvs" class="cvs1" width="160" height="90"></canvas>
+							<span class="btn upload">法人身份证正面<input type="file" class="upload_pic" id="upload" /></span>
+						</div>
+					
+						<div class="con4">
+							<canvas id="cvs" class="cvs2" width="160" height="90"></canvas>
+							<span class="btn upload">法人身份证反面<input type="file" class="upload_pic" id="upload" /></span>
+						</div>
+					
+						<div class="con4">
+							<canvas id="cvs" class="cvs3" width="160" height="90"></canvas>
+							<span class="btn upload">营业执照<input type="file" class="upload_pic" id="upload" /></span>
+						</div>
+					</div>
+				
+			</div>
+		</div>
+		<!--<div class="nav1_left_tijiao1"> 
+			<div class="nav1_left_tijiao">确认提交</div>
+		</div>-->
+		
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+var Gid  = document.getElementById ;
+
+var showArea = function(){
+
+	Gid('show').innerHTML = "<h3>省" + Gid('s_province').value + " - 市" + 	
+
+	Gid('s_city').value + " - 县/区" + 
+
+	Gid('s_county').value + "</h3>"
+
+							}
+
+</script>
+
+ 

@@ -1,0 +1,83 @@
+{extend name="layout"}
+{block name="title"}我要报名{/block}
+{block name="css"}
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+
+    .tab .tab-nav .active a {
+        color: #fff;
+        background: #0a8;
+    }
+    .img_box img{
+        width: 200px;
+        height: 120px;
+    }
+
+
+</style>
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/two/js/pintuer.js"></script>
+<script src="__PUBLIC__/two/js/zui.min.js"></script>
+<script src="__PUBLIC__/two/js/icheck.js"></script>
+<script type="text/javascript">
+    $(".ajax-linkk").each(function() {
+        $(this).click(function() {
+            var diZhi = $(this).attr("rel");
+            htmlobj = $.ajax({
+                url: diZhi,
+                async: false
+            });
+            $(".ajax-Box").html(htmlobj.responseText);
+        });
+    });
+
+    $(function() {
+        $(".batchenroll").click(function () {
+            var _nums = $(this).attr("category_id");
+            var diZhi = $(this).attr("rel");
+            location.href = diZhi+"?category="+_nums;
+            // alert(_nums);
+            //document.location.href="/addOrder?category_id="+_nums;
+        })
+    });
+</script>
+{/block}
+{block name="content"}
+<div class="r_main">
+    <div class="ad_co_Box_warp">
+        <div class="ad_co_Box">
+            <div class="content">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>报名信息</th>
+                        <th>名称</th>
+                        <th>标题</th>
+                        <th>价格</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="dingdandfk">
+                    {volist name="signupList" id="vo"}
+                    <tr>
+                        <td class="img_box"><img alt="暂无图片" src="{$vo.bag_img}"/></td>
+                        <td style="line-height:108px;">{$vo.name}</td>
+                        <td style="line-height:108px;">{$vo.title}</td>
+                        <td style="line-height:108px;"><span class="text-red">￥{$vo.sign_price}</span></td>
+
+                        <td style="line-height:108px;">
+                            <button type="button" class="button bg-gray button-small yigoumai batchenroll" style="background-color:#0a8;" category_id="{$vo.id}"  rel="allbatch">批量报名</button>
+                        </td>
+                    </tr>
+                    {/volist}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

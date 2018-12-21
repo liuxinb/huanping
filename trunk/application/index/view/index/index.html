@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/header.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/dist/aos.css"/>
+
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/index.js"></script>
+
+    <link rel="stylesheet" href="__PUBLIC__/css/swiper.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/demo.css">
+    <link rel="stylesheet" media="only screen and (min-width: 900px) and (max-width: 1600px)"
+          href="__PUBLIC__/css/index1200-1600.css">
+
+    <script src="__PUBLIC__/js/swiper.min.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/js/common/alertBox/alertBox.css">
+    <script src="__PUBLIC__/js/common/alertBox/alertBox.js"></script>
+
+    <title>环保Link网络培训系统</title>
+    <style>
+
+        .yanzhengma {
+            white-space: nowrap;
+
+        }
+
+        .yzmtext {
+            margin-top: 18px;
+            /*width: 127px;*/
+            width: 120px;
+            height: 42px;
+        }
+
+        .yzmimg {
+            width: 118px;
+            height: 46px;
+            vertical-align: middle;
+        }
+
+        .ryzmimg {
+            vertical-align: middle;
+        }
+
+        .btn-white:hover {
+            background-color: #dedede;
+        }
+
+        .btn:hover {
+            color: #FFF;
+            text-decoration: none;
+            background-color: #f73500;
+        }
+
+        .btn-weak {
+            font-weight: 300;
+            font-size: 10px;
+            padding: 0 5px;
+        }
+
+        .btn-white {
+            color: #404040;
+            background-color: #f7f7f7;
+            border: 1px solid #d0d0d0;
+        }
+
+        .btn {
+            /*width: 130px;*/
+            margin-left: 20px;
+            display: inline-block;
+            zoom: 1;
+            height: 36px;
+            line-height: 36px;
+            padding: 0 20px;
+            color: #FFF;
+            font-weight: 100;
+            font-size: 14px;
+            text-align: center;
+            background: #ff4001;
+            border: 0;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .tree_btn {
+            width: 100%;
+        }
+
+        .tree_btn div {
+            float: left;
+            width: 83px;
+            padding-top: 10px;
+            color: white;
+        }
+    </style>
+    <!--<link rel="stylesheet" href="../../../../public/static/css/index.css">-->
+</head>
+
+<body>
+<div class="container">
+    <header>
+        <div class="header1" id="bignav">
+            <div class="nav1">
+                <div>
+                    欢迎来到环保Link网络培训系统！
+                </div>
+                <div>
+                    客服电话：010-57137487
+                </div>
+            </div>
+        </div>
+        <div class="nav">
+
+            <div class="nav_a">
+                <div id="logo">
+                    <img src="__PUBLIC__/img/index/logo.png"/>
+                </div>
+                <div class="nav_y">
+                    <nav>
+                        <ul class="nav_s">
+                            <li class="index_sy">首页</li>
+                            <li onclick="location.href='/#content_r';">课程展示</li>
+                            <li onclick="location.href='#teachers';">专家介绍</li>
+                            <li onclick="alert('暂未开通！');">在线论坛</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+        </div>
+    </header>
+    <div class="banner">
+        <div class="flexslider">
+            <ul class="slides">
+                {foreach $arrPlugList as $key=>$v}
+                <li><img src="{$v.plug_pic}" style="width:100%;height:100%;"/></li>
+                {/foreach}
+            </ul>
+        </div>
+
+        <div class="banner_left">
+            <img src="__PUBLIC__/img/index/dianhua.png"/>
+        </div>
+
+        {if !(\session('rootId'))}
+        <!--登录框开始-->
+        <div class="register">
+            <div>
+                <div class="register_top tab_t">
+                    <ul>
+                        <li class="selected">帐号登录</li>
+                        <!--<li>扫码登录</li>-->
+                    </ul>
+                </div>
+                <div class="tab_c">
+                    <ul>
+                        <li>
+                            <div class="phone">
+                                <div><img src="__PUBLIC__/img/index/phone.png"/></div>
+                                <input type="text" name="email" id="emailAjax" placeholder="请输入手机号/邮箱" value="">
+                            </div>
+                            <div class="phone">
+                                <div><img src="__PUBLIC__/img/index/yanzhengma.png"/></div>
+                                <input type="password" name="password" id="passwordAjax" placeholder="请输入密码" value="">
+                            </div>
+                            <!--验证码-->
+                            <div class="phone">
+                                <div><img src="__PUBLIC__/img/index/yanzhengma.png"/></div>
+                                <input type="text" id="yzm" placeholder="验证码" name="code" class="yzmInput">
+                                <img id="verifycode_imgq" title="点击更换" src="/captcha.html?seed=<?=mt_rand()?>"
+                                     onclick="this.src='{:captcha_src()}?seed='+Math.random()">
+                            </div>
+                            <div class="tree_btn">
+                                <div class="radio icheck-primary">
+                                    <input name="type" id="21" value="1" type="radio">
+                                    <label for="21">企业</label>
+                                </div>
+                                <div class="radio icheck-primary">
+                                    <input name="type" id="22" value="2" type="radio">
+                                    <label for="22">院校</label>
+                                </div>
+                                <div class="radio icheck-primary">
+                                    <input name="type" id="23" value="3" type="radio">
+                                    <label for="23">学员</label>
+                                </div>
+                            </div>
+
+                            <div class="password_b">
+                                <div><input name="" type="checkbox" id="checkPost" value="" class="danxuan"/>&nbsp;&nbsp;记住我
+                                </div>
+                                <div class="register_text">
+                                    <a id="ClickMe" style="cursor: pointer;">还没有账号？立即注册</a>
+                                </div>
+                            </div>
+
+                            <div class="register_e">
+                                <a href="" onclick="return false">
+                                    <button onclick="ajaxPost()">登录</button>
+                                </a>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div id="apper">
+                <img style="height: 149px; width: 147px;" src="__PUBLIC__/img/index/apper.png"/> 扫一扫下载学习APP
+            </div>
+        </div>
+        <div id="goodcover"></div>
+
+        <div id="code" style="height: 450px">
+            <div class="close1">
+                <a href="javascript:void(0)" id="closebt"><img src="__PUBLIC__/img/index/close.gif"></a>
+            </div>
+            <div class="goodtxt">
+                <div class="goodtxt_zhuce tab_ts">
+                    <ul>
+                        <li class="selecteds">企业</li>
+                        <li>院校</li>
+                        <li>学员</li>
+                    </ul>
+                </div>
+                <div class="tab_cs">
+                    <ul>
+                        <li>
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>*&nbsp;</span>账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号
+                                </div>
+                                <div class="goodtxt_zhuce_main_input"><input type="text" class="reg_email"
+                                                                             placeholder="请输入您的手机号" value=""></div>
+                            </div>
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>*&nbsp;</span>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码
+                                </div>
+                                <div class="goodtxt_zhuce_main_input"><input type="password" class="reg_password"
+                                                                             placeholder="请输入您的密码" value=""></div>
+                            </div>
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>*&nbsp;</span>确认密码</div>
+                                <div class="goodtxt_zhuce_main_input"><input type="password"
+                                                                             class="reg_password_confirm"
+                                                                             placeholder="请再次输入您的密码" value=""></div>
+                            </div>
+                            <!--验证码-->
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>* </span>验&nbsp;&nbsp;证&nbsp;&nbsp;码</div>
+                                <div class="goodtxt_zhuce_main_input">
+                                    <input type="text" class="" placeholder="请输入验证码" id="reginyzm" name="yzm"
+                                           style="width:100px;"></div>
+                                <button type="button" class="btn btn-white btn-weak tsl"
+                                        data-phase-id="r_p_getCheckcodeTip"
+                                        id="J_BtnMobileCode" data-spm-anchor-id="a2145.7268393.0.i9.f9aa5d7cdDrCw6">
+                                    获取验证码
+                                </button>
+                                <button type="button" style="display:none ;background-color: #ccc;"
+                                        class="btn btn-white btn-weak tsl" data-phase-id="r_p_getCheckcodeTip"
+                                        id="timer"
+                                        data-spm-anchor-id="a2145.7268393.0.i9.f9aa5d7cdDrCw6">获取验证码（59）
+                                </button>
+                            </div>
+                            <div class="goodtxt_zhuce_main_xy"><input name="" id="checkPosts" type="checkbox" value=""
+                                                                      class="danxuan"/>&nbsp;&nbsp;我已阅读并同意《<a
+                                    style="color: red;text-decoration: underline;" href="/cooper"
+                                    target="_blank">网站注册协议</a>》
+                            </div>
+                            <div class="register_e goodtxt_zhuce_btn">
+                                <a href="#">
+                                    <button onclick="firmPost()">注册</button>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="hide"><!--院校注册-->
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>*&nbsp;</span>账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号
+                                </div>
+                                <div class="goodtxt_zhuce_main_input">
+                                    <input type="text" class="academyreg_email" placeholder="请输入您的手机号" value=""></div>
+                            </div>
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>*&nbsp;</span>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码
+                                </div>
+                                <div class="goodtxt_zhuce_main_input"><input type="password" class="academyreg_password"
+                                                                             placeholder="请输入您的密码" value=""></div>
+                            </div>
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>*&nbsp;</span>确认密码</div>
+                                <div class="goodtxt_zhuce_main_input"><input type="password"
+                                                                             class="academyreg_password_confirm"
+                                                                             placeholder="请再次输入您的密码" value=""></div>
+                            </div>
+                            <!--验证码-->
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>* </span>验&nbsp;&nbsp;证&nbsp;&nbsp;码</div>
+                                <div class="goodtxt_zhuce_main_input">
+                                    <input type="text" class="" placeholder="请输入验证码" id="academyreginyzm" name="yzm"
+                                           style="width:100px;"></div>
+                                <button type="button" class="btn btn-white btn-weak tsl"
+                                        data-phase-id="r_p_getCheckcodeTip"
+                                        id="academyJ_BtnMobileCode"
+                                        data-spm-anchor-id="a2145.7268393.0.i9.f9aa5d7cdDrCw6">获取验证码
+                                </button>
+                                <button type="button" style="display:none ;background-color: #ccc;"
+                                        class="btn btn-white btn-weak tsl" data-phase-id="r_p_getCheckcodeTip"
+                                        id="academytimer"
+                                        data-spm-anchor-id="a2145.7268393.0.i9.f9aa5d7cdDrCw6">获取验证码（59）
+                                </button>
+                            </div>
+                            <div class="goodtxt_zhuce_main_xy"><input name="" id="academycheckPosts" type="checkbox"
+                                                                      value=""
+                                                                      class="danxuan"/>&nbsp;&nbsp;我已阅读并同意《<a
+                                    style="color: red;text-decoration: underline;" href="/cooper"
+                                    target="_blank">网站注册协议</a>》
+                            </div>
+                            <div class="register_e goodtxt_zhuce_btn">
+                                <a href="#">
+                                    <button onclick="academy()">注册</button>
+                                </a>
+                            </div>
+                        </li>
+                        <!--学员注册-->
+                        <li class="hide">
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>*&nbsp;</span>账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号
+                                </div>
+                                <div class="goodtxt_zhuce_main_input">
+                                    <input type="text" class="ownreg_email" placeholder="请输入您的手机号" value=""></div>
+                            </div>
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>*&nbsp;</span>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码
+                                </div>
+                                <div class="goodtxt_zhuce_main_input"><input type="password" class="ownreg_password"
+                                                                             placeholder="请输入您的密码" value=""></div>
+                            </div>
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>*&nbsp;</span>确认密码</div>
+                                <div class="goodtxt_zhuce_main_input"><input type="password"
+                                                                             class="ownreg_password_confirm"
+                                                                             placeholder="请再次输入您的密码" value=""></div>
+                            </div>
+                            <!--验证码-->
+                            <div class="goodtxt_zhuce_main">
+                                <div class="goodtxt_zhuce_main_zh"><span>* </span>验&nbsp;&nbsp;证&nbsp;&nbsp;码</div>
+                                <div class="goodtxt_zhuce_main_input">
+                                    <input type="text" class="" placeholder="请输入验证码" id="owncode" name="yzm"
+                                           style="width:100px;"></div>
+                                <button type="button" class="btn btn-white btn-weak tsl"
+                                        data-phase-id="r_p_getCheckcodeTip"
+                                        id="getowncode" data-spm-anchor-id="a2145.7268393.0.i9.f9aa5d7cdDrCw6">获取验证码
+                                </button>
+                                <button type="button" style="display:none ;background-color: #ccc;"
+                                        class="btn btn-white btn-weak tsl" data-phase-id="r_p_getCheckcodeTip"
+                                        id="owntimer"
+                                        data-spm-anchor-id="a2145.7268393.0.i9.f9aa5d7cdDrCw6">获取验证码（59）
+                                </button>
+                            </div>
+                            <div class="goodtxt_zhuce_main_xy"><input name="" id="owncheckPosts" type="checkbox"
+                                                                      value=""
+                                                                      class="danxuan"/>&nbsp;&nbsp;我已阅读并同意《<a
+                                    style="color: red;text-decoration: underline;" href="/cooper"
+                                    target="_blank">网站注册协议</a>》
+                            </div>
+                            <div class="register_e goodtxt_zhuce_btn">
+                                <a href="#">
+                                    <button onclick="ownregister()">注册</button>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        {/if}
+
+        {if (\session('rootId'))}
+
+        <div class="register">
+            <div>
+                <ul class="logined">
+                    <li><h2>登录成功:<br/><span>{$arrEmail.email}</span></h2></li>
+                    <li><a href="/qiyes" target="_self">后台管理</a></li>
+                    <li><a href="javascript:void(0);" id="logout">退出登录</a></li>
+                </ul>
+            </div>
+
+            <div id="apper">
+                <img src="__PUBLIC__/img/index/apper.png"/> 扫一扫下载学习APP
+            </div>
+        </div>
+
+    </div>
+
+    {/if}
+
+    <!--登录框结束-->
+    <!--课程展示开始-->
+</div>
+<div class="content">
+    <div class="CourseToShow">
+        <div class="content_left_1">&nbsp;&nbsp;课程展示</div>
+    </div>
+    {foreach $parentArray as $key=>$parent}
+    <div class="content_r" id="content_r">
+        <!--<p aos="fade-up" aos-offset="100" aos-easing="ease-out">企业年收费仅<span>{$parent.bag_price}</span>元！</p>-->
+        <!--<p aos="fade-up" aos-offset="120" aos-easing="ease-out">不限学习人数、不限学习时间、不限学习次数、无线畅学！</p>-->
+        <!--<div aos="fade-up" aos-offset="140" aos-easing="ease-out" class="content_r_shopBtn">-->
+
+        <!--<a href="/addOrder?category_id={$parent.id}">立即购买</a>-->
+
+
+        <div aos="fade-up" aos-offset="160" aos-easing="ease-out"
+             style="font-size: 30px;margin: 0 auto;width: 1010px;border: 1px solid #000;border-radius: 30px;padding: 4px;font-weight: 700;">
+            <div style="float: left;position: relative;width: 760px;margin-left: 55px;">
+                <span>"环保Link"第一期课程：{$parent.title}</span>
+                <img style="position: absolute;right: 20px;top: -47px;" width="90" height="110"
+                     src="__PUBLIC__/img/index/hot.png"/>
+            </div>
+            <span class="">销售中</span>
+        </div>
+    </div>
+</div>
+<!--课程展示页结束-->
+<!--专家介绍开始-->
+<div class="content_buttom" id="teachers">
+    <div aos="fade-up" aos-offset="200" aos-easing="ease-out" id="certify" class="sect10">
+        <div class="container-carousel">
+            <div class="community-carousel">
+
+                <div class="swiper-container">
+                    <div class="swiper-wrapper js_animeSwiper">
+
+                        {foreach $parent.childs as $ckey=>$child}
+                        <div class="swiper-slide">
+                            <div class="slide-holder">
+                                <div class="ava">
+                                    <img src="{$child.bag_img}" alt="" class="img-responsive">
+                                </div>
+                                <div class="author-wrap">
+                                    <div id="author-wrap-title">{$child.title}<span>({$child.hours} 课时)</span></div>
+                                    <div id="author-wrap-artile">
+                                        <p>专家：{$child.teacher_name}</p>
+                                        <p>单位：{$child.qg}</p>
+                                        <p>职位：{$child.referral}</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        {/foreach}
+
+
+                    </div>
+                </div>
+                <div class="swiper-btn-next"></div>
+                <div class="swiper-btn-prev"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="zu"></div>-->
+{/foreach}
+<!--专家介绍结束-->
+<!--优势介绍开始-->
+<div class="container_main">
+
+    <div class="teacher_main" aos="fade-up" aos-offset="200" aos-easing="ease-out">
+        <ul>
+            <li>
+                <div class="ZhuanJiaMainImg"><img src="__PUBLIC__/img/index/zhu1.jpg"/></div>
+                <div class="ZhuanJiaMainTop">
+                    <h1>李鱼</h1>
+                    <p>华北电力大学能源与环境研究中心教授、博士生导师</p>
+                    <div class="ZhuanJiaMain">
+                        吉林大学教授、博士生导师，主要从事环境化学及环境规划与评价研究，于2006年12月获得国家人事部、国家环境保护总局环境影响评价注册工程师资格，原环保部环境工程评估中心专家库专家，现为华北电力大学能源与环境研究中心教授、博士生导师。
+                    </div>
+                </div>
+            </li>
+            <li class="hidebb">
+                <div class="ZhuanJiaMainImg"><img src="__PUBLIC__/img/index/zu2.jpg"/></div>
+                <div class="ZhuanJiaMainTop">
+                    <h1>包存宽</h1>
+                    <p>复旦大学环境科学与工程系教授、博士生导师</p>
+                    <div class="ZhuanJiaMain">
+                        博士，曾任同济大学环境科学与工程学院环境规划学院副教授、责任教授，主要从事战略环境评价与综合决策、生态城市及其规划理论与方法、循环经济与环境经济学等领域的科研教学工作，已发表论文十余篇、出版教材两本、专著两本。现为复旦大学环境科学与工程系教授，博士生导师。
+                    </div>
+                </div>
+            </li>
+            <li class="hidebb">
+                <div class="ZhuanJiaMainImg"><img src="__PUBLIC__/img/index/zu3.jpg"/></div>
+                <div class="ZhuanJiaMainTop">
+                    <h1>胡颖华</h1>
+                    <p>院控专业技术岗位首席研究员</p>
+                    <div class="ZhuanJiaMain">
+                        博士，ERM中国的合伙人，主要负责ERM中国在环境影响评价领域的业务发展。作为国家注册环评工程师及环保部上市核查环境审核员，具有十七年丰富的环境影响评价和管理工作经验。作为前国家环保总局和地市级环保局负责建设项目环境影响评价审批的官员，胡博士具有多年地方及国家级环评文件审批的政府工作经验，非常了解并熟悉环评审批程序，并对各行业领域的建设项目环评审批及竣工验收管理均有较为丰富的经验。
+                    </div>
+                </div>
+            </li>
+            <li class="hidebb">
+                <div class="ZhuanJiaMainImg"><img src="__PUBLIC__/img/index/zu4.jpg"/></div>
+                <div class="ZhuanJiaMainTop">
+                    <h1>李巍</h1>
+                    <p>博士学位、职称教授</p>
+                    <div class="ZhuanJiaMain">博士学位，职称教授。现任北京师范大学环境学院，环境科学、政策与管理系主任，环境影响评价中心副主任。</div>
+                </div>
+            </li>
+            <li class="hidebb">
+                <div class="ZhuanJiaMainImg"><img src="__PUBLIC__/img/index/zu5.jpg"/></div>
+                <div class="ZhuanJiaMainTop">
+                    <h1>辜小安</h1>
+                    <p>院控专业技术岗位首席研究员</p>
+                    <div class="ZhuanJiaMain">
+                        研究员，铁路专业技术带头人，院高端科技创新人才，院控专业技术岗位首席研究员，硕士研究生导师。长期从事铁路、城市轨道交通环境噪声振动基础理论研究、标准制定、高速铁路联调联试环境噪声振动试验方法及环境影响评价技术方法建立等工作，在国内噪声及环保领域具有较深的学术造诣和较高的知名度。
+                    </div>
+                </div>
+            </li>
+
+    </div>
+    <div class="teacher_list" aos="fade-up" aos-offset="200" aos-easing="ease-out">
+        <ul>
+            <li class="tab_tb_left">
+                <div class="zhuanjiaImg clckClass"><img src="__PUBLIC__/img/index/zhu1.jpg"/></div>
+                <h5>李鱼</h5>
+                <p>教授</p>
+            </li>
+            <li>
+                <div class="zhuanjiaImg"><img src="__PUBLIC__/img/index/zu2.jpg"/></div>
+                <h5>包存宽</h5>
+                <p>教授</p>
+            </li>
+            <li>
+                <div class="zhuanjiaImg"><img src="__PUBLIC__/img/index/zu3.jpg"/></div>
+                <h5>胡颖华</h5>
+                <p>高级工程师</p>
+            </li>
+            <li>
+                <div class="zhuanjiaImg"><img src="__PUBLIC__/img/index/zu4.jpg"/></div>
+                <h5>李巍</h5>
+                <p>教授</p>
+            </li>
+            <li>
+                <div class="zhuanjiaImg"><img src="__PUBLIC__/img/index/zu5.jpg"/></div>
+                <h5>辜小安</h5>
+                <p>教授</p>
+            </li>
+
+            <!--<li>会员变更</li>-->
+        </ul>
+    </div>
+</div>
+<!--专家介绍结束-->
+<div class="content_buttom_h">
+    <div class="content_buttom_h_a">
+        <div class="content_left_1">&nbsp;&nbsp;优势介绍</div>
+        <div class="tree">
+            <div aos="fade-right" aos-offset="100" aos-easing="ease-in-sine" class="tree_one">
+                <div class="tree_title">优势一：紧跟政策形势，拨云见日</div>
+                <div class="tree_youshi">
+                    <div id="tree_actice">
+                        环保行业发展迅速，政策形势日新月异，“环保Link”通过对政策趋势的敏锐嗅觉与多年扎根行业的丰厚经验提供政策解读、行业发展形势预判等培训内容，助力企业突破迷雾，为服务机构转型发展赋能。
+                    </div>
+                    <div class="tree_img"><img src="__PUBLIC__/img/index/1.1.png"/></div>
+                </div>
+            </div>
+
+            <div aos="fade-left" aos-offset="100" aos-easing="ease-in-sine" class="tree_two">
+                <div class="tree_title">优势二：凝聚权威行业专家，直击痛点</div>
+                <div class="tree_youshi">
+                    <div id="tree_actice">
+                        “环保Link”凝聚行业内资深权威专家，紧跟行业发展趋势，提供优质、权威、行业急需的培训内容，为行业发展把脉指路，为行业服务人员能力提升赋能。
+                    </div>
+                    <div class="tree_img"><img src="__PUBLIC__/img/index/2.2.png"/></div>
+                </div>
+            </div>
+        </div>
+        <div class="tree" style="margin-top: 30px;">
+            <div aos="fade-right" aos-offset="100" aos-easing="ease-in-sine" class="tree_tree">
+                <div class="tree_title">优势三：APP在线学习方式，便宜便捷</div>
+                <div class="tree_youshi">
+                    <div id="tree_actice">
+                        APP在线培训方式，随时随地畅享学习，节约成本，节省时间！教学课程体系完整，明白的可以快速听，不明白的可以反复听，保障培训效果！学习过程中定时弹题，即时检验学员学习效果保障培训质量！
+                    </div>
+                    <div class="tree_img"><img src="__PUBLIC__/img/index/3.3.png"/></div>
+                </div>
+            </div>
+
+            <div aos="fade-left" aos-offset="100" aos-easing="ease-in-sine" class="tree_four">
+                <div class="tree_title">优势四：培训通过发证，权威可信</div>
+                <div class="tree_youshi">
+                    <div id="tree_actice">
+                        员工培训通过后可获取由环境影响评价行业分会颁发的培训证书。
+                    </div>
+                    <div class="tree_img"><img src="__PUBLIC__/img/index/4.4.png"/></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div>
+        <div class="footer_logo">
+            <img src="__PUBLIC__/img/footer.png">
+        </div>
+        <div class="footer_f">
+            <ul>
+                <li>官方微信</li>
+                <li><img style="width:110px;height:110px;" src="__PUBLIC__/img/foot.png"><img
+                        src="__PUBLIC__/img/foot2.png"></li>
+            </ul>
+        </div>
+
+    </div>
+</footer>
+</div>
+</div>
+</body>
+
+</html>
+<script src="__PUBLIC__/dist/aos.js"></script>
+<script src="__PUBLIC__/js/banner.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+
+    $(function () {
+        var libb = $('.teacher_list ul li');
+        var li_cbb = $('.teacher_main ul li');
+        var ZhuanJiaImg = $('.zhuanjiaImg')
+        libb.click(function () {
+            $(this).addClass('selectedbb').siblings().removeClass('selectedbb');
+            var h = $(this).index();
+            li_cbb.eq(h).show().siblings().hide();
+        });
+    });
+    $('.zhuanjiaImg').bind('click', function () {
+
+        $('.clckClass').removeClass('clckClass');
+        $(this).addClass('clckClass');
+
+    });
+    /*8.28*/
+
+    $(function () {
+        $("#J_BtnMobileCode").click(function () {
+            getyzm();
+        });
+        $("#getowncode").click(function () {
+            getowncode();
+        });
+        $("#academyJ_BtnMobileCode").click(function () {
+            academygetyzm();
+        });
+    });
+    var djsTime = 60;
+
+    function djs() {
+        $("#timer").text("获取验证码(" + djsTime + ")");
+        djsTime--;
+        var myTime = setTimeout("djs()", 1000);
+        if (djsTime <= 0) {
+            window.clearInterval(myTime);
+            $("#J_BtnMobileCode").show();
+            $("#timer").hide();
+        }
+    }
+
+    function lhj() {
+        $("#owntimer").text("获取验证码(" + djsTime + ")");
+        djsTime--;
+        var myTime = setTimeout("lhj()", 1000);
+        if (djsTime <= 0) {
+            window.clearInterval(myTime);
+            $("#getowncode").show();
+            $("#owntimer").hide();
+        }
+    }
+
+    function djss() {
+        $("#academytimer").text("获取验证码(" + djsTime + ")");
+        djsTime--;
+        var myTime = setTimeout("djss()", 1000);
+        if (djsTime <= 0) {
+            window.clearInterval(myTime);
+            $("#academyJ_BtnMobileCode").show();
+            $("#academytimer").hide();
+        }
+    }
+
+    function academygetyzm() {
+        var email = $('.academyreg_email').val();
+        if (email == '') {
+            return alert('请输入您的手机号！');
+        } else {
+            $.ajax({
+                url: '/api/index/sendMessage',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                    'phone': email,
+                },
+                success: function (res) {
+                    if (res.success) {
+                        alert('短信验证码已经发送至你的手机,请注意查收!', {
+                            callback: function () {
+                                $("#academyJ_BtnMobileCode").hide();
+                                $("#academytimer").show();
+                                djsTime = 60;
+                                djss();
+                            }
+                        });
+                    } else {
+                        alert(res.message);
+                    }
+
+                }
+            })
+        }
+    }
+
+    function getowncode() {
+        var email = $('.ownreg_email').val();
+        if (email == '') {
+            return alert('请输入您的手机号！');
+        } else {
+            $.ajax({
+                url: '/api/index/sendMessage',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                    'phone': email,
+                },
+                success: function (res) {
+                    if (res.success) {
+                        alert('短信验证码已经发送至你的手机,请注意查收!', {
+                            callback: function () {
+                                $("#getowncode").hide();
+                                $("#owntimer").show();
+                                djsTime = 60;
+                                lhj();
+                            }
+                        });
+                    } else {
+                        alert(res.message);
+                    }
+
+                }
+            })
+        }
+    }
+
+    function getyzm() {
+        var email = $('.reg_email').val();
+        if (email == '') {
+            return alert('请输入您的手机号！');
+        } else {
+            $.ajax({
+                url: '/api/index/sendMessage',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                    'phone': email,
+                },
+                success: function (res) {
+                    if (res.success) {
+                        alert('短信验证码已经发送至你的手机,请注意查收!', {
+                            callback: function () {
+                                $("#J_BtnMobileCode").hide();
+                                $("#timer").show();
+                                djsTime = 60;
+                                djs();
+                            }
+                        });
+                    } else {
+                        alert(res.message);
+                    }
+
+                }
+            })
+        }
+
+    }
+
+    function ajaxPost() {
+        //选择登录角色
+        var x = document.getElementsByName("type");
+        for (var i = 0; i < x.length; i++) {
+            var flag = false;
+            if (x[i].checked) {
+                flag = true;
+                var type = x[i].value;
+                break;
+            }
+        }
+        if (!flag) {
+            return alert('请选择角色!');
+        }
+        //数据验证
+        var email = $('#emailAjax').val();
+        var password = $('#passwordAjax').val();
+        var yzm = $('#yzm').val();
+        var check = $("#checkPost").is(":checked");
+        if (yzm == '') {
+            return alert('请输入验证码！');
+            $("#verifycode_imgq").click();
+        }
+        if (email == '') {
+            return alert('账号不能为空！');
+            $("#verifycode_imgq").click();
+        } else if (password == '') {
+            return alert('密码不能为空！');
+            $("#verifycode_imgq").click();
+        }
+        if (check === true) {
+            check = 1;
+        } else {
+            check = '';
+        }
+        $.ajax({
+            url: '/login',
+            dataType: 'json',
+            type: 'post',
+            data: {
+                'yzm': yzm,
+                'email': email,
+                'password': password,
+                'check': check,
+                'type': type
+            },
+            success: function (res) {
+                if (res == -77) {
+                    alert("请扫一扫右侧二维码下载学习APP！", {
+                        callback: function () {
+                            window.close();
+                        }
+                    });
+                } else if (res == -3) {
+                    $("#verifycode_imgq").click();
+                    alert('验证码错误', {
+                            callback: function () {
+                                $("#verifycode_img").click();
+                                $('#yzm').val("").focus();
+                            }
+                        }
+                    );
+                } else if (res == 0) {
+                    alert("登陆成功", {
+                        callback: function () {
+                            location.href = "/qiyes";
+                        }
+                    });
+                } else if (res == -18) {
+                    $('#emailAjax').val("").focus();
+                    $("#verifycode_img").click();
+                    $('#passwordAjax').val("").focus();
+                    $('#yzm').val("").focus();
+                    $("#verifycode_imgq").click();
+                    return alert("账号审核中");
+                } else if (res == -16) {
+                    alert("请填写审核资料!", {
+                        callback: function () {
+                            location.href = "/academyInfo";
+                        }
+                    })
+                } else if (res === -110) {
+                    alert("登陆成功", {
+                        callback: function () {
+                            location.href = "/own/index/index";
+                        }
+                    });
+                } else if (res === -10) {
+                    $('#emailAjax').val("").focus();
+                    $("#verifycode_img").click();
+                    $('#passwordAjax').val("").focus();
+                    $('#yzm').val("").focus();
+                    $("#verifycode_imgq").click();
+                    return alert("账号被冻结");
+                } else if (res == -6) {
+                    $('#emailAjax').val("").focus();
+                    $("#verifycode_img").click();
+                    $('#passwordAjax').val("").focus();
+                    $('#yzm').val("").focus();
+                    $("#verifycode_imgq").click();
+                    return alert("账户不存在，请重新输入");
+                } else if (res == -2) {
+                    $("#verifycode_img").click();
+                    $('#passwordAjax').val("").focus();
+                    $('#yzm').val("").focus();
+                    $("#verifycode_imgq").click();
+                    return alert("密码错误");
+                } else if (res > 0) {
+                    // alert("您有订单未支付,请立即支付", {
+                    //     callback: function () {
+                    //         location.href = "/addOrder?category_id=" + res;
+                    //     }
+                    // });
+                    location.href = "/qiyes";
+                } else if (res == -1) {
+                    location.href = "/qiyes";
+                }
+            }, error: function () {
+                $("#verifycode_imgq").click();
+                alert('网络错误');
+            }
+        })
+    }
+
+    //企业注册
+    function firmPost() {
+        var email = $('.reg_email').val();
+        var yzm = $('#reginyzm').val();
+        var password = $('.reg_password').val();
+        var password_confirm = $('.reg_password_confirm').val();
+        var check = $("#checkPosts").is(":checked");
+
+        if (email == '') {
+            alert('账号不能为空', {
+                    callback: function () {
+                        $('.reg_email').focus();
+                    }
+                }
+            );
+        } else if (!email.match(/^[1][3,4,5,6,7,8,9][0-9]{9}$/)) {
+            alert('账号格式不正确', {
+                    callback: function () {
+                        $('.reg_email').val("").focus();
+                    }
+                }
+            );
+        } else if (password == '') {
+            alert('密码不能为空', {
+                    callback: function () {
+                        $('.reg_password').focus();
+                    }
+                }
+            );
+        } else if (!password.match(/^[A-Za-z0-9]{4,40}$/)) {
+            alert('密码仅支持数字,字母，且最少4位', {
+                    callback: function () {
+                        $('.reg_password').focus();
+                    }
+                }
+            );
+        } else if (check == false) {
+            alert('请阅读《企业合作须知》,并同意');
+        } else if (password_confirm == '') {
+            alert('确认密码不能为空', {
+                    callback: function () {
+                        $('.reg_password_confirm').focus();
+                    }
+                }
+            );
+        } else if (password_confirm !== password) {
+            alert('两次输入密码不一致', {
+                    callback: function () {
+                        $('.reg_password_confirm').val("").focus();
+                    }
+                }
+            );
+        } else if (yzm == '') {
+            alert('验证码不能为空', {
+                    callback: function () {
+                        $('#reginyzm').focus();
+                    }
+                }
+            );
+        } else {
+
+            $.ajax({
+                url: '/register',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                    'email': email,
+                    'password': password,
+                    'yzm': yzm
+                },
+                success: function (res) {
+                    if (res == -78) {
+                        alert('手机号在企业已经注册!')
+                        return setTimeout(function () {
+                            location.href = '/'
+                        }, 1000);
+                    } else if (res == -79) {
+                        alert('手机号在院校已经注册!');
+                        return setTimeout(function () {
+                            location.href = '/'
+                        }, 1000);
+                    }
+
+                    alert(res);
+                    return setTimeout(function () {
+                        location.href = '/'
+                    }, 1000);
+                },
+                error: function (res) {
+                    //$(".ryzmimg").trigger("click");
+                    alert(res.responseText, {
+                            callback: function () {
+                                $('#reginyzm').val("").focus();
+                            }
+                        }
+                    );
+                }
+            });
+        }
+    }
+
+    //院校注册
+    function academy() {
+        var email = $('.academyreg_email').val();
+        var yzm = $('#academyreginyzm').val();
+        var password = $('.academyreg_password').val();
+        var password_confirm = $('.academyreg_password_confirm').val();
+        var check = $("#academycheckPosts").is(":checked");
+
+
+        if (email == '') {
+            alert('账号不能为空', {
+                    callback: function () {
+                        $('.academyreg_email').focus();
+                    }
+                }
+            );
+        } else if (!email.match(/^[1][3,4,5,6,7,8,9][0-9]{9}$/)) {
+            alert('账号格式不正确', {
+                    callback: function () {
+                        $('.academyreg_email').val("").focus();
+                    }
+                }
+            );
+        } else if (password == '') {
+            alert('密码不能为空', {
+                    callback: function () {
+                        $('.academyreg_password').focus();
+                    }
+                }
+            );
+        } else if (!password.match(/^[A-Za-z0-9]{4,40}$/)) {
+            alert('密码仅支持数字,字母，且最少4位', {
+                    callback: function () {
+                        $('.academyreg_password').focus();
+                    }
+                }
+            );
+        } else if (check == false) {
+            alert('请阅读《企业合作须知》,并同意');
+        } else if (password_confirm == '') {
+            alert('确认密码不能为空', {
+                    callback: function () {
+                        $('.academyreg_password_confirm').focus();
+                    }
+                }
+            );
+        } else if (password_confirm !== password) {
+            alert('两次输入密码不一致', {
+                    callback: function () {
+                        $('.academyreg_password_confirm').val("").focus();
+                    }
+                }
+            );
+        } else if (yzm == '') {
+            alert('验证码不能为空', {
+                    callback: function () {
+                        $('#academyreginyzm').focus();
+                    }
+                }
+            );
+        } else {
+
+            $.ajax({
+                url: '/index/Login/academyRegister',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                    'email': email,
+                    'password': password,
+                    'yzm': yzm
+                },
+                success: function (res) {
+                    if (res == -17) {
+                        alert("请填写审核资料!", {
+                            callback: function () {
+                                location.href = "/academyInfo";
+                            }
+                        })
+                    }
+                    if (res == -78) {
+                        alert("手机号在企业已经注册!", {
+                            callback: function () {
+                                location.href = "/";
+                            }
+                        })
+                    } else if (res == -79) {
+                        alert("手机号在企业已经注册!", {
+                            callback: function () {
+                                location.href = "/";
+                            }
+                        })
+                    }
+                },
+                error: function (res) {
+                    alert(res.responseText, {
+                            callback: function () {
+                                $('#academyreginyzm').val("").focus();
+                            }
+                        }
+                    );
+                }
+            });
+        }
+    }
+
+    //个人注册
+    function ownregister() {
+        var email = $('.ownreg_email').val();
+        var yzm = $('#owncode').val();
+        var password = $('.ownreg_password').val();
+        var password_confirm = $('.ownreg_password_confirm').val();
+        var check = $("#owncheckPosts").is(":checked");
+
+        if (email == '') {
+            alert('账号不能为空', {
+                    callback: function () {
+                        $('.ownreg_email').focus();
+                    }
+                }
+            );
+        } else if (!email.match(/^[1][3,4,5,6,7,8,9][0-9]{9}$/)) {
+            alert('账号格式不正确', {
+                    callback: function () {
+                        $('.ownreg_email').val("").focus();
+                    }
+                }
+            );
+        } else if (password == '') {
+            alert('密码不能为空', {
+                    callback: function () {
+                        $('.ownreg_password').focus();
+                    }
+                }
+            );
+        } else if (!password.match(/^[A-Za-z0-9]{4,40}$/)) {
+            alert('密码仅支持数字,字母，且最少4位', {
+                    callback: function () {
+                        $('.ownreg_password').focus();
+                    }
+                }
+            );
+        } else if (check == false) {
+            alert('请阅读《企业合作须知》,并同意');
+        } else if (password_confirm == '') {
+            alert('确认密码不能为空', {
+                    callback: function () {
+                        $('.ownreg_password_confirm').focus();
+                    }
+                }
+            );
+        } else if (password_confirm !== password) {
+            alert('两次输入密码不一致', {
+                    callback: function () {
+                        $('.ownreg_password_confirm').val("").focus();
+                    }
+                }
+            );
+        } else if (yzm == '') {
+            alert('验证码不能为空', {
+                    callback: function () {
+                        $('#owncode').focus();
+                    }
+                }
+            );
+        } else {
+
+            $.ajax({
+                url: '/index/Login/ownRegister',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                    'phone': email,
+                    'password': password,
+                    'yzm': yzm
+                },
+                success: function (res) {
+
+                    if (res.success === true) {
+                        alert(res.message, {
+                            callback: function () {
+                                location.href = "/own";
+                            }
+                        });
+                    } else {
+                        alert(res.message);
+                    }
+                }
+            });
+        }
+    }
+
+    // community-carousel
+    if ($(".community-carousel").length) {
+        var swiperVideo = new Swiper('.community-carousel .swiper-container', {
+            navigation: {
+                nextEl: '.community-carousel .swiper-btn-next',
+                prevEl: '.community-carousel .swiper-btn-prev',
+            },
+            loopAdditionalSlides: 3,
+
+            effect: 'slide',
+            grabCursor: true,
+            paginationClickable: true,
+            centeredSlides: true,
+
+            loop: true,
+            autoplay: false,
+            slidesPerView: "auto",
+            initialSlide: 1,
+            keyboardControl: true,
+            slideToClickedSlide: true,
+            preventClicks: false,
+            speed: 800,
+            followFinger: false,
+            onInit: function (swiper) {
+
+            },
+        });
+    }
+    window.onscroll = function () {
+        var topScroll = document.body.scrollTop; //滚动的距离,距离顶部的距离
+        var bignav = document.getElementById("bignav"); //获取到导航栏id
+        if (topScroll > 250) { //当滚动距离大于250px时执行下面的东西
+            bignav.style.position = 'fixed';
+            bignav.style.top = '0';
+            bignav.style.zIndex = '9999';
+        } else { //当滚动距离小于250的时候执行下面的内容，也就是让导航栏恢复原状
+            bignav.style.position = 'static';
+        }
+    }
+
+    AOS.init({
+        easing: 'ease-out-back',
+        duration: 1000
+    });
+
+    $(document).ready(function () {
+        $('.flexslider').flexslider({
+            directionNav: true,
+            pauseOnAction: false,
+            manualControls: ".js-slidernav i",
+        });
+    });
+
+    $(function () {
+        $("#logout").click(function () {
+            confirm("确定要退出当前账号吗？", {
+                confirm: function () {
+                    location.href = "/loginOut";
+                }
+            })
+        });
+
+        $('#ClickMe').click(function () {
+            $("#goodcover").center();
+            $('#code').center();
+            $('#goodcover').show();
+            $('#code').fadeIn();
+            $("body").css({"overflow-x": "hidden", "overflow-y": "hidden"});
+        });
+        $('#closebt').click(function () {
+            $("body").css({"overflow-x": "", "overflow-y": ""});
+            $('#code').hide();
+            $('#goodcover').hide();
+        });
+        $('#goodcover').click(function () {
+            $("body").css({"overflow-x": "", "overflow-y": ""});
+            $('#code').hide();
+            $('#goodcover').hide();
+        });
+
+        jQuery.fn.center = function (loaded) {
+            var obj = this;
+            body_width = parseInt($(window).width());
+            body_height = parseInt($(window).height());
+            block_width = parseInt(obj.width());
+            block_height = parseInt(obj.height());
+
+            left_position = parseInt((body_width / 2) - (block_width / 2) + $(window).scrollLeft());
+            if (body_width < block_width) {
+                left_position = 0 + $(window).scrollLeft();
+            }
+            ;
+
+            top_position = parseInt((body_height / 2) - (block_height / 2) + $(window).scrollTop());
+            if (body_height < block_height) {
+                top_position = 0 + $(window).scrollTop();
+            }
+            ;
+
+            if (!loaded) {
+
+                obj.css({
+                    'position': 'absolute'
+                });
+                obj.css({
+                    /*'top': ($(window).height() - $('#code').height()) * 0.5,*/
+                    'top': top_position,
+                    'left': left_position
+                });
+                $(window).bind('resize', function () {
+                    obj.center(!loaded);
+                });
+                $(window).bind('scroll', function () {
+                    obj.center(!loaded);
+                });
+
+            } else {
+                obj.stop();
+                obj.css({
+                    'position': 'absolute'
+                });
+                obj.animate({
+                    'top': top_position
+                }, 200, 'linear');
+            }
+        }
+    });
+    $(function () {
+        var li = $('.tab_ts ul li');
+        var li_c = $('.tab_cs ul li');
+        li.click(function () {
+            $(this).addClass('selecteds').siblings().removeClass('selecteds');
+            var j = $(this).index();
+            li_c.eq(j).show().siblings().hide();
+        });
+    });
+</script>

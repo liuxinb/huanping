@@ -1,0 +1,86 @@
+{extend name="layout"}
+{block name="title"}集中培训{/block}
+{block name="css"}
+<link href="__PUBLIC__/two/css/chosen.min.css" rel="stylesheet">
+<link href="__PUBLIC__/two/css/icheck-green.css" rel="stylesheet">
+<link href="__PUBLIC__/two/css/jquery.datetimepicker.css" rel="stylesheet">
+
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+
+    .tab .tab-nav .active a {
+        color: #fff;
+        background: #0a8;
+    }
+</style>
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/two/js/pintuer.js"></script>
+<script src="__PUBLIC__/two/js/zui.min.js"></script>
+<script src="__PUBLIC__/two/js/icheck.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".ajax-linkk").each(function() {
+            $(this).click(function() {
+                var diZhi = $(this).attr("rel");
+                location.href = diZhi;
+            });
+        });
+    });
+
+</script>
+{/block}
+{block name="content"}
+<div class="r_main">
+
+<div class="ad_co_Box_warp">
+    <div class="ad_co_Box">
+        <div class="content">
+            <div class="fenQuTongJi_shaiXuan clearfix">
+                <div style="float: left;">培训计划列表</div>
+                <div style="float: right;">
+                    <button class="button bg-main icon-plus-circle ajax-linkk" rel="trainAdd">	添加培训</button>
+                </div>
+
+            </div>
+            <table class="table table_Jizhongpeixun">
+                <thead>
+                <tr>
+                    <th width="20%">封面</th>
+                    <th width="30%">培训名称</th>
+                    <th width="30%">起始时间</th>
+                    <th width="20%">操作</th>
+                </tr>
+                </thead>
+                <tbody class="dingdandfk">
+                {volist name="trainData" id="vo"}
+                <tr>
+                    <td><img width="200px" height="120px" class="ajax-linkk" rel="" src="{$vo.bag_img}"/></td>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.start_time}&nbsp;至&nbsp;{$vo.end_time}</td>
+                    <td>
+                        {if condition="$adminRole==1"}
+                        <button type="button" class="button border-yellow button-small icon-eye ajax-linkk" rel="/trainStudylist?id={$vo.id}"> 成员管理</button>
+                        {/if}
+                        <button type="button" class="button border-yellow button-small icon-eye ajax-linkk" rel="trainVideolist?cid={$vo.cid}?&url={$vo.url}&videoTime={$vo.videoTime}&id={$vo.id}"> 开始学习</button>
+
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+            {if condition="count($trainData)<=0"}
+            <div style="display: block;margin: 0 auto;width: 120px;font-size: 20px;padding: 10px;">暂无数据！</div>
+            {/if}
+            <div style="text-align: center;padding-bottom:30px;">{$page}</div>
+        </div>
+    </div>
+</div>
+</div>
+{/block}
+
+
+
+

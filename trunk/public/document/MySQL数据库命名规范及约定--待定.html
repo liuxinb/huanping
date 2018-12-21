@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>MySQL数据库命名规范及约定</title>
+</head>
+<body>
+    <div><h1>MySQL数据库命名规范及约定</h1></div>
+    <div style="padding-left: 50px;">
+        <div align="left">
+            <strong>
+                <h3>
+                    一、【常用表名约定（格式：<span style="color:red;">前缀_主名[_次名][_其他名]</span>）】
+                </h3><br>
+
+                1.表前缀用项目名称首字母缩写（如环评：hp_）；<br>
+                2.表名用百度翻译出来的第一个单词：如企业-》enterprise，菜单-》menu;<br>
+                3.表名都小写，主名要全拼，次名和其他名可简写，单词之间用下划线分开，单词都用单数形式；<br>
+                4.表名单词数不要超过3个；<br>
+            </strong>
+            <div style="padding-left: 40px; ">
+                例：<br>
+                hp_user----------------前台用户<br>
+                hp_enterprise ----------企业信息<br />
+                hp_category -----------分类<br>
+                hp_goods ------------- 商品、产品等一切可交易的物品都用此命名<br>
+                hp_article ------------- 文章、新闻、帮助中心等以文章形式出现的，一般都用此命名<br>
+                hp_cart ---------------- 购物车<br>
+                hp_user_order -------- 前台用户订单<br><br>
+                <strong>
+                    <span style="color:red;"> *相同模块相关功能表，使用同一主名</span>
+                </strong><br />
+                hp_admin ---------------- 所有后台用户，企业、省、协会、系统 【RBAC标准表】<br>
+                hp_admin_role ----------- 后台用户角色【RBAC标准表】<br>
+                hp_admin_menu --------- 后台操作权限菜单【RBAC标准表】<br>
+                hp_admin_role_menu ---- 后台角色对应的权限【RBAC标准表】<br><br>
+                hp_course_box ----------课程包，包含多个课程<br>
+                hp_course ---------------课程,包含多个课时<br>
+                hp_course_hour ----------课时，对应一个视频<br>
+                hp_course_hour_video ---课时视频文件<br />
+                待续。。。
+            </div>
+        </div>
+        <br><br>
+        <div align="left">
+            <strong>
+                <h3>二、【常用列名约定】</h3><br>
+                1.数据库列名与表名命名类似：使用小写英文单词，如果有多个单词使用下划线隔开；<br>
+                2.使用简单单词，避免生僻词；<br>
+                3.第一个字段为id，一定是主键且为自动增长；<br>
+                4.外键列格式：外键表名字_唯一字段（常用id），外键表名如果太长可以简写，不能是一个字母，<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如企业编号-》enter_id,订单编号-》order_id，用户编号-》user_id <br>
+                5.一对多的表关系，在多表里放一表的id<br />
+                6.方便关联查询，可以把部分常用字段冗余<br />
+                7.时间字段，除特殊情况一律采用int来记录unix_timestamp；<br />
+                8. text字段尽量少用，或是拆到冗余表中；
+            </strong>
+            <div style="padding-left: 40px; ">
+                例：<br>
+                add_time – 添加时间、上架时间等<br>
+                last_time – 最后操作时间，如登录、修改记录<br>
+                expire_time – 过期时间<br>
+                name – 商品名称、商家名称等，不要跟title混用，title只用于文章标题、职称等<br>
+                price – 价格<br>
+                image – 相册中的图片地址一律用此命名，不要出现各种img,src,img_url,thumb_url等<br>
+                head_image – 用户头像， 虽然有点长，一定要遵守。不要出现上述情况<br>
+                image_alt – 相册中图片的alt属性<br>
+                describe – 描述、简介，比如goods_desc，不要出现goods_txt这种<br>
+                detail – 详情、文章内容等<br>
+                sort – 排序<br>
+                telephone – 座机号码<br>
+                mobile – 手机号码<br>
+                phone – 当不区分手机和座机时，请用phone命名<br>
+                address – 地址，单独出现不要用addr缩写，组合出现时需用缩写，比如mac地址，mac_addr<br>
+                zipcode – 邮编<br>
+                region – 地区，大的区域，比如记录杭州市、温州市等<br>
+                待续
+            </div>
+        </div>
+        <br><br>
+        <div align="left">
+            <strong>
+                <h3>三、【操作规范】</h3><br>
+                <div style="padding-left: 40px; ">
+                    1. 如无备注，则表中的第一个id字段一定是主键且为自动增长；<br>
+                    2. 如无备注，则数值类型的字段请使用UNSIGNED属性；<br>
+                    3. 如无备注，排序字段sort在程序中默认使用降序排列；<br>
+                    4. 如无备注，所有字段都设置NOT NULL，并设置默认值；<br>
+                    5. 如无备注，所有的布尔值字段，如is_hot、is_deleted，都必须设置一个默认值，并设为0；<br>
+                    6. 所有的数字类型字段，都必须设置一个默认值，并设为0；<br>
+                    7. 针对varchar类型字段的程序处理，请验证用户输入，不要超出其预设的长度；<br>
+                    8. 建表时将数据字典中的字段中文名和属性备注写入数据表的备注中(“PK、自动增长”不用写)；<br>
+                    9. 如无说明，建表时一律采用innodb引擎:表引擎取决于实际应用场景及当前数据库中的已经存在的存储引擎；日志及报表类表建议用myisam，与交易，审核，金额相关的表建议用innodb引擎。总体来讲数据库默认innodb；<br>
+                    10.默认使用utf8字符集（由于数据库定义使用了默认，数据表可以不再定义，但为保险起见，建议都写上）；<br>
+                    11.所有不常见的表都必须有备注，写明白这个表中存放的数据内容；
+                </div>
+            </strong>
+        </div>
+    </div><br><br><br><br><br>
+</body>
+</html>

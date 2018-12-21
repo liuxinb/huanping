@@ -1,0 +1,218 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {margin:0;padding:0;} 
+table {border-collapse:collapse;border-spacing:0;} 
+fieldset,img {border:0} 
+address,caption,cite,code,dfn,em,strong,th,var {font-style:normal;font-weight:normal} 
+ol,ul {list-style:none} 
+caption,th {text-align:left} 
+h1,h2,h3,h4,h5,h6 {font-size:100%;font-weight:normal} 
+q:before,q:after {content:''} 
+abbr,acronym { border:0}
+a {
+    color: black;
+    text-decoration: none;
+    -webkit-tap-highlight-color: #4475A7;
+}
+.content::-webkit-scrollbar{
+  display:none;
+}
+.content_header_red{
+	display: flex;
+	width: 70%;
+	margin: 0 auto;
+	padding: 30px 0;
+}
+.content_header_red_text{
+	width: 80%;
+	margin: 0 auto;
+	color: red;
+	line-height: 32px;
+}
+.content_header_red_btn{
+	width: 90px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    display: block;
+    font-size: 14px;
+    margin-left: 10px;
+    border-radius: 1px;
+    color: #FFFFFF;
+    background: #2A8AE2;
+    cursor: default;
+}
+
+.content_jiben{
+	width: 80%;
+	margin: 0 auto;
+	min-height:200px;
+	padding-bottom: 20px;
+	border:1px solid #EFEFEF
+}
+.content_jiben_tou{
+	width:90%;
+	    padding: 20px 0 20px 0;
+	margin: 0 auto;
+}
+.signup_item_one{
+	padding-top: 0px;
+}
+
+.signup_item {
+    margin: 0 auto ;
+    width: 500px;
+}
+.signup_title_desc {
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    margin-top: 24px;
+    width: 70px;
+    padding-right: 20px;
+    text-align: left;
+    color: #000;
+}
+.signup_item_left {
+    width: 90px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    color: #7F7F7F;
+    display: inline-block;
+    vertical-align: 27px;
+    text-align: right;
+    padding-right: 20px;
+}
+.signup_item_right {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+}
+.ww_inputWithMagnifier_info {
+    position: absolute;
+    background: #E5F3FF;
+    border-radius: 4px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 24px;
+    color: #787878;
+    padding: 0 10px;
+    left: 0;
+    right: 0;
+    bottom: 55px;
+}
+.signup_item_input {
+    border: none #FFFFFF;
+    border-bottom: 1px solid #C9C9C9;
+    
+    width: 280px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    padding: 5px 6px;
+}
+.signup_item_input:focus {
+    outline:none;
+}
+
+.info select{ min-width: 90px; height:30px;border:1px #C9C9C9 solid; background:#FFFFFF; border-radius: 2px;}
+
+.info{ margin:5px; text-align:center;}
+
+.info #show{ color:#3399FF; }
+.signup_item_textarea{
+	width: 300px;
+	    display: inline-block;
+    vertical-align: top;
+    position: relative;
+}
+.signup_item_textarea>textarea {
+    color: black;
+    height: 100px;
+    width: 292px;
+    margin: 0 auto;
+     border: 1px solid #C9C9C9;
+     resize:none;
+     overflow-x:hidden;
+     overflow-y:hidden;
+     font-family: "微软雅黑";
+     font-size: 14px;
+}
+.content_lianxiren,.content_zhengjian{
+	margin-top: 20px;
+}
+.content_jiben_tous{
+	width: 80%;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-between;
+}
+.con4{
+     /*width: 26%;*/
+     padding: 0 3%;
+     height: auto;
+     overflow: hidden;
+     margin: 0px auto;
+     color: #000000;
+}
+.con4 .btn{
+     width: 130px;
+     height: 40px;
+     margin-left: 15px;
+     line-height: 40px;
+     text-align: center;
+     /*background: #2A8AE2;*/
+     display: block;
+     font-size: 14px;
+     border-radius: 2px;
+     border: 1px solid #C9C9C9;
+}
+.info_xuanze{
+	margin-left: 20px;
+}
+.upload{
+     float: left;
+     position: relative;
+}
+.upload_pic{
+     display: block;
+     width: 70%;
+     height: 40px;
+     position: absolute;
+     left: 0;
+     top: 0;
+     opacity: 0;
+     border-radius: 5px;
+}
+#cvs{
+	margin: 0 auto;
+	border: 1px solid #C9C9C9;
+}
+.cvs1{
+	background: url(../../img/zheng.png)  no-repeat;
+	 background-size:100% 100%;-moz-background-size:100% 100%;
+}
+.cvs2{
+	background: url(../../img/fan.png)  no-repeat;
+	 background-size:100% 100%;-moz-background-size:100% 100%;
+}
+.cvs3{
+	background: url(../../img/zhizhao.jpg)  no-repeat;
+	 background-size:100% 100%;-moz-background-size:100% 100%;
+}
+.nav1_left_tijiao1{
+	padding-top: 30px;
+}
+.nav1_left_tijiao {
+    width: 90px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    display: block;
+     font-size: 14px;
+    margin-top: 35px;
+    margin: 0 auto;
+    border-radius: 1px;
+    color: #FFFFFF;
+    background: #2A8AE2;
+    cursor: default;
+}

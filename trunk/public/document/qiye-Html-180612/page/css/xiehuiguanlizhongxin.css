@@ -1,0 +1,12 @@
+.content{
+	width: 90%;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-around;
+}
+#main,#main_2{
+	width: 400px;height:400px; padding-top: 50px;
+}
+#main_l{
+	width: 600px;height:400px;margin:0 auto;padding-top: 100px;
+}

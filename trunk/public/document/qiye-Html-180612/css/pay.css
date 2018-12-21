@@ -1,0 +1,113 @@
+*{
+	margin: 0px;
+	padding: 0px;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+    font: 14px/2em "PingFang SC", "微软雅黑", "Microsoft YaHei", "Helvetica", "Helvetica Neue", "Tahoma", "Arial", "sans-serif";
+}
+body{
+	background: #EFEFEF;
+}
+.container{
+	width:66%;
+	min-height: 700px;
+	background: white;
+	padding: 30px 2%;
+	margin: 0 auto;
+	margin-top:100px;
+}
+.container_center{
+	padding: 20px 0;
+}
+.container_play{
+	width: 100%;
+	height:90px;
+	padding: 30px 12px 48px;
+    border-top: 1px solid #d9dde1;
+    border-bottom: 1px solid #d9dde1;
+	display: flex;
+}
+.navdown{
+	border:2px solid red;
+}
+.container_play>div{
+	width:240px;
+	height: 90px;
+	margin-left: 10px;
+	
+}
+
+.zhifubao{
+	background-color: #EFEFEF;
+	background-repeat: no-repeat;
+	background-image: url(../img/pay_s.png);
+	cursor: pointer;
+	background-position:50px -300px;
+	
+}
+.wechart{
+	background-color: #EFEFEF;
+	background-repeat: no-repeat;
+	background-image: url(../img/pay_s.png);
+	cursor: pointer;
+	background-position:50px -420px;
+}
+
+.pay-summary{
+	width: 100%;
+	height:140px;
+	padding-top: 60px;
+	display: flex;
+	justify-content: space-between;
+}
+.warning{
+	width: 70%;
+	font-size: 14px;
+    color: #ff9900;
+   
+    line-height: 20px;
+}
+.summary{
+	width:20%;
+	padding-left: 10%;
+}
+.label{
+	width: 96px;
+    font-size: 14px;
+    color: #07111b;
+    height: 20px;
+    text-align: right;
+}
+.price {
+    font-size: 24px;
+    line-height: 24px;
+    height: 24px;
+    color: red;
+    }
+.price>em{
+	
+}
+.submit-warp{
+	padding-top: 30px;
+}
+.js-pay-submit{
+    float: left;
+    width: 140px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #f01414;
+    border-radius: 2px;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+}
+@media only screen and (min-width: 900px) and (max-width: 1600px) {
+	.summary {
+    width: 35%;
+    padding-left: 10%;
+}
+}

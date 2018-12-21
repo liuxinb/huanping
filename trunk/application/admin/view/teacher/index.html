@@ -1,0 +1,344 @@
+{extend name="layout"}
+{block name="title"}教师列表{/block}
+{block name="css"}
+<link href="__PUBLIC__/css/upload_picture.css" rel="stylesheet">   <!--//上传图片样式表-->
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/js/picture_verify.js"></script>  <!--//上传图片验证格式-->
+<script type="text/javascript" >
+    /*添加教师*/
+    function add() {
+        $("input[name='name']").val('');
+        $("input[name='image']").val('');
+        $("input[name='referral']").val('');
+        $("input[name='qg']").val('');
+        $("input[name='phone']").val('');
+        $("input[name='sex']").val('');
+        $('#thinkright-add').modal('show');
+    }
+
+
+    // 修改菜单
+    function edit(obj) {
+        var teaId = $(obj).attr('teaId');
+        var teaName = $(obj).attr('teaName');
+        var teaPhone = $(obj).attr('teaPhone');
+        var teaReferral = $(obj).attr('teaReferral');
+        var teaSex = $(obj).attr('teaSex');
+        var teaQg = $(obj).attr('teaQg');
+        var teaPath = $(obj).attr('teaPath');
+
+        $("input[name='id']").val(teaId);
+        $("input[name='name']").val(teaName);
+        $("input[name='phone']").val(teaPhone);
+        $("input[name='referral']").val(teaReferral);
+        $("input[name='qg']").val(teaQg);
+        $("img[name='teaImg']").attr('src', teaPath);
+        if (teaSex == 1) {
+            document.getElementById('man').checked = true;
+        }
+        if (teaSex == 0) {
+            document.getElementById('wo m an').checked = true;
+        }
+
+        $('#thinkright-edit').modal('show');
+    }
+
+
+    //        <!--全选全不选 -->
+    function checkall() {
+        var checkall = document.getElementsByName('checkall[]');
+        for (var i = 0; i < checkall.length; i++) {
+            if (checkall[i].checked) {
+                checkall[i].checked = false;
+            } else {
+                checkall[i].checked = true;
+            }
+
+        }
+    }
+
+    //        批量删除
+    //        function dels() {
+    //                    var str = '';
+    //                    var checkallName = document.getElementsByName('checkall[]');  //全选按钮的name值
+    //                    var checkallClick = document.getElementById('checkall');  //全选按钮的onclick方法名
+    //                    for (var i = 0; i < checkallName.length; i++) {
+    //                        if (checkallName[i].checked) {
+    //                            str = str + checkallName[i].value + ',';
+    //                        }
+    //                    }
+    //                    str = str.substring(str.length - 1, ',');
+    //                    str=str.substring(3);
+    ////                    alert(str);die;
+    //                    var ajax = new XMLHttpRequest();
+    //                    ajax.onreadystatechange = function () {
+    //                        if (ajax.readyState == 4) {
+    //                            document.getElementBbangyId('demo-dt-basic').innerHTML = ajax.responseText;
+    //                        }
+    //                },
+    //                ajax.open('get',"dels"+str);
+    //                ajax.send(null);
+    //              }
+
+    // 删除操作
+    $('#discard').click(function() {
+        if($(':checked').size() > 0) {
+            layer.confirm('确定要删除吗？', {
+                btn: ['确定','取消'], //按钮
+                shade: false //不显示遮罩
+            }, function(){
+                $.post("{:url('Admin/Teacher/dels')}", {data: $('form').serializeArray()}, function(res) {
+                    if(res.state == 1) {
+                        layer.msg(res.message, {icon: 1, time: 1000});
+                    } else {
+                        layer.msg(res.message, {icon: 2, time: 1000});
+                    }
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                });
+            }, function(){
+                layer.msg('取消了删除！', {time: 1000});
+            });
+        } else {
+            layer.alert('没有选择！');
+        }
+    });
+
+    $(function(){
+        //搜索功能
+        $("#search").click(function(){
+            var url = $(this).attr('url');
+            var query = $(this).prev('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+            query = query.replace(/^&/g,'');
+            if( url.indexOf('?')>0 ){
+                url += '&' + query;
+            }else{
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+
+    })
+
+    //上传教师图片预览
+    $(function() {
+        $(".imgInput").change(function () {
+            $(".img").attr("src", URL.createObjectURL($(this)[0].files[0]));
+        });
+    });
+
+
+</script>
+{/block}
+{block name="content"}
+    <body>
+        <!--===================================================-->
+        <div id="page-content">
+
+            <!-- Basic Data Tables -->
+            <!--===================================================-->
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">教师列表</h3>
+                </div>
+                <div class="padding border-bottom">
+                    <div class="col-lg-7">
+                        <h3 class="panel-title">
+                            <!--<a id="discard" href="javascript:;"><button id="demo-btn-addrow" class="btn btn-info">删除 </button></a>-->
+                            <button id="demo-btn-addrow" class="btn btn-info" onclick="add(this)">添加教师</button>
+                        </h3> 
+                    </div>
+                    <div class="col-lg-5" style="padding: 0 20px 0 20px;">
+                        <div class="float-right">
+                            <input type="text" name="keyword" class="input input-auto input-small search-form" size="50" placeholder="搜索专家名称" /> <a  href="javascript:;" id="search" url="{:url('index')}">搜索</a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="panel-body">
+                    <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+                        <thead>
+                            <tr>
+<!--                                <th class="all">
+                                    <label><input type="checkbox" name="checkall[]" onclick="checkall()" checked>选择</label>
+                                </th>-->
+                                <th>ID</th>
+                                <th>专家</th> 
+                                <th>性别</th>  
+                                <th>职位</th>   
+                                <th>所在单位</th>   
+                                <th>联系方式</th>
+                                <th>创建时间</th>
+                                <th class="min-tablet">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($all as $k => $v): ?>
+                            <tr>
+<!--                                <td>
+                                    <input type="checkbox" name="checkall[]" value="{$v['id']}">
+                                </td>-->
+                                <td>{$v['id']}</td>
+                                <td>{$v['name']}</td>     
+                                <td>{$v['sex']?"男":"女"}</td> 
+                                <td>{$v['referral']}</td>
+                                <td>{$v['qg']}</td>
+                                <td>{$v['phone']}</td>  
+                                <td>{$v['create_time']|date="Y-m-d H:i:s",###}</td>
+                                <td>
+                                    <button><a href="javascript:;" teaId="{$v['id']}" teaName="{$v['name']}"  teaPhone="{$v['phone']}" teaReferral="{$v['referral']}" teaQg="{$v['qg']}" teaSex="{$v['sex']}" teaPath="{$v['path']}" onclick="edit(this)">修改</a> </button>
+                                    <button><a href="javascript:confirm('确定删除？',{confirm:function(){location='{:url('Admin/Teacher/del',array('id'=>$v['id']))}'}})">删除</a></button>
+                                </td>
+                            </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                    <tr>
+                        <td class="center">{$all->render()}</td>
+                    </tr>
+                </div>
+            </div>
+            <!--===================================================-->
+        </div>
+        <!--===================================================-->
+
+        <div class="modal fade" id="thinkright-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            添加教师
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="{:url('Admin/Teacher/add')}" method="post" enctype="multipart/form-data">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">教师名称</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"  class="form-control" name="name" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">性别</label>
+                                    <div class="col-sm-9">
+                                        <input type="radio"   name="sex[]" value="男" checked="checked"  >男
+                                        <input type="radio"   name="sex[]" value="女" >女
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">联系方式</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"  class="form-control" name="phone" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">图片</label>
+                                    <div class="col-sm-9 ">
+                                        <a class="upload_img_add"><input type="file"  class="imgInput" name="image" accept=".gif,.jpg,.jpeg,.png" required>点击上传图片</a>
+                                        <img  src="" class="img" alt="" width="160" height="90"  ><br>
+                                        <span class="text-warning imageFileWarning"></span>
+                                        <p style="color: red">上传的图片大小不能超过2M;</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">职位</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"   class="form-control" name="referral" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">所在单位</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"   class="form-control" name="qg" required="required">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button class="btn btn-success" type="submit">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 修改菜单模态框开始 -->
+        <div class="modal fade" id="thinkright-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            修改教师信息
+                        </h4> 
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="{:url('Admin/Teacher/edit')}" method="post" enctype="multipart/form-data">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">教师名称</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="id">
+                                        <input type="text"   class="form-control" name="name" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">性别</label>
+                                    <div class="col-sm-9">
+                                        <input type="radio"  id="man" name="sex[]" value="1"  >男
+                                        <input type="radio"  id="woman"  name="sex[]" value="0" >女
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">联系方式</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"  class="form-control" name="phone" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">图片</label>
+                                    <div class="col-sm-9 ">
+                                        <a class="upload_img_add"><input type="file"  class="imgInput" accept=".gif,.jpg,.jpeg,.png" name="image"> 点击更改图片 </a>
+                                        <img  name="teaImg" src="{$v['path']?$v['path']:''}" class="img" alt="" width="160" height="90"  >
+                                        <span class="text-warning imageFileWarning"></span>
+                                        <p style="color: red">上传的图片大小不能超过2M;</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">职位</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"  class="form-control" name="referral" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">所在单位</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="qg" required="required">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button class="btn btn-success" type="submit">修改</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 修改菜单模态框结束 -->
+
+
+
+    </body>
+{/block}
+
+

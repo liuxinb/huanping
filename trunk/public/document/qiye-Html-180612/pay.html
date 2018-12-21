@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link rel="stylesheet" type="text/css" href="css/pay.css"/>
+	<script type="text/javascript" src="js/jquery.js">
+		
+	</script>
+	<title>支付</title>
+</head>
+<body>
+	<div class="container">
+		<div class="container_center">支付中心</div>
+		<div class="container_play" id="nav">
+			<div class="zhifubao navdown"></div>
+			<div class="wechart"></div>
+		</div>
+		<div class="pay-summary clearfix huabei-active">
+			<div class="warning">
+				<i class="imv2-error_c"></i>
+				<span>请在 <b>23小时59分钟</b> 以内支付完成，如未完成此订单将自动关闭。需重新购买！</span>
+			</div>
+			
+			<div class="summary">
+				<div class="clearfix total">
+					<span class="label">应付金额：</span>
+					<span class="price">
+						<em>￥</em>
+						<span>2999.00</span>
+					</span>
+				</div>
+				
+				<div class="submit-warp clearfix">
+					<a href="guanli.html">
+					<span  class="js-pay-submit">立即支付</span>
+					</a>
+				</div>
+			
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	$(function(){
+		  $("#nav div").click(function(){
+		  	console.log("sds")
+		    $("#nav div").eq($(this).index()).addClass("navdown").siblings().removeClass("navdown");
+		  })
+		})
+</script>

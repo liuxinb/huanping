@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <title>后台</title>
+    <link href="__PUBLIC__/two/css/pintuer.css" rel="stylesheet">
+    <link href="__PUBLIC__/two/css/admin.css" rel="stylesheet">
+    <link href="__PUBLIC__/two/css/jquery.datetimepicker.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/jquery-2.2.4.min.js"></script>
+    <link href="__PUBLIC__/js/common/alertBox/alertBox.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/common/extensions.js"></script>
+    <script src="__PUBLIC__/js/common/Tool.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            $("#logout").click(function () {
+                confirm("确定要退出当前账号吗？", {
+                    confirm: function () {
+                        location.href = "/loginOut";
+                    }
+                })
+            });
+
+            $("#upassword").click(function () {
+                $(location).attr('href', 'password');
+
+            });
+        });
+        if (window.IE7) {
+            window.location.href = 'http://cdn.dmeng.net/upgrade-your-browser.html?referrer=' + location.href;
+        }
+    </script>
+    <script src="__PUBLIC__/two/js/moment.min.js"></script>
+    <script src="__PUBLIC__/two/js/jquery.datetimepicker.full.js"></script>
+
+</head>
+<style>
+    body{
+        position: relative;
+        min-width: 980px;
+        min-height: 980px;
+    }
+    .admin_left_Box{
+        position: relative !important;
+
+    }
+</style>
+<body>
+<div name='{if condition="$recordResult eq 0"}0{else/}1{/if}' id="lllhj"></div>
+<div class="admin_top_menu clearfix">
+    <div class="admin_top_meun_left">
+        <div class="clearfix">
+            <h2 class="x6"><span class="icon-user animated"></span> <span class="childTitle">管理中心</span></h2></div>
+        <ul class="bread">
+            <li> 首页</li>
+            <li class="active childTitle">管理中心</li>
+        </ul>
+    </div>
+    <div class="admin_top_meun_right">
+        <ul class="nav nav-menu nav-inline nav-tabs" style="float: none;">
+            {if condition="$recordResult > 0"}
+                {if condition="$adminRole == 1"}
+                    <li class="nav-head float-right"><span> {$recordinfo->firmname} </span>
+                        {else /}
+                    <li class="nav-head float-right"><span> {$recordinfo->academy_name} </span>
+                {/if}
+            {/if}
+                <span class="icon-wrench showIframeDialog" style="padding: 0px 10px;color: #1f995c;"
+                      data-href="password" data-title="修改密码" data-width="50" data-height="55"> 修改密码</span>
+                <span class="icon-power-off" id="logout"> 退出</span>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="admin_left_Box">
+    <div class="info_Box text-center">
+        <div><img src="__PUBLIC__/two/images/logo.png"/></div>
+
+    </div>
+    <dl class="list_left_main_menu">
+        <!--企业-->
+        <!--<dd>-->
+            <!--<div class="ti clckClass">-->
+                <!--<a target="/manage"></a><span class="icon-cog"></span>管理中心-->
+            <!--</div>-->
+        <!--</dd>-->
+        <!--院校-->
+        {if condition="$adminRole==2"}
+        <dd>
+        <div class="ti clckClass">
+        <a target="/academyManage"></a><span class="icon-cog"></span>管理中心
+        </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/users"></a><span class="icon-group (alias) animated"></span>学生管理
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/batch"></a><span class="icon-bullhorn animated"></span>批量报名
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/paybatch"></a><span class="icon-bullhorn animated"></span>批量缴费
+            </div>
+        </dd>
+        {/if}
+        <dd>
+            <div class="ti orders">
+                <a target="/orders"></a><span class="icon-credit-card animated"></span>订单管理
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/student"></a><span class="icon-cube animated"></span>学习管理
+            </div>
+        </dd>
+        {if condition="$adminRole==1"}
+        <dd>
+            <div class="ti">
+                <a target="/signup"></a><span class="icon-bullhorn animated"></span>我要报名
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/users"></a><span class="icon-group (alias) animated"></span>员工管理
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/recruit"></a><span class="icon-cube animated"></span>招聘管理
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/train"></a><span class="icon-toggle-right"></span>集中培训
+            </div>
+        </dd>
+        {/if}
+        <dd>
+            <div class="ti">
+                <a target="{$recordAddress}"></a><span class="icon-user animated"></span>我的档案
+            </div>
+        </dd>
+    </dl>
+</div>
+
+<div class="admin_right_Box">
+    <div class="r_main">
+        <iframe id="iframeContent" name="iframeContent" src="{$adminRole==1?"/record":"/academyManage"}" style="overflow:visible;" scrolling="yes"
+                frameborder="no" width="100%" height="100%; ">
+        </iframe>
+    </div>
+</div>
+
+<div class="footer"></div>
+</body>
+
+</html>
+<script type="text/javascript">
+    $(function () {
+        $.get("/record", function (data) {
+            $("#iframeContent").html(data); //初始化加载界面
+        });
+
+        $('.ti').click(function () { //点击li加载界面
+            var current = $(this)
+            var text = $(current).text().trim();
+            $(".childTitle").text(text);
+            $("H2.x6").html($(current).find("span").clone());
+            $("H2.x6").html($("H2.x6").html() + " " + text);
+            var target = current.find('a').attr('target'); // 找到链接a中的targer的值
+            $("#iframeContent").attr("src", target);
+        });
+
+    });
+
+    $('.list_left_main_menu dd .ti').bind('click', function () {
+        $('.clckClass').removeClass('clckClass');
+        $(this).addClass('clckClass');
+
+    });
+</script>

@@ -1,0 +1,186 @@
+{extend name="layout"}
+{block name="title"}订单管理{/block}
+{block name="css"}
+<link href="__PUBLIC__/two/css/chosen.min.css" rel="stylesheet">
+<link href="__PUBLIC__/two/css/icheck-green.css" rel="stylesheet">
+<link href="__PUBLIC__/two/css/jquery.datetimepicker.css" rel="stylesheet">
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+
+    .tab .tab-nav .active a {
+        color: #fff;
+        background: #0a8;
+    }
+</style>
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/two/js/pintuer.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var search = location.search;
+        if (search.indexOf("payed=1") > -1) {
+            $(".tab-head ul li").last().click();
+        }
+        $(".bg-main").click(function () {
+            var _nums = $(this).attr("category_id");
+            document.location.href = "/addOrder?category_id=" + _nums;
+        })
+
+        $(".ajax-linkk").each(function () {
+            $(this).click(function () {
+                var self = $(this);
+                var diZhi = $(this).attr("rel");
+                var num = $(this).attr("num");
+                $.ajax({
+                    url: diZhi + "?num=" + num,
+                    async: false,
+                    success: function (msg) {
+                        //1 开票成功 2重复开票 -2开票失败
+                        if (msg.code == 1) {
+                            // debugger;
+                            alert("开票成功", {
+                                callback: function () {
+                                    $(self).text("下载").unbind("click").click(function () {
+                                        document.location.href = msg.pdf_url;
+                                    })
+                                }
+                            });
+                        } else if (msg.code == -1) {
+                            alert("请完善档案");
+                        } else if (msg.code == 2) {
+                            alert("重复开票", {
+                                callback: function () {
+                                    $(self).text("下载").unbind("click").click(function () {
+                                        document.location.href = msg.pdf_url;
+                                    })
+                                }
+                            });
+                        } else {
+                            alert("开票失败");
+                        }
+                    }
+                });
+            });
+        });
+    })
+
+</script>
+{/block}
+{block name="content"}
+
+<script>
+    function rf(obj) {
+        $(obj).attr("disabled", "disabled");
+        $(obj).html('已下载');
+    }
+</script>
+<div class="ad_r_top_ti_w">
+
+</div>
+<div class="ad_co_Box_warp">
+    <div class="ad_co_Box">
+        <div class="content" style="padding-top: 35px;padding-left: 10px;padding-right: 20px;">
+            <div class="tab">
+                <div class="tab-head">
+                    <ul class="tab-nav">
+                        <li class="active">
+                            <a href="#tab-daifukuan">待付款</a>
+                        </li>
+                        <li>
+                            <a href="#tab-yifukuan">已付款</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-body">
+                    <div class="tab-panel active" id="tab-daifukuan">
+                        <table class="table Dingdanxinxi">
+                            <thead>
+                            <tr>
+                                <th>订单信息</th>
+                                <th>提交人</th>
+                                <th>订单号</th>
+                                <th>价格</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="dingdandfk">
+                            {volist name="unpayList" id="vo"}
+                            <tr>
+                                <td style="line-height:108px;"><img width="200px" height="120px" src="{$vo.bag_img}"/> {$vo.title}</td>
+                                <td style="line-height:130px;">{$vo.enterprise_name}</td>
+                                <td style="line-height:130px;">{$vo.num}</td>
+                                <td style="line-height:130px;"><span class="text-red tips">￥{$vo.price}</span></td>
+                                <td style="line-height:130px;">
+                                    <button type="button" class="button  button-small bg-main"
+                                            category_id="{$vo.category_id}">立即付款
+                                    </button>
+                                </td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-panel" id="tab-yifukuan">
+
+                        <table class="table Dingdanxinxi">
+                            <thead>
+                            <tr>
+                                <th>订单信息</th>
+                                <th>订单号</th>
+                                <th>报名时间</th>
+                                <th>支付时间</th>
+                                <th>价格</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="dingdandfk">
+                            {volist name="payList" id="vo"}
+                            <tr>
+                                <td style="line-height:108px;"><img width="200px" height="120px" src="{$vo.bag_img}"/> {$vo.title}</td>
+                                <td style="line-height:130px;">{$vo.num}</td>
+                                <td style="line-height:130px;">{$vo.add_time}</td>
+                                <td style="line-height:130px;">{$vo.paytime}</td>
+                                <td style="line-height:130px;"><span class="text-red tips">￥{$vo.price}</span></td>
+                                <td style="line-height:130px;">
+                                    {if($vo.pdf_url == "")}
+                                    <button type="button" num="{$vo.num}" class="button bg-red button-small ajax-linkk"
+                                            rel="/drawing">开具发票
+                                    </button>
+                                    {else}
+                                    <a href="{$vo.pdf_url}" onclick="rf(this)" class="button bg-red">下载</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div id="addOrUpdate" class="dialog" style="width:500px;">-->
+    <!--<div class="dialog-head"><strong></strong></div>-->
+    <!--<div class="dialog-body">-->
+        <!--<form class="xiugaixueyuan" id="editMember">-->
+            <!--<input type="hidden" name="id" value="">-->
+            <!--<div><span>发票名称：</span><input type="text" id="name" name="name" value="{$arrRecord['invoicename']}"  readonly  unselectable="on"/></div>-->
+            <!--<div><span>纳税人识别号：</span><input type="text" id="phone" name="phone" value="{$arrRecord['identifynumber']}" readonly  unselectable="on"/></div>-->
+            <!--<div><span>地址及电话：</span><input type="password" id="password" name="password" class="input" value="{$arrRecord['invoiceaddress'].' '.$arrRecord['addressphone']}" readonly  unselectable="on"/></div>-->
+            <!--<div><span>开户行及账号：</span><input type="date" id="create_time" name="create_time" class="input" value="{$arrRecord['openingbank'].' '.$arrRecord['accountnumber']}" readonly  unselectable="on"/>-->
+            <!--</div>-->
+        <!--</form>-->
+        <!--<div class="dialog-foot">-->
+            <!--<div class="anNiu">-->
+                <!--<button class="button bg-main btnAddOrUpdate">确定</button>-->
+                <!--<button href="#0" class="button dialog-close">取消</button>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+{/block}
+

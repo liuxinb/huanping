@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/help.css"/>
+		<script src="../js/jquery-1.10.2.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="content">
+			<div class="content_top">
+				<div><input type="text" placeholder="请输入您的问题" class="signup_item_input" name="" ></div>
+		    	<div class="nav1_left_sousuo">搜索</div>
+			</div>
+			<div class="content_top_help">
+				<div class="help_liebiao help_liebiao2">
+					收不到短信验证码怎么办？
+				</div>
+				<div  class="help_liebiao_daan">
+					<ul>
+						<li>1、查看手机是否停机</li>
+						<li>2、...</li>
+						<li>3、...</li>
+					</ul>
+				</div>
+				<div class="help_liebiao">
+					以上回答是否解决了您的问题？
+				</div>
+				<div class="content_main_caozuo2 btn">
+			        <div class="content_dingdanxinxi_right_quxiao2 btn_no">否</div>
+					<div class="content_dingdanxinxi_right_zhifu2 btn_yes">是</div>
+			    </div>
+			    <div class="yes"  style="padding: 10px 0;">感谢您的反馈。</div>
+			    <div class="yes2"  style="padding: 10px 0;">感谢您的反馈，我们一定好好改进。</div>
+			    <div class="no">
+			    	<div style="padding: 10px 0;">很抱歉没能解决您的困扰，能选一下原因吗？</div>
+			    	<div>
+			    		<div class="magic_table">
+			    			<input class="magic-checkbox" type="checkbox" name="layout" id="c1"><label for="c1">太复杂，没看懂</label>
+			    		</div>
+			    		<div class="magic_table">
+			    			<input class="magic-checkbox" type="checkbox" name="layout" id="c2"><label for="c2">操作后未能解决</label>
+			    		</div>
+			    		<div class="magic_table">
+			    			<input class="magic-checkbox" type="checkbox" name="layout" id="c3"><label for="c3">内容有错误</label>
+			    		</div>
+			    		<div class="magic_table">
+			    			<input class="magic-checkbox" type="checkbox" name="layout" id="c4"><label for="c4">描述不清晰</label>
+			    		</div>
+			    		<div class="content_dingdanxinxi_right_tijiao tijiao">提交</div>
+			    	</div>
+			    </div>
+			</div>
+			
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	$(document).ready(function(){
+  		$(".btn_yes").click(function(){
+  			$(".btn").hide();
+  			$(".yes").show();
+  		});
+  		$(".btn_no").click(function(){
+  			$(".btn").hide();
+  			$(".no").show();
+  		});
+  		$(".tijiao").click(function(){
+  			$(".no").hide();
+  			$(".yes2").show();
+  		});
+	});
+</script>

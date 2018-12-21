@@ -1,0 +1,130 @@
+{extend name="layout"}
+{block name="title"}修改企业信息{/block}
+{block name="css"}{/block}
+{block name="script"}
+<script class="resources library" src="__PUBLIC__/two/js/area.js" type="text/javascript"></script>
+{/block}
+{block name="content"}
+    <body>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><a href="{:url('Admin/Firm/index')}"><button id="demo-btn-addrow" class="btn btn-info">回到列表</button></a></h3>
+            </div>
+        </div>
+        <!--===================================================-->
+        <div class="col-lg-3"></div>
+
+        <div class="col-lg-6">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">修改企业信息</h3>
+                </div>
+                <?php foreach ($all as $k => $v): ?>
+
+                <form class="form-horizontal" method="post" action="{:url('Admin/Firm/edit_firm_run',array('id'=>$v.id))}" enctype="multipart/form-data">
+                    <div class="panel-body">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">企业基本信息</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="demo-is-inputsmall">企业名称:</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="firmname" id="demo-hor-inputemail" class="form-control" value="{$v.firmname|default=''}" placeholder="企业信息" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="demo-is-inputsmall"></label>
+                            <div class="col-sm-6">
+                                <select id="s_province" name="province"  data-selected="{$v.province|default=''}" ></select>  
+                                <select id="s_city" name="city"  data-selected="{$v.city|default=''}" ></select>  
+                                <select id="s_county" name="county"  data-selected="{$v.county|default=''}"></select>
+                                <script type="text/javascript">_init_area();</script>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">注册地址:</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="registersite"  class="form-control" value="{$v.registersite|default=''}" required>
+                            </div>
+                        </div>
+                         <div class="panel-heading">
+                            <h3 class="panel-title">企业发票信息</h3>
+                        </div>
+                         <div class="form-group">
+                            <label class="col-sm-3 control-label">发票名称</label>
+                            <div class="col-sm-6 ">
+                                <input type="text" name="invoicename"  class="form-control" value="{$v.invoicename|default=''}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">纳税人识别号:</label>
+                            <div class="col-sm-6 ">
+                                <input type="text" name="identifynumber"  class="form-control" value="{$v.identifynumber|default=''}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">开户行</label>
+                            <div class="col-sm-6 ">
+                                <input type="text" name="openingbank"  class="form-control" value="{$v.openingbank|default=''}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">账号</label>
+                            <div class="col-sm-6 ">
+                                <input type="text" name="accountnumber"  class="form-control" value="{$v.accountnumber|default=''}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">地址电话</label>
+                            <div class="col-sm-6 ">
+                                <input type="text" name="addressphone"  class="form-control" value="{$v.addressphone|default=''}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发票地址</label>
+                            <div class="col-sm-6 ">
+                                <input type="text" name="invoiceaddress"  class="form-control" value="{$v.invoiceaddress|default=''}" required>
+                            </div>
+                        </div>
+
+                        <div class="panel-heading">
+                            <h3 class="panel-title">企业联系人信息</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">姓名:</label>
+                            <div class="col-sm-6 ">
+                                <input type="text" name="name" id="demo-hor-inputemail" class="form-control" value="{$v.name|default=''}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">手机:</label>
+                            <div class="col-sm-6 ">
+                                <input type="text" name="phone" id="demo-hor-inputemail" class="form-control" value="{$v.phone|default=''}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">邮箱:</label>
+                            <div class="col-sm-6 ">
+                                <input type="text" name="email" id="demo-hor-inputemail" class="form-control" value="{$v.email|default=''}" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <input class="btn btn-success" type="submit" value="保存">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <?php endforeach ?>
+            </div>
+            <!--===================================================-->
+
+        </div>
+    </body>
+{/block}
+
+
+

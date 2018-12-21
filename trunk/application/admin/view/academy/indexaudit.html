@@ -1,0 +1,237 @@
+{extend name="layout"}
+{block name="title"}院校审核列表{/block}
+{block name="css"}
+<link href="__PUBLIC__/css/upload_picture.css" rel="stylesheet">   <!--//上传图片样式表-->
+<style>
+    .selectStyle{
+        height: 26px;
+        width: 170px ;
+    }
+</style>
+{/block}
+{block name="script"}
+<script type="text/javascript" >
+    $(function(){
+        //搜索功能
+        $("#search").click(function(){
+            var url = $(this).attr('url');
+            var email = $(this).prev().prev().prev('input').serialize();
+//            var query = $(this).prev('input').serialize();
+            var states = $(this).prev().prev('select').serialize();
+            var name = $(this).prev('input').serialize();
+//            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+//            query = query.replace(/^&/g,'');
+            if( url.indexOf('?')>0 ){
+                url += '&' + states+','+email+','+name;
+            }else{
+                url += '?' + states+'&'+email+'&'+name;
+            }
+            window.location.href = url;
+        });
+
+    })
+
+    function jiedong(id) {
+        $.ajax({
+            url: '/admin/Academy/unfreezeState/id/' + id + '/state/1',
+            dataType: 'json',
+            type: 'post',
+            success: function (res) {
+                if (res.status == 1) {
+//                    AlertBox.alert(123);
+//                    console.log(res);
+                }
+            },
+            error: function (res) {
+                layer.msg(res.responseText, {icon: 5, time: 1000, offset: '350px'});
+            }
+        });
+    }
+
+
+
+
+    //查询院校系信息
+    function xi(id) {
+        $.ajax({
+            url : "/admin/Academy/getSchoolInfo",
+            async : true,
+            type : "POST",
+            data : {
+                "type" : "query",
+                "id" : id
+            },
+            // 成功后开启模态框
+            success : showQuery,
+            error : function() {
+                alert("请求失败");
+            },
+            dataType : "json"
+        });
+    }
+
+    // 查询成功后向模态框插入数据并开启模态框。data是返回的JSON对象
+    function showQuery(data) {
+        $('#school').text(data.school.yx);
+        $('#organ').text(data.school.dm);
+//        var arr= new Array;
+//        arr.push(data.academy);
+//        console.log(arr);
+        str='';
+        $.each(data.academy ,function(i,val){
+            str+=val.academy+"</br>";
+            $('#xi').html(str);
+        });
+
+        $('#wei').val(data.school.id);
+        if(data.school.state==0){
+            $("#wei").attr("style","display:block;background-image: linear-gradient(#86c042, #86c042);");
+        }
+        if(data.school.state==1){
+            $("#wei").attr("style","display:none;");
+        }
+        $('#thinkright-edit').modal('show');
+    }
+
+
+</script>
+{/block}
+{block name="content"}
+<body>
+<!--===================================================-->
+<div id="page-content">
+
+    <!-- Basic Data Tables -->
+    <!--===================================================-->
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">院校审核</h3>
+        </div>
+        <div class="padding border-bottom">
+            <div class="col-lg-4">
+                <h3 class="panel-title">
+                    <!--<a id="discard" href="javascript:;"><button id="demo-btn-addrow" class="btn btn-info">删除 </button></a>-->
+                    <!--<button id="demo-btn-addrow" class="btn btn-info" onclick="add(this)">添加教师</button>-->
+                </h3>
+            </div>
+            <div class="col-lg-8" style="padding: 0 20px 0 20px;">
+                <div class="float-right">
+                    <input type="text" name="email" class="input search-form" size="20" placeholder="搜索账号" />
+                    <select class="input search-form selectStyle" name="states" >
+                        <option value="">请选择审核状态</option>
+                        <?php foreach ($State as $k => $v): ?>
+                        <option value="{$k}">{$v}</option>
+                        <?php endforeach ?>
+                    </select>
+                    <input type="text" name="name" class="input search-form" size="20" placeholder="搜索院校名称" />
+                    <a  href="javascript:;" id="search" url="{:url('indexAudit')}">搜索</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="panel-body">
+            <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%" >
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>院校账号</th>
+                    <th>院校名称</th>
+                    <th>组织机构代码</th>
+                    <th>创建时间</th>
+                    <th>审核状态</th>
+                    <th>确定信息审核</th>
+                    <!--<th class="min-tablet">操作</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($all as $k => $vo): ?>
+                <tr>
+                    <td>{$vo['cid']?$vo['cid']:''}</td>
+                    <td>{$vo['email']?$vo['email']:''}</td>
+                    <td>{$vo['academy_name']?$vo['academy_name']:''}</td>
+                    <td>{$vo['organization_code']?$vo['organization_code']:''}</td>
+                    <td>{$vo['create_time']|date="Y-m-d H:i:s",###}</td>
+                    <td>
+                        {if condition="$vo.state == 0"/}
+                        <span> 未审核 </span>
+                        {else}
+                        <span> 已审核</span>
+                        {/if}
+                    </td>
+
+                    <td>
+                        {if condition="$vo.state == 0"/}
+                             <button id="myModal" style="background-image: linear-gradient(#FF9900, #FF9900);" onclick="xi({$vo.cid})">  查看信息并审核 </a> </button></td>
+                        {else}
+                            <button id="myModal" onclick="xi({$vo.cid})">  查看信息 </a> </button></td>
+
+                        {/if}
+                    <!--<td>-->
+                        <!--{if condition="$vo.state == 0"/}-->
+                       <!--<span><button  style="background-image: linear-gradient(#FF9900, #FF9900);"><a onclick="jiedong({$vo.cid})" caozuo="2"> 未审核 </a> </button></span>-->
+                        <!--{else}-->
+                        <!--<span><button style="background-image: linear-gradient(#dddddd, #dddddd);"> 已审核 </a></button> </span>-->
+                        <!--{/if}-->
+                    <!--</td>-->
+                </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+            <div style="text-align: center;padding-bottom:30px;">{$all->render()}</div>
+        </div>
+    </div>
+    <!--===================================================-->
+</div>
+<!--===================================================-->
+
+<!-- 修改菜单模态框开始 -->
+<div class="modal fade" id="thinkright-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    院校审核信息
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="form1" action="" method="post" enctype="multipart/form-data">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" >院校:</label>
+                            <div class="col-sm-9" id="school">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">系:</label>
+                            <div class="col-sm-9" id="xi">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" >组织机构代码:</label>
+                            <div class="col-sm-9" id="organ">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer text-right"   >
+                       <button id="wei" class="sh" value="" style="text-align: center;padding-bottom:30px;" onclick="jiedong($(this).val())">审核 </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 修改菜单模态框结束 -->
+
+
+</body>
+{/block}
+
+
+
+

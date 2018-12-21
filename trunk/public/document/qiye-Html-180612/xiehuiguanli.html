@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/xiehuiguanli.css" />
+		<link rel="stylesheet" type="text/css" href="css/fonticon.css" />
+		<link rel="stylesheet" type="text/css" href="css/jquery.pagewalkthrough.css" />
+		<script src="js/xiehuiguanli.js" type="text/javascript" charset="utf-8"></script>
+		<script src="page/js/selectUi.js" type="text/javascript" charset="utf-8"></script>
+		<script src="page/js/lq.datetimepick.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.pagewalkthrough.min.js" type="text/javascript" charset="utf-8"></script>
+		<title></title>
+	</head>
+
+	<body>
+		<div class="container">
+			<!--头部导航-->
+			<header>
+				<div class="header1">
+					<div class="nav1">
+						<div class="nav1_left">
+							<!--<div  type="button" class="nav1_left_fenlei" id="hide">课程分类<i class="iconfont icon-jiantou"></i></div>
+		             <div><input type="text" placeholder="请输入课程分类" class="signup_item_input" name="" ></div>
+		             <div class="nav1_left_sousuo">搜索</div>-->
+						</div>
+						<div class="nav1_left_tree">
+							<div>通知</div>
+							<div class="help">
+								<a href="page/xiehuihelp.html" target="menuFrame">&nbsp;&nbsp;&nbsp;&nbsp;帮助</a>
+							</div>
+							<div class="qie">&nbsp;&nbsp;&nbsp;&nbsp;企业名称
+								<div class="xiugai">
+									<div class="upup">
+										<img src="img/upup.png" />
+									</div>
+									<div>
+										<a href="page/gaimi.html" target="menuFrame">修改密码</a>
+									</div>
+									<div>安全退出</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</header>
+			<!--<div id="divObj" class="header_main" style="display:none;">
+		    <div class="header_main_content">
+		    	<div class="header_main_content_he">
+		             <div><input type="text" placeholder="请输入课程分类" class="header_main_content_input" name="" ></div>
+		             <div class="header_main_content_sousuo">搜索</div>
+		          </div>
+		          <div class="header_main_content_xuan">
+		          		<div class="header_main_content_leibie">行业类别</div>
+		          		<div class="header_main_content_leibie">行业类别</div>
+		          		<div class="header_main_content_leibie">行业类别</div>
+		          		<div class="header_main_content_leibie">行业类别</div>
+		          		<div class="header_main_content_leibie">行业类别</div>
+		          </div>
+		          <div class="header_main_content_xuan header_main_content_xuaner">
+		          		<div class="header_main_content_leibie">行业类别</div>
+		          		<div class="header_main_content_leibie">行业类别</div>
+		          		<div class="header_main_content_leibie">行业类别</div>
+		          		<div class="header_main_content_leibie">行业类别</div>
+		          		<div class="header_main_content_leibie">行业类别</div>
+		          </div>
+		        </div>
+		    </div>
+		 </div>-->
+			<!--头部导航结束-->
+			<div class="content">
+				<div class="left">
+					<div class="left_tab">
+						<ul id="accordion" class="accordion">
+							<li class="selectedbb">
+								<a href="page/xiehuiguanlizhongxin.html" target="menuFrame">
+									<div class="link link2_title con1">管理中心</div>
+								</a>
+							</li>
+							<li>
+								<a href="page/qiyexinxi.html" target="menuFrame">
+									<div class="link con2">企业信息</div>
+								</a>
+							</li>
+							<li>
+								<a href="page/xueyuanxinxi.html" target="menuFrame">
+									<div class="link con3">学员信息</div>
+								</a>
+							</li>
+							<li>
+								<a href="page/kechengxinxi.html" target="menuFrame">
+									<div class="link con4">课程信息</div>
+								</a>
+
+							</li>
+							<li>
+								<a href="page/peixunzhengshu.html" target="menuFrame">
+									<div class="link con5">培训证书</div>
+								</a>
+							</li>
+							<!--<li>
+								<a href="page/quanxianguanli.html"target="menuFrame"><div class="link">权限管理</div></a>
+							</li>-->
+							<li>
+								<a href="page/xiehuimytiezi.html" target="menuFrame">
+									<div class="link">我的帖子</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="left_tab2">
+						<ul class="accordion2">
+							<li class="link2 link2_title">社区热帖</li>
+							<li class="link2">帖子名称</li>
+							<li class="link2">社区名称</li>
+							<li class="link2">帖子名称</li>
+							<li class="link2">社区名称</li>
+							<li class="link2">帖子名称</li>
+						</ul>
+					</div>
+				</div>
+				<div class="right">
+					<iframe id="menuFrame" name="menuFrame" src="page/xiehuiguanlizhongxin.html" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="100%; ">
+				     </iframe>
+
+				</div>
+			</div>
+			<div id="walkthrough-content">
+				<div id="walkthrough-1">
+					<div class="walkthrough-1_one">欢迎来到欢迎来到环境保护知识赋能网络培训系统！</div>
+				</div>
+
+				<div id="walkthrough-2">
+					<div class="walkthrough-1_two">点击这里查看信息</div>
+				</div>
+
+				<div id="walkthrough-3">
+					<div class="walkthrough-1_tree">点击这里查看学员信息</div>
+				</div>
+
+				<div id="walkthrough-4">
+					<div class="walkthrough-1_fure">点击这里查看课程信息</div>
+				</div>
+
+			</div>
+		</div>
+
+		<footer>
+			<P>意见反馈-用户协议-关于我们-商务合作-加入我们</P>
+			<P>@北京博奥网络教育科技股份有限公司 技术支持 京 ICP 备16030848 号</P>
+		</footer>
+
+	</body>
+
+</html>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		$("#hide").click(function() {
+			$(".header_main").slideToggle(1000); //利用slideToggle来实现窗帘式效果
+		});
+	});
+	$(function() {
+		$("#datetimepicker").on("click", function(e) {
+			e.stopPropagation();
+			$(this).lqdatetimepicker({
+				css: 'datetime-day',
+				dateType: 'D',
+				selectback: function() {
+
+				}
+			});
+
+		});
+	});
+	$(function() {
+		var libb = $('.left_tab ul li');
+		libb.click(function() {
+			$(this).addClass('selectedbb').siblings().removeClass('selectedbb');
+
+		});
+	});
+</script>
+<script>
+	$(function() {
+		// Set up tour
+		$('body').pagewalkthrough({
+			name: 'introduction',
+			steps: [{
+				popup: {
+					content: '#walkthrough-1',
+					type: 'modal'
+				}
+			}, {
+				wrapper: '.con2',
+				popup: {
+					content: '#walkthrough-2',
+					type: 'tooltip',
+					position: 'bottom'
+				}
+			}, {
+				wrapper: '.con3',
+				popup: {
+					content: '#walkthrough-3',
+					type: 'tooltip',
+					position: 'bottom'
+				}
+			}, {
+				wrapper: '.con5',
+				popup: {
+					content: '#walkthrough-4',
+					type: 'tooltip',
+					position: 'right'
+				}
+			}]
+		});
+		// Show the tour
+		$('body').pagewalkthrough('show');
+	});
+</script>

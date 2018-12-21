@@ -1,0 +1,82 @@
+<style>
+    .teacher_table {
+        margin: 15px 0px;
+    }
+
+    .teacher_table td {
+        border-top: 0px solid #ddd;
+        padding: 8px;
+        line-height: 35px;
+        vertical-align: top;
+    }
+
+    .teacher_table th {
+        border-bottom: 1px solid #ddd;
+        vertical-align: bottom;
+        padding: 8px;
+        line-height: 35px;
+        text-align: left;
+    }
+</style>
+<div class="content_main">
+    <div class="main">
+        <div class="content_main_kecheng">
+            <div class="content_main_kecheng_img">
+                <img src="{$res.bag_img}"/>
+            </div>
+            <div class="content_main_kecheng_name">
+                <div class="content_main_kecheng_name_ming">{$res.title}</div>
+                <div class="content_main_kecheng_name_text">
+                    {$res.description}
+                </div>
+                <div class="content_main_kecheng_name_jiage">￥{$res.price}</div>
+            </div>
+        </div>
+        <div class="content_teacher">
+            <h2 class="common-title">课程体系</h2>
+            <table class="table table-striped teacher_table">
+                <tbody>
+                <tr>
+                    <th>讲师</th>
+                    <th>单位</th>
+                    <th>职称</th>
+                    <th>课程名称</th>
+                    <th>学时</th>
+                </tr>
+                {volist name="data" id="vo"}
+                <tr>
+                    <td>{$vo.teacher.name}</td>
+                    <td>{$vo.teacher.qg}</td>
+                    <td>{$vo.teacher.referral}</td>
+                    <td>{$vo.title}</td>
+                    <td>{$vo.hours}学时</td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+        <div class="kechenggoumai">
+            <div class="x6 fanhuikechengliebiao"> <!--<i class="icon-angle-left"></i>&nbsp;返回课程列表--> </div>
+            <div class="x6">
+                <div class="rightfloat kechenggoumai_btn" data-cid="{$res.id}" id="buy" data-status="{$buyed}">立即购买
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $("#buy").on("click", function () {
+        var status = $(this).data("status");
+        var cid = $(this).data("cid");
+        if (status == 0) {
+            menu("/own/orders/addOrder?category_id=" + cid);
+        } else if (status == 1) {
+            alert("<div id=\"apper\" style=\"width:236px;\"><br/>" +
+                "<img style=\"height: 149px; width: 147px;\" src=\"/static/img/index/apper.png\"><br/>" +
+                "扫一扫下载学习APP",{title:"您已购买此课程"});
+        } else {
+            alert("您已报名,可点击订单管理查看报名信息！");
+        }
+    })
+</script>

@@ -1,0 +1,96 @@
+
+{extend name="layout"}
+{block name="title"}员工列表{/block}
+{block name="css"}{/block}
+{block name="script"}
+<script>
+    //根据条件搜索
+    $(function () {
+        //搜索功能
+        $("#search").click(function () {
+            var url = $(this).attr('url');
+//            var name = $(this).prev('input').serialize();  //姓名
+            var query = $(this).prev('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+            query = query.replace(/^&/g, '');
+            if (url.indexOf('?') > 0) {
+                url += '&' + query;
+            } else {
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+    })
+</script>
+{/block}
+{block name="content"}
+    <body>
+                <div id="page-content">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                               <label>学员APP考试</label>
+                            </h3>
+                        </div>
+
+                        <div class="padding border-bottom">
+                            <div class="col-lg-7">
+                                <h3 class="panel-title">
+                                    <!--<button id="demo-btn-addrow" class="btn btn-info"> 删除</button>-->
+                                </h3>
+                            </div>
+                            <div class="col-lg-5 " style="padding: 0 20px 0 20px;">
+                                <div class="float-right">
+                                    <input type="text" name="phone" class="input search-form"
+                                           placeholder="用户账号"/>
+                                    <input type="button" id="search" url="{:url('Admin/Exam/index')}" class="wq-btn" value="搜索"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-body" >
+                            <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <!--<th class="all">-->
+                                            <!--<label><input type="checkbox"  id="cboxAll" name="checkall"   value="">选择</label>-->
+                                        <!--</th>-->
+                                        <th class="id" width="100px">Id</th>
+                                        <th class="phone" width="10%">用户账号</th>
+                                        <th class="title" width="15%">课程</th>
+                                        <th class="results" width="10%">分数</th>
+                                        <th class="isqualified" width="10%">合格</th>
+                                        <th class="create_time" width="200px">创建时间</th>
+                                        <th class="update_time" width="200px">修改时间</th>
+                                        <th class="croller" width="200px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {foreach name="all" id="value"}
+                                           <tr>
+                                               <!--<td>-->
+                                                   <!--<input type="checkbox" class="child" name="checkall" value="{$value['uid']?$value['uid']:''}">-->
+                                               <!--</td>-->
+                                                <td>{$value.id}</td>
+                                                <td>{$value.phone}</td>
+                                                <td>{$value.title}</td>
+                                                <td>{$value.results}</td>
+                                                <td>{$value.isqualified?"合格":"不合格"}</td>
+                                                <td>{$value.create_time|date("Y-m-d H:i:s");}</td>
+                                                <td>{$value.update_time|date("Y-m-d H:i:s");}</td>
+                                                <td>
+                                                   <button><a href="javascript:confirm('确定删除？',{confirm:function(){location='{:url('Admin/Exam/del_exam',array('id'=>$value['id']))}'}})">删除</a></button>
+                                                </td>
+                                            </tr>
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                            <tr>
+                               <td  align="center">{$all->render()}</td>
+                            </tr>
+                        </div>
+                    </div>
+                </div>
+
+    </body>
+{/block}

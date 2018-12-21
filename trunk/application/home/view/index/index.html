@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 page</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+    <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/nifty.min.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <script src="__PUBLIC__/js/nifty.min.js"></script>
+    <script src="__PUBLIC__/js/jquery-2.2.4.min.js"></script>
+    <link href="__PUBLIC__/js/common/alertBox/alertBox.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/common/alertBox/alertBox.js"></script>
+</head>
+
+<body>
+    <div id="container" class="cls-container">
+        <!--===================================================-->
+        <div class="cls-content">
+            <div class="cls-content-sm panel">
+                <div class="panel-body">
+                    <div class="mar-ver pad-btm">
+                        <h3 class="h4 mar-no">登录</h3>
+                    </div>
+                     
+                      <form action="" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="username" placeholder="Username" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" placeholder="Password" >
+                        </div>
+                          <div class="form-group">
+                              <input type="text" class="form-control" name="verifyCode" placeholder="请输入验证码" >
+                              <div class="code-img"><img src="{:captcha_src()}" alt="captcha" onClick="this.src='{:captcha_src()}?'+Math.random();" /></div>
+                          </div>
+                     
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">登录</button>
+                    </form>
+                </div>
+        
+            </div>
+        </div>
+        <!--===================================================-->
+    </div>
+        </body>
+</html>

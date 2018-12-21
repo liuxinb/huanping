@@ -1,0 +1,92 @@
+
+{extend name="layout"}
+{block name="title"}修改广告{/block}
+{block name="css"}
+<link href="__PUBLIC__/css/upload_picture.css" rel="stylesheet">   <!--//上传图片样式表-->
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/js/picture_verify.js"></script>  <!--//上传图片验证格式-->
+<script type="text/javascript">
+    $(function() {
+        //上传图片显示预览
+        $("#bg_pic").change(function () {
+            $(".img").attr("src", URL.createObjectURL($(this)[0].files[0]));
+        });
+
+        // 清空背景图片
+        $("#empty_pic").click(function () {
+            $('.pic_look').hide();
+            $("#bg_pic").val('');
+        });
+    });
+
+</script>
+{/block}
+{block name="content"}
+    <body>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><a href="{:url('Admin/Plug/index')}"><button id="demo-btn-addrow" class="btn btn-info">广告列表</button></a>
+                    <a href="{:url('Admin/Plug/add_adv')}"><button id="demo-btn-addrow" class="btn btn-info">添加广告信息</button></a></h3>
+            </div>
+        </div>
+        <!--===================================================-->
+        <div class="col-lg-3"></div>
+
+        <div class="col-lg-6">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">修改广告</h3>
+                </div>    
+
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form" name="add_adv" id="add_adv" method="post" action="{:url('Admin/Plug/update_adv_run',array('id'=>$ad_find['id']))}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">广告名称：</label>
+                        <div class="col-sm-7">
+                            <input type="text" placeholder="请输入广告名称" class="form-control" name="plug_name" id="plug_name" value="{$ad_find.plug_name}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <label class="col-sm-3 control-label">广告位名称：</label>
+                            <div class="col-sm-7">
+                                <select class="input input-auto type" name="plug_typeid" required>
+                                    <option value="1" {if condition="$ad_find.plug_typeid eq 1"}selected {/if}>首页WEB首页</option>
+                                    <option value="2" {if condition="$ad_find.plug_typeid eq 2"}selected {/if}>APP轮播图</option>
+                                </select>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">广告图片上传</label>
+                        <div class="col-sm-7 ">
+                            <a class="upload_img_add"><input type="file"  name="image" class="imgInput" id="bg_pic">点击更改图片</a>
+                            <img  src="{$ad_find.plug_pic}" class="img" alt="" width="160" height="90"  >
+                            <span class="text-warning imageFileWarning"></span>
+                            <p style="color: red">上传的图片大小不能超过2M;</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">打开链接：</label>
+                        <div class="col-sm-7">
+                            <input type="text" placeholder="请输入正确的网址更是" class="form-control" name="plug_url" id="plug_url" value="{$ad_find.plug_url}">
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <button class="btn btn-primary" type="submit">保存内容</button>
+                                <button class="btn btn-white" type="button" onClick="self.location = document.referrer;">返回列表</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--===================================================-->
+
+        </div>
+    </div>
+
+
+</body>
+{/block}
+

@@ -1,0 +1,146 @@
+{extend name="layout"}
+{block name="title"}学习管理{/block}
+{block name="css"}
+
+{/block}
+{block name="content"}
+<link href="__PUBLIC__/two/css/chosen.min.css" rel="stylesheet">
+
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+</style>
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/two/js/pintuer.js"></script>
+
+<script>
+    function jiedong(id) {
+        var a = document.getElementById(id);
+        var b = document.getElementById("status" + id);
+        $.ajax({
+            url: 'enterprise/users/unfreezeStatus/id/' + id + '/status/1',
+            dataType: 'json',
+            type: 'post',
+            success: function (res) {
+                if (res == '操作成功') {
+                    alert(res, {
+                        callback: function () {
+                            location.assign(location);
+                        }
+                    });
+                }
+            },
+            error: function (res) {
+                layer.msg(res.responseText, {icon: 5, time: 1000, offset: '350px'});
+            }
+        })
+    }
+
+    function dongjie(id) {
+        var a = document.getElementById(id);
+        var b = document.getElementById("status" + id);
+        $.ajax({
+            url: 'enterprise/users/unfreezeStatus/id/' + id + '/status/-1',
+            dataType: 'json',
+            type: 'post',
+            success: function (res) {
+                alert(res, {
+                    callback: function () {
+                        location.assign(location);
+                    }
+                });
+            },
+            error: function (res) {
+                layer.msg(res.responseText, {icon: 5, time: 1000, offset: '350px'});
+            }
+        })
+    }
+</script>
+{/block}
+{block name="content"}
+<div class="r_main">
+    <div class="ad_co_Box_warp">
+        <div class="ad_co_Box">
+            <div class="content">
+                <form action="/student" method="post">
+                    <div class="fenQuTongJi_shaiXuan clearfix">
+                        <div style="float: left;">
+                            <input style="width:110px;float: left;margin-right: 10px;" name="name" type="text"
+                                   class="input" placeholder="姓名"/>
+                            <div class="" style="width:110px;display:inline-block">
+                                <select id="city" name="status" class="input" style="width:100px;height:34px">
+                                    <option value="">所有</option>
+                                    <option value="1">正常</option>
+                                    <option value="-1">离职</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="button bg-blue icon-search"> 查询</button>
+                    </div>
+                </form>
+                <table class="table table-striped table-hover xueyuanguanlitable">
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>学习进度</th>
+                        <th>培训证书</th>
+                        <th>状态</th>
+                        {if($role==1)}
+                        <th>操作</th>
+                        {/if}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name="data" id="vo" }
+                    <tr>
+                        <td>{$vo.name}</td>
+                        <td>{$vo.plan}</td>
+                        <td>
+                            <?php
+                        if($vo['certificate']) {
+                            echo '已发';
+                            } else {
+                            echo '未发';
+                            }
+                            ?>
+                        </td>
+                        <td id="status{$vo.uid}">
+                            <?php
+                        if($vo['status'] == 1) {
+                            echo '正常';
+                        } else if($vo['status'] == -1) {
+                            echo '离职';
+                        }
+                       ?>
+                        </td>
+                        {if($role==1)}
+                        <td class="content_main_caozuo">
+                            {if condition="$vo.status == -1"/}
+                            <button type="button" class="button bg-red button-small icon-asterisk " id="{$vo.uid}"
+                                    onclick="jiedong({$vo.uid})" caozuo="2"> 解冻
+                            </button>
+                            {else}
+                            <button type="button" class="button border-red button-small icon-asterisk " id="{$vo.uid}"
+                                    onclick="dongjie({$vo.uid})" caozuo="1"> 离职
+                            </button>
+                            {/if}
+
+                        </td>
+                        {/if}
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+                {if condition="count($data)<=0"}
+                <div style="display: block;margin: 0 auto;width: 120px;font-size: 20px;padding: 10px;">暂无数据!</div>
+                {/if}
+                {if condition="count($data)>0"}
+                <div style="text-align: center;padding-bottom:30px;">{$list}</div>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

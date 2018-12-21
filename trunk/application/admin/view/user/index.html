@@ -1,0 +1,55 @@
+
+{extend name="layout"}
+{block name="title"}用户列表{/block}
+{block name="css"}{/block}
+{block name="script"}{/block}
+{block name="content"}
+    <body>
+        <div class="panel">
+            <!--===================================================-->
+            <div class="panel-body">
+                <div class="pad-btm form-inline">
+                    <div class="row">
+                        <div class="col-sm-6 text-xs-center">
+                            <div class="form-group">
+                                <a href="{:url('Admin/User/add_user')}"><button id="demo-btn-addrow" class="btn btn-purple"><i class="demo-pli-plus"></i> 添加用户</button></a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 text-xs-center text-right">
+                        </div>
+                    </div>
+                </div>
+                <table id="demo-foo-addrow" class="table table-bordered table-hover toggle-circle" data-page-size="7">
+                    <thead>
+                        <tr>
+                            <th data-sort-initial="true" data-toggle="true">用户名</th>
+                            <th>拥有角色</th>
+                            <th data-hide="phone, tablet">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach name="data" item="v"}
+                        <tr>
+                            <td>{$v['username']}</td>
+                            <td>{$v['title']}</td>
+                            <td>
+                                <button><a href="{:url('Admin/User/edit_user',array('id'=>$v['id']))}">修改权限或密码</a></button>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <div class="text-right">
+                                    <ul class="pagination"></ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!--===================================================-->
+        </div>
+    </body>
+{/block}

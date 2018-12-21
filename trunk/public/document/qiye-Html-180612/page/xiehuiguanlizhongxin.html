@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>管理中心</title>
+		<!-- 引入 echarts.js -->
+		<script src="js/echarts.common.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/xiehuiguanlizhongxin.css"/>
+	</head>
+
+	<body>
+		<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+		<div class="content">
+			<div id="main"></div>
+			<div id="main_2"></div>
+		</div>
+		<div id="main_l"></div>
+		<script type="text/javascript">
+			// 基于准备好的dom，初始化echarts实例
+			var myChart = echarts.init(document.getElementById('main'));
+			var myChart2 = echarts.init(document.getElementById('main_l'));
+			var myChart3 = echarts.init(document.getElementById('main_2'));
+			// 指定图表的配置项和数据
+			option = {
+				title: {
+					text: '新增企业数量',
+					x: 'center'
+				},
+				tooltip: {
+					trigger: 'axis'
+				},
+
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				toolbox: {
+					
+				},
+				xAxis: {
+					type: 'category',
+					boundaryGap: false,
+					data: ['一月', '二月', '三月', '四月', '五月', '六月']
+				},
+				yAxis: {
+
+					type: 'value',
+					
+				},
+				series: [{
+					name: '新增企业数量',
+					type: 'line',
+					stack: '总量',
+					data: [55, 158, 125, 135, 90, 199]
+				}]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+			// 指定图表的配置项和数据
+			option = {
+				title: {
+					text: '新增学员数量',
+					x: 'center'
+				},
+				tooltip: {
+					trigger: 'axis'
+				},
+
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true
+				},
+				toolbox: {
+					
+				},
+				xAxis: {
+					type: 'category',
+					boundaryGap: false,
+					data: ['一月', '二月', '三月', '四月', '五月', '六月']
+				},
+				yAxis: {
+
+					type: 'value',
+					
+					
+				},
+				series: [{
+					name: '新增学员数量',
+					type: 'line',
+					stack: '总量',
+					data: [120, 132, 101, 134, 90, 210]
+				}]
+			};
+
+			// 使用刚指定的配置项和数据显示图表。
+			myChart3.setOption(option);
+
+			option = {
+				title: {
+					text: '培训证书',
+
+					x: 'center'
+				},
+				tooltip: {
+					trigger: 'item',
+					formatter: "{a} <br/>{b} : {c} ({d}%)"
+				},
+				legend: {
+					orient: 'vertical',
+					left: 'left',
+					data: ['已发放', '未发放']
+				},
+				series: [{
+					name: '访问来源',
+					type: 'pie',
+					radius: '55%',
+					center: ['50%', '60%'],
+					data: [{
+							value: 335,
+							name: '已发放'
+						},
+						{
+							value: 310,
+							name: '未发放'
+						}
+					],
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}]
+			};
+			myChart2.setOption(option);
+		</script>
+	</body>
+
+</html>

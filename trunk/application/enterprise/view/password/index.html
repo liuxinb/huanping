@@ -1,0 +1,191 @@
+{extend name="layout"}
+{block name="title"}员工管理列表{/block}
+{block name="css"}
+<!--<link rel="stylesheet" href="__PUBLIC__/page/css/yuangongguanli.css" />-->
+{/block}
+{block name="script"}
+
+    <style type="text/css">
+        body {
+        }
+
+        .container {
+            text-align: center;
+            padding: 30px;
+            /* width: 66%; */
+            /* min-height: 300px; */
+            background: white;
+            /* padding: 3px 2%; */
+            margin: 0 auto;
+            /* margin-top: 5px; */
+            /* padding-top: 140px; */
+        }
+
+        .signup_item {
+            margin: 0 auto;
+            width: 500px;
+        }
+
+        .signup_item_one {
+            padding-top: 10px;
+        }
+
+        .signup_item_left {
+            width: 90px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            color: #7F7F7F;
+            display: inline-block;
+            vertical-align: 27px;
+            text-align: left;
+            padding-right: 20px;
+        }
+
+        .signup_item_right {
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+        }
+
+        .ww_inputWithMagnifier_info {
+            position: absolute;
+            background: #E5F3FF;
+            border-radius: 4px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 24px;
+            color: #787878;
+            padding: 0 10px;
+            left: 0;
+            right: 0;
+            bottom: 55px;
+        }
+
+        .signup_item_input {
+            border: 1px solid #C9C9C9;
+            border-radius: 2px;
+            width: 280px;
+            height: 20px;
+            line-height: 20px;
+            font-size: 14px;
+            padding: 5px 6px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .content_header_red_btn {
+            width: 90px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            display: block;
+            font-size: 14px;
+            margin-left: 10px;
+            border-radius: 1px;
+            color: #FFFFFF;
+            background: #2A8AE2;
+            cursor: default;
+            margin: 0 auto;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $("#submitBtn").click(function () {
+                var ypassword = $("#ypassword").val();
+                var password = $("#password").val();
+                var password_confirm = $("#password_confirm").val();
+                if (ypassword == "") {
+                    alert("请输入原密码！", {
+                        callback: function () {
+                            $("#ypassword").focus();
+                        }
+                    });
+                } else if (password == "") {
+                    alert("请输入新密码！", {
+                        callback: function () {
+                            $("#password").focus();
+                        }
+                    });
+                } else if (password_confirm == "") {
+                    alert("请输入新密码确认！", {
+                        callback: function () {
+                            $("#password_confirm").focus();
+                        }
+                    });
+                } else if (password != password_confirm) {
+                    alert("两次新密码不一致确认！", {
+                        callback: function () {
+                            $("#password_confirm").val("").focus();
+                        }
+                    });
+                } else if (ypassword == password_confirm) {
+                        alert("新密码不能和旧密码一致！", {
+                            callback: function () {
+                                $("#ypassword").val("").focus();
+                                $("#password").val("").focus();
+                                $("#password_confirm").val("").focus();
+                            }
+                        });
+                } else {
+                    $.ajax({
+                        url: '/passwordgo',
+                        dataType: 'json',
+                        type: 'post',
+                        data: {
+                            'ypassword': ypassword,
+                            'password': password
+                        },
+                        success: function (res) {
+                            alert(res, {
+                                callback: function () {
+                                    if (res == "密码重置成功，请重新登录！") {
+                                        parent.document.location.href = "/loginOut";
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            })
+        });
+    </script>
+{/block}
+{block name="content"}
+<body>
+<div class="container">
+    <div class="signup_item signup_item_one">
+        <div class="signup_item_left">原始密码 :</div>
+        <div class="signup_item_right">
+            <div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+            <input type="password" name="ypassword"  style="width:250px;height:32px;float: left; margin-right: 10px;"
+                   placeholder="请输入原始密码" id="ypassword" class="signup_item_input" name="mobile" data-default=""
+                   autocomplete="off" tabindex="5">
+
+        </div>
+    </div>
+    <div class="signup_item signup_item_one">
+        <div class="signup_item_left">新密码 :</div>
+        <div class="signup_item_right">
+            <div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+            <input name="password" id="password" style="width:250px;height:32px;float: left; margin-right: 10px;"
+                   placeholder="请输入新密码" type="password" class="signup_item_input" name="mobile" data-default=""
+                   autocomplete="off" tabindex="5">
+        </div>
+    </div>
+    <div class="signup_item signup_item_one">
+        <div class="signup_item_left">确认密码:</div>
+        <div class="signup_item_right">
+            <div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+            <input name="password_confirm" style="width:250px;float: left; height:32px;margin-right: 10px;"
+                   placeholder="请输入确认新密码" id="password_confirm" type="password" class="signup_item_input" name="mobile"
+                   data-default="" autocomplete="off" tabindex="5">
+        </div>
+    </div>
+    <!--<div class="content_header_red_btn">确认</div>-->
+    <input class="content_header_red_btn" style=" padding: 0px;border:2px solid;border-radius:6px;" type="submit" id="submitBtn" value="确认">
+
+</div>
+</body>
+</html>
+{/block}
+

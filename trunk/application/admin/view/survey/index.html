@@ -1,0 +1,276 @@
+
+{extend name="layout"}
+{block name="title"}企业问卷调查列表{/block}
+{block name="css"}{/block}
+{block name="script"}
+<script type="text/javascript" >
+    /*添加判断题*/
+    function add() {
+        $("input[name='question']").val('');
+        $("input[name='A']").val('');
+        $("input[name='B']").val('');
+        $("input[name='C']").val('');
+        $("input[name='D']").val('');
+        $('#thinkright-add').modal('show');
+    }
+
+    // 修改菜单
+    function edit(obj) {
+        var surId = $(obj).attr('surId');
+        var surQuestion = $(obj).attr('surQuestion');
+        var surA = $(obj).attr('surA');
+        var surB = $(obj).attr('surB');
+        var surC = $(obj).attr('surC');
+        var surD = $(obj).attr('surD');
+
+        $("input[name='id']").val(surId);
+        $("input[name='question']").val(surQuestion);
+        $("input[name='A']").val(surA);
+        $("input[name='B']").val(surB);
+        $("input[name='C']").val(surC);
+        $("input[name='D']").val(surD);
+
+        $('#thinkright-edit').modal('show');
+    }
+
+    //        <!--全选全不选 -->
+    function checkall() {
+        var checkall = document.getElementsByName('checkall[]');
+        for (var i = 0; i < checkall.length; i++) {
+            if (checkall[i].checked) {
+                checkall[i].checked = false;
+            } else {
+                checkall[i].checked = true;
+            }
+
+        }
+    }
+
+    //        批量删除
+    //        function dels() {
+    //                    var str = '';
+    //                    var checkallName = document.getElementsByName('checkall[]');  //全选按钮的name值
+    //                    var checkallClick = document.getElementById('checkall');  //全选按钮的onclick方法名
+    //                    for (var i = 0; i < checkallName.length; i++) {
+    //                        if (checkallName[i].checked) {
+    //                            str = str + checkallName[i].value + ',';
+    //                        }
+    //                    }
+    //                    str = str.substring(str.length - 1, ',');
+    //                    str=str.substring(3);
+    ////                    alert(str);die;
+    //                    var ajax = new XMLHttpRequest();
+    //                    ajax.onreadystatechange = function () {
+    //                        if (ajax.readyState == 4) {
+    //                            document.getElementBbangyId('demo-dt-basic').innerHTML = ajax.responseText;
+    //                        }
+    //                },
+    //                ajax.open('get',"dels"+str);
+    //                ajax.send(null);
+    //              }
+
+    // 删除操作
+    $('#discard').click(function() {
+        if($(':checked').size() > 0) {
+            layer.confirm('确定要删除吗？', {
+                btn: ['确定','取消'], //按钮
+                shade: false //不显示遮罩
+            }, function(){
+                $.post("{:url('Admin/Teacher/dels')}", {data: $('form').serializeArray()}, function(res) {
+                    if(res.state == 1) {
+                        layer.msg(res.message, {icon: 1, time: 1000});
+                    } else {
+                        layer.msg(res.message, {icon: 2, time: 1000});
+                    }
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                });
+            }, function(){
+                layer.msg('取消了删除！', {time: 1000});
+            });
+        } else {
+            layer.alert('没有选择！');
+        }
+    });
+
+    $(function(){
+        //搜索功能
+        $("#search").click(function(){
+            var url = $(this).attr('url');
+            var query = $(this).prev('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+            query = query.replace(/^&/g,'');
+            if( url.indexOf('?')>0 ){
+                url += '&' + query;
+            }else{
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+
+    })
+
+    //上传教师图片预览
+    $(".imgInput").change(function(){
+        $(".img").attr("src",URL.createObjectURL($(this)[0].files[0]));
+    });
+</script>
+{/block}
+{block name="content"}
+    <body>
+
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">问卷信息列表</h3>
+            </div>
+            <div class="padding border-bottom">
+                    <div class="col-lg-5">
+                        <h3 class="panel-title">
+                            <!--<a id="discard" href="javascript:;"><button id="demo-btn-addrow" class="btn btn-info">删除 </button></a>-->
+                            <button id="demo-btn-addrow" class="btn btn-info" onclick="add(this)">添加问卷题目</button>
+                        </h3> 
+                    </div>
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-4">
+                        <div class="float-right">
+                        </div>
+                    </div>
+
+            </div>
+       
+        <!--===================================================-->
+
+            <div class="panel-body">
+                <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                             <th width="5%">ID</th>
+                            <th width="25%">标题</th>
+                            <th width="10%">A次数</th>
+                            <th width="10%">B次数</th>
+                            <th width="10%">C次数</th>
+                            <th width="10%">D次数</th>
+                            <th width="15%">创建时间</th>
+                            <th width="15%">操作</th>
+                        </tr> 
+                    </thead>
+                    <?php foreach($all as $k=>$v): ?>
+                    <tbody>
+                        <tr>
+                            <td>{$v.id}</td>
+                            <td>
+                                <!-- 标题 -->
+                                <div>{$k+1}、{$v.question}</div>
+                                <!-- 选项 -->
+                                <div>A.{$v.A} </div>
+                                <div>B.{$v.B} </div>
+                                <div>C.{$v.C} </div>
+                                <div>D.{$v.D} </div>
+                            </td>
+                            <td>{$v.countA?$v.countA:"无"}</td>
+                            <td>{$v.countB?$v.countB:"无"}</td>
+                            <td>{$v.countC?$v.countC:"无"}</td>
+                            <td>{$v.countD?$v.countD:"无"}</td>
+                            <td>{$v.create_time|date="Y-m-d H:i:s",###}</td>
+                            <td>
+                                <button><a href="javascript:;" surId="{$v.id}" surQuestion="{$v.question}" surA="{$v.A}" surB="{$v.B}" surC="{$v.C}" surD="{$v.D}" onclick="edit(this)">修改</a> </button>
+                               <button><a href="javascript:confirm('确定删除？',{confirm:function(){location='{:url('Admin/Survey/del',array('id'=>$v['id']))}'}})">删除</a></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <?php endforeach; ?>
+                </table>
+                <tr>
+                        <td class="center">{$render->render()}</td>
+                 </tr>
+            </div>
+         </div>
+            <!--===================================================-->
+
+       <!-- 添加判断题模态框开始 -->
+        <div class="modal fade" id="thinkright-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            添加调查问卷题目信息
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="{:url('Admin/Survey/add')}" method="post">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">题目内容</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"  id="demo-hor-inputemail" class="form-control" name="question" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">选项</label>
+                                    <div class="col-sm-9">
+                                        A:<input type="text" id="demo-hor-inputemail" class="form-control"  name="A" required> 
+                                        B:<input type="text" id="demo-hor-inputemail" class="form-control"  name="B" required> 
+                                        C:<input type="text" id="demo-hor-inputemail" class="form-control"  name="C" required>
+                                        D:<input type="text" id="demo-hor-inputemail" class="form-control"  name="D" required> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button class="btn btn-success" type="submit">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 添加判断题模态框结束 -->
+
+        <!-- 修改判断题模态框开始 -->
+        <div class="modal fade" id="thinkright-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            修改调查问卷题目信息
+                        </h4> 
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="{:url('Admin/Survey/edit')}" method="post">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">题目内容</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="id">
+                                        <input type="text"  id="demo-hor-inputemail" class="form-control" name="question" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">选择答案</label>
+                                    <div class="col-sm-9">
+                                        A:<input type="text" id="demo-hor-inputemail" class="form-control"   name="A" required> 
+                                        B:<input type="text" id="demo-hor-inputemail" class="form-control"  name="B" required>
+                                        C:<input type="text" id="demo-hor-inputemail" class="form-control"  name="C" required> 
+                                        D:<input type="text" id="demo-hor-inputemail" class="form-control"  name="D" required> 
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="panel-footer text-right">
+                            <button class="btn btn-success" type="submit">修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改菜单模态框结束 -->
+        
+
+</body>
+{/block}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理__TITLE__</title>
+    <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/nifty.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/demo/nifty-demo-icons.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/js/common/alertBox/alertBox.css" rel="stylesheet">
+
+    <script src="__PUBLIC__/js/jquery-2.2.4.min.js"></script>
+    <script src="__PUBLIC__/js/common/alertBox/alertBox.js"></script>
+    <script src="__PUBLIC__/js/nifty.min.js"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        #mainnav-menu li ul li a {
+            cursor: pointer;
+        }
+
+        #mainnav-menu li ul li a:hover {
+            color: black;
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+<div id="container" class="effect aside-float aside-bright mainnav-lg">
+    <!--顶部-->
+    <header id="navbar">
+        <div id="navbar-container" class="boxed">
+            <div class="navbar-header">
+                <a href="{:url('Admin/Index/index')}" class="navbar-brand">
+                    <img src="__PUBLIC__/img/adminlogo.jpg" alt="Nifty Logo" class="brand-icon">
+                    <div class="brand-title">
+                        <span class="brand-text">{$Think.session.user.username}</span>
+                    </div>
+                </a>
+            </div>
+            <div class="navbar-content clearfix">
+                <ul class="nav navbar-top-links pull-left">
+                    <li class="tgl-menu-btn">
+                        <a class="mainnav-toggle" href="#">
+                            <i class="demo-pli-view-list"></i>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-top-links pull-right">
+                    <li id="dropdown-user" class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
+                                    <span class="pull-right">
+                                        <!--<img class="img-circle img-user media-object" src="images/profile-photos/1.png" alt="Profile Picture">-->
+                                        <i class="demo-pli-male ic-user"></i>
+                                    </span>
+                            <div class="username hidden-xs">
+                                <h4 class="text-main"><p class="text-pink"><b>欢迎：</b>{$Think.session.user.username}</p>
+                                </h4>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right panel-default">
+                            <ul class="head-list">
+                                <li>
+                                    <a href="#">
+                                        <span class="label label-success pull-right">New</span>
+                                        <i class="demo-pli-gear icon-lg icon-fw"></i> Settings
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="demo-pli-information icon-lg icon-fw"></i> Help
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="pad-all text-right">
+                                <a href="{:url('Admin/Index/logout')}" class="btn btn-primary">
+                                    <i class="demo-pli-unlock"></i> 退出
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <!--左边菜单栏-->
+    <nav id="mainnav-container">
+        <div id="mainnav">
+            <div id="mainnav-menu-wrap">
+                <div class="nano">
+                    <div class="nano-content">
+                        <div id="mainnav-profile" class="mainnav-profile">
+                            <div class="profile-wrap">
+                                <div class="pad-btm">
+                                    <span class="label label-success pull-right">New</span>
+                                    <img class="img-circle img-sm img-border"
+                                         src="__PUBLIC__/img/profile-photos/1.png" alt="Profile Picture">
+                                </div>
+                                <a href="#profile-nav" class="box-block" data-toggle="collapse"
+                                   aria-expanded="false">
+                                </a>
+                            </div>
+                        </div>
+                        <ul id="mainnav-menu" class="list-group">
+                            {foreach $menuArray as $key=>$parent}
+                            <li>
+                                <a href="#">
+                                    <i class="demo-psi-gear-2"></i>
+                                    <span class="menu-title">
+                                                    <strong>{$parent.title}</strong>
+                                                </span>
+                                    <i class="arrow"></i>
+                                </a>
+                                <ul class="collapse">
+                                    {foreach $parent.childs as $ckey=>$child}
+                                    <li><a data-url="{:url($child.name)}" href="{:url($child.name)}"
+                                           data-title="{$parent.title} >> {$child.title}" title="{$child.name}">{$child.title}</a></li>
+                                    {/foreach}
+                                </ul>
+                            </li>
+                            {/foreach}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!--右边内容-->
+    <div id="content-container">
+        <div class="col-sm-12">
+            <div class="panel">
+                <div class="rightArea">
+                    <div id="PanelContent" class="contentBox" data-option="panelHeight:'auto'"
+                         style="height: 100%; width: auto; padding-left: 2px;">
+                        <div style="padding:20px 10px;">首页</div>
+                        <iframe id="panelIframe" src="/admin/welcome/index"
+                                style="width: 100%;    border: 1px solid #ccc;    height: 100%;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--底部-->
+    <footer id="footer">
+        <div class="show-fixed pull-right">
+            You have <a href="#" class="text-bold text-main"><span class="label label-danger">3</span> pending
+            action.</a>
+        </div>
+        <div class="hide-fixed pull-right pad-rgt">
+            14GB of <strong>512GB</strong> Free.
+        </div>
+        <p class="pad-lft">&#0169; 2018 Your Company</p>
+    </footer>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        AutoHeight();
+        $(window).resize(function () {
+            AutoHeight();
+        });
+        $("#mainnav-menu li ul li a").bind("click", function () {
+            $('#mainnav-menu li ul li a').css({"background-color": "", "color": ""});
+            $(".popover-content ul li a").css({"background-color": "", "color": ""});
+            $(this).css({"background-color": "#ccc", "color": "black"});
+            UpdatePanel($(this).data('title'), $(this).data('url'));
+            return false;
+        });
+    });
+    function UpdatePanel(title, url) {
+        $('#PanelContent').find("div").html(title);
+        $('#PanelContent').find("iframe").attr("src", url);
+    }
+    function ParentRefresh() {
+        $('#PanelContent').find("iframe").attr("src", $('#PanelContent').find("iframe").attr("src"));
+    }
+
+    function AutoHeight() {
+        var topHeight = 40;
+        var bottomHeight = 35;
+        var userStateHeight = 0;//用户状态高度
+        var middleHeight = $(window).height() - topHeight - bottomHeight - userStateHeight;
+        var panelHeaderHeight = 58;//选项卡头部高度
+        $('#panelIframe').height(middleHeight - panelHeaderHeight);
+    }
+
+</script>
+

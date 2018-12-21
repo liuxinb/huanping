@@ -1,0 +1,425 @@
+{extend name="layout"}
+{block name="title"}招聘管理{/block}
+{block name="css"}
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+    .miaoshu{height: 75px !important;}
+</style>
+{/block}
+{block name="script"}
+<script>
+    //添加
+    function add() {
+
+        var work = $('form').eq(2).find('input').eq(1).val();
+        var wage = $('form').eq(2).find('input').eq(2).val();
+        var size = $('form').eq(2).find('input').eq(3).val();
+        var work_describe = $('form').eq(2).find('textarea').eq(0).val();
+        var company_size = $('form').eq(2).find('textarea').eq(1).val();
+        $flag = true;
+
+         if (work == '') {
+            $flag = false;
+            alert('职位不能为空');
+        }  else if (size == '') {
+            $flag = false;
+            alert('地点不能为空');
+        }  else if (wage == '') {
+            $flag = false;
+            alert('薪资不能为空');
+        }  else if (work_describe == '') {
+            $flag = false;
+            alert('职位描述不能为空');
+        } else if (company_size == '') {
+            $flag = false;
+            alert('公司地址不能为空');
+        }
+        if (wage != '面议') {
+            if (!wage.match(/^[0-9]+[\-]?[0-9]+$/)) {
+                $flag = false;
+                alert('薪资只限已有选项，数字，特殊符号-');
+            }
+        }
+
+        if ($flag == false) {
+            return false;
+        }
+        var d = {};
+        var t = $('form').eq(2).serializeArray();
+        $.each(t, function () {
+            d[this.name] = this.value;
+        });
+        $.ajax({
+            url: 'enterprise/recruit/save',
+            dataType: 'json',
+            type: 'post',
+            data: d,
+            success: function (res) {
+                console.log(res);
+                if (res) {
+                    alert('保存成功', {
+                        callback: function () {
+                            location.assign(location);
+                        }
+                    });
+                } else {
+                alert('保存失败');
+                }
+            }, error: function (res) {
+                alert('网络错误');
+            }
+        });
+    }
+
+    //查看
+    function upd(updid) {
+        var id = updid.slice(3);
+        $.ajax({
+            url: 'enterprise/recruit/show?id=' + id,
+            dataType: 'json',
+            type: 'get',
+            success: function (res) {
+                $('#showData div select').eq(4).get(0).value = res.degree;
+                $('#showData div select').eq(5).get(0).value = res.experience;
+                for (var i in res) {
+                    $('#showData div').find('input[name="' + i + '"]').val(res[i]);
+                    $('#showData div').find('textarea[name="' + i + '"]').val(res[i]);
+                }
+            }, error: function () {
+                alert('网络错误.');
+            }
+        });
+    }
+
+    //发布
+    function sta1(sta1id) {
+        var id = sta1id.slice(4);
+        confirm("确定发布吗？", {
+            confirm: function () {
+                $.ajax({
+                    url: 'enterprise/recruit/state',
+                    dataType: 'json',
+                    type: 'post',
+                    data: {
+                        'id': id,
+                        'state': '1'
+                    },
+                    success: function (res) {
+                        if (res) {
+                            alert('发布成功', {
+                                callback: function () {
+                                    location.assign(location);
+                                }
+                            });
+                        } else {
+                            alert('发布失败');
+                        }
+                    },
+                    error: function (res) {
+                        alert('网络错误.');
+                    }
+                })
+            }
+        });
+    }
+
+    //撤销
+    function sta2(sta2id) {
+        var id = sta2id.slice(4);
+        confirm("确定撤销吗？", {
+            confirm: function () {
+                $.ajax({
+                    url: 'enterprise/recruit/state',
+                    dataType: 'json',
+                    type: 'post',
+                    data: {
+                        'id': id,
+                        'state': '0'
+                    },
+                    success: function (res) {
+                        if (res) {
+                            alert('撤销成功', {
+                                callback: function () {
+                                    location.assign(location);
+                                }
+                            });
+                        } else {
+                            alert('撤销失败');
+                        }
+                    },
+                    error: function (res) {
+                        alert('网络错误.');
+                    }
+                })
+            }
+        });
+
+    }
+
+    //删除
+    function del(delid) {
+        var id = delid.slice(3);
+        confirm("确定删除吗？", {
+            confirm: function () {
+                $.ajax({
+                    url: 'enterprise/recruit/delete?id=' + id,
+                    dataType: 'json',
+                    type: 'get',
+                    success: function (res) {
+
+                        if (res) {
+                            alert('删除成功', {
+                                callback: function () {
+                                    return location.assign(location);
+                                }
+                            });
+                        } else {
+                            alert('删除失败');
+                        }
+                    }, error: function (res) {
+                        alert('网络错误');
+                    }
+                });
+            }
+        })
+    }
+    
+    //薪资
+    function a() {
+        var option = $("select option:selected").eq(1).text();
+        $('form').eq(2).find('input').eq(2).val(option);
+    }
+</script>
+{/block}
+{block name="content"}
+<div class="ad_co_Box_warp">
+    <div class="ad_co_Box">
+        <div class="content" style="padding: 40px 20px;">
+            <div class="clearfix">
+                <div style="float: left;">
+
+                </div>
+                {if condition="$recordCount>0"}
+                <div style="float: right;">
+                    <button class="button bg-main icon-plus-circle dialogs" data-toggle="click" data-target="#tianjia"
+                            data-mask="1"  data-width="800px">添加信息
+                    </button>
+                </div>
+                {else /}
+                <div style="float: right;">
+                    <button class="button bg-main icon-plus-circle dialogs" onclick="alert('请填写档案，才可以发布招聘信息!')">添加信息</button>
+                </div>
+                {/if}
+
+            </div>
+            <table class="table table-striped table-hover xueyuanguanlitable">
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>职位</th>
+                    <th>薪资</th>
+                    <th>地点</th>
+                    <th>学历</th>
+                    <th>发布日期</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="dataAll" id="vo"}
+                <tr id="tr{$vo.id}">
+                    <td>{$vo.company_name}</td>
+                    <td>{$vo.work}</td>
+                    <td>{$vo.wage}</td>
+                    <td>{$vo.size}</td>
+                    <td>{$vo.degree}</td>
+                    <td>{$vo.allow_date}</td>
+                    <td>
+
+                        {if condition="$vo.state==0"}
+                        <button type="button" id="sta1{$vo.id}" onclick="sta1(this.id);"
+                                class="button  border-blue button-small icon-send (alias) "> 发布
+                        </button>
+                        {else /}
+                        <button type="button" id="sta2{$vo.id}" onclick="sta2(this.id);"
+                                class="button border-yellow button-small icon-mail-reply-all (alias) "> 撤销
+                        </button>
+                        {/if}
+                        <button type="button" id="upd{$vo.id}" onclick="upd(this.id);"
+                                class="button border-main button-small icon-wrench dialogs" data-toggle="click"
+                                data-target="#xiugai" data-mask="1" data-width="800px"> 查看
+                        </button>
+                        <button type="button" id="del{$vo.id}" onclick="del(this.id);"
+                                class="button border-red button-small icon-trash-o"> 删除
+                        </button>
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+            {if condition="count(dataAll)<=0"}
+            <div style="display: block;margin: 0 auto;width: 120px;font-size: 20px;padding: 10px;">暂无数据!</div>
+            {/if}
+            <div style="text-align: center;padding-bottom:30px;">{$page}</div>
+        </div>
+    </div>
+</div>
+<div id="tianjia">
+    <div class="dialog">
+        <div class="dialog-head">
+            <span class="close rotate-hover"></span><strong>添加招聘信息</strong>
+        </div>
+        <div class="dialog-body" style="height: 305px">
+            <form class="xiugaixueyuan" style="height: 400px;">
+                <div style="float: left;width: 380px;height: 300px;padding: 0px 30px;">
+                    <input type="hidden" name="id">
+                    <div><span>职位：</span><input type="text" id="work" name="work" class="input" placeholder="职位"/></div>
+                    <div>
+                        <select id="select" class="button" onclick="a()">
+                            <option value="">面议</option>
+                        </select>
+                        <span>薪资：</span><input type="text" id="wage" name="wage" class="input" placeholder="15000-20000" style="width: 120px;"/>
+                    </div>
+                    <div><span>地点：</span><input type="text" id="size" name="size" class="input" placeholder="地点"/></div>
+                    <div>
+                        <span>学历：</span>
+                        <select class="input" id="degree" name="degree" style="width: 250px;float: left;">
+                            <option value="不限">不限</option>
+                            <option value="高中">高中</option>
+                            <option value="大专">大专</option>
+                            <option value="本科">本科</option>
+                            <option value="硕士">硕士</option>
+                            <option value="博士">博士</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span>经验：</span>
+                        <select class="input" id="experience" name="experience" style="width: 250px;float: left;">
+                            <option value="不限">不限</option>
+                            <option value="应届生">应届生</option>
+                            <option value="1年以内">1年以内</option>
+                            <option value="1-3年">1-3年</option>
+                            <option value="3-5年">3-5年</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="float: left;width: 350px;height: 300px;clear: none;">
+                    <div class="miaoshu"><span>职位描述：</span><textarea name="work_describe" rows="3" class="input" id="work_describe" placeholder="职位描述"
+                                                                     style="width: 250px;float: left;"></textarea></div>
+                    <div class="miaoshu"><span>公司地址：</span><textarea name="company_size" rows="3" class="input" id="company_size" placeholder="公司地址"
+                                                                     style="width: 250px;float: left;"></textarea></div>
+                </div>
+            </form>
+        </div>
+        <div class="dialog-foot">
+            <button class="button dialog-close">取消</button>
+            <button class="button bg-main" onclick="add();">确认</button>
+        </div>
+    </div>
+</div>
+
+<div id="xiugai">
+    <div class="dialog">
+        <div class="dialog-head">
+            <span class="close rotate-hover"></span><strong>修改招聘信息</strong>
+        </div>
+        <div class="dialog-body" style="height: 305px">
+            <form class="xiugaixueyuan" id="showData" style="height: 400px;">
+                <div style="float: left;width: 380px;height: 300px;padding: 0px 30px;">
+                    <input type="hidden" name="id">
+                    <div><span>职位：</span><input type="text" id="work" name="work" class="input" placeholder="职位"/></div>
+                    <div>
+                        <select id="selects" class="button" onclick="a()">
+                            <option value="">面议</option>
+                        </select>
+                        <span>薪资：</span><input type="text" id="wage" name="wage" class="input" placeholder="15000-20000" style="width: 120px;"/>
+                    </div>
+                    <div><span>地点：</span><input type="text" id="size" name="size" class="input" placeholder="地点"/></div>
+                    <div>
+                        <span>学历：</span>
+                        <select class="input" id="degree" name="degree" style="width: 250px;float: left;">
+                            <option value="不限">不限</option>
+                            <option value="高中">高中</option>
+                            <option value="大专">大专</option>
+                            <option value="本科">本科</option>
+                            <option value="硕士">硕士</option>
+                            <option value="博士">博士</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span>经验：</span>
+                        <select class="input" id="experience" name="experience" style="width: 250px;float: left;">
+                            <option value="不限">不限</option>
+                            <option value="应届生">应届生</option>
+                            <option value="1年以内">1年以内</option>
+                            <option value="1-3年">1-3年</option>
+                            <option value="3-5年">3-5年</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="float: left;width: 350px;height: 300px;clear: none;">
+                    <div class="miaoshu"><span>职位描述：</span><textarea name="work_describe" rows="3" class="input" id="work_describe" placeholder="职位描述"
+                                                                     style="width: 250px;float: left;"></textarea></div>
+                    <div class="miaoshu"><span>公司地址：</span><textarea name="company_size" rows="3" class="input" id="company_size" placeholder="公司地址"
+                                                                     style="width: 250px;float: left;"></textarea></div>
+                </div>
+            </form>
+        </div>
+        <div class="dialog-foot">
+            <button class="button dialog-close">取消</button>
+            <button class="button bg-main" onclick="add();">确认</button>
+        </div>
+    </div>
+</div>
+<!--<div id="tianjia">-->
+    <!--<div class="dialog">-->
+        <!--<div class="dialog-head">-->
+            <!--<span class="close rotate-hover"></span><strong>添加招聘信息</strong>-->
+        <!--</div>-->
+        <!--<div class="dialog-body" style="height: 305px">-->
+            <!--<form class="xiugaixueyuan" id="addData" style="height: 300px;">-->
+                <!--<div style="float: left;width: 380px;height: 300px;padding: 0px 30px;">-->
+                    <!--<div><span>职位：</span><input type="text" name="work" class="input" placeholder="职位"/></div>-->
+                    <!--<div><span>薪资：</span><input type="text" name="wage" class="input" placeholder="薪资" style="width: 120px;"/>-->
+                        <!--&lt;!&ndash;<span style="width: 13px">&#45;&#45;</span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<input type="text" name="" class="input" placeholder="最高" style="width: 120px;"/>&ndash;&gt;-->
+                    <!--</div>-->
+                    <!--<div><span>地点：</span><input type="text" name="size" class="input" placeholder="地点"/></div>-->
+                    <!--<div>-->
+                        <!--<span>学历：</span>-->
+                        <!--<select class="input" name="degree" style="width: 250px;float: left;">-->
+                            <!--<option value="不限">不限</option>-->
+                            <!--<option value="高中">高中</option>-->
+                            <!--<option value="大专">大专</option>-->
+                            <!--<option value="本科">本科</option>-->
+                            <!--<option value="硕士">硕士</option>-->
+                            <!--<option value="博士">博士</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
+                    <!--<div>-->
+                        <!--<span>经验：</span>-->
+                        <!--<select class="input" name="experience" style="width: 250px;float: left;">-->
+                            <!--<option value="不限">不限</option>-->
+                            <!--<option value="应届生">应届生</option>-->
+                            <!--<option value="1年以内">1年以内</option>-->
+                            <!--<option value="1-3年">1-3年</option>-->
+                            <!--<option value="3-5年">3-5年</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div style="float: left;width: 350px;height: 300px;clear: none;">-->
+                    <!--<div class="miaoshu"><span>职位描述：</span><textarea name="work_describe" rows="3" class="input" placeholder="职位描述"-->
+                                                     <!--style="width: 250px;float: left;"></textarea></div>-->
+                    <!--<div class="miaoshu"><span>公司地址：</span><textarea name="company_size" rows="3" class="input" placeholder="职位描述"-->
+                                                     <!--style="width: 250px;float: left;"></textarea></div>-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</div>-->
+        <!--<div class="dialog-foot">-->
+            <!--<button class="button dialog-close">取消</button>-->
+            <!--<button class="button bg-main" onclick="add();">确认</button>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+{/block}

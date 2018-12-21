@@ -1,0 +1,30 @@
+{extend name="layout"}
+{block name="title"}视频列表{/block}
+{block name="css"}{/block}
+{block name="script"}
+<script src="__PUBLIC__/js/boli/polyvplayer.min.js"></script>
+<script src="__PUBLIC__/js/boli/swfobject.js"></script>
+<script src="__PUBLIC__/js/boli/StudyBoLi.js"></script>
+<script src='//player.polyv.net/script/polyvplayer.min.js'></script>
+<script>
+    window.onload = function () {
+        var player = polyvObject('#plv_{$all["movie_url"]}').videoPlayer({
+            'width': '800',
+            'height': '490',
+            'vid': '{$all["movie_url"]}'
+        });
+    }
+</script>
+{/block}
+{block name="content"}
+<fieldset class="layui-elem-field">
+    <div>
+        <div style="padding: 15px; width: 900px; margin: 0 auto; position: relative;">
+            <legend><i class="ion-flag"></i> {$all["title"]}</legend>
+            <div id="flashContent">
+                <div id='plv_{$all["movie_url"]}'></div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+{/block}

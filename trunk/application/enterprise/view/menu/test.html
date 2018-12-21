@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <title>后台</title>
+    <link href="__PUBLIC__/two/css/pintuer.css" rel="stylesheet">
+    <link href="__PUBLIC__/two/css/admin.css" rel="stylesheet">
+    <link href="__PUBLIC__/two/css/jquery.datetimepicker.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/jquery-2.2.4.min.js"></script>
+    <!--[if lte IE 7]>
+    <script type="text/javascript">window.IE7 = true</script><![endif]-->
+    <script>
+        $(function () {
+            $("#logout").click(function () {
+                confirm("确定要退出当前账号吗？", {
+                    confirm: function () {
+                        location.href = "/loginOut";
+                    }
+                })
+            });
+            $("#upassword").click(function () {
+                $(location).attr('href', 'password');
+
+            });
+        });
+        if (window.IE7) {
+            window.location.href = 'http://cdn.dmeng.net/upgrade-your-browser.html?referrer=' + location.href;
+        }
+    </script>
+    <script src="__PUBLIC__/two/js/moment.min.js"></script>
+    <script src="__PUBLIC__/two/js/jquery.datetimepicker.full.js"></script>
+
+</head>
+
+<body>
+<div class="admin_top_menu clearfix">
+    <ul class="nav nav-menu nav-inline nav-tabs" style="float: none;">
+
+        <li class="nav-head float-right"><span>欢迎您！ <?php echo \session('rootName')?> </span><img class="radius-circle" src="__PUBLIC__/two/images/user.jpg" alt="">
+            <div class="admin_tuichu">
+                <p class="icon-wrench" id="upassword"> 修改密码</p>
+                <p class="icon-power-off" id="logout" > 退出登录</p>
+            </div>
+        </li>
+        <!--<li><a> 修改密码</a></li>-->
+        <!--<li><a href="/loginOut"> 退出登录</a></li>-->
+
+    </ul>
+
+</div>
+<div class="admin_left_Box">
+    <div class="info_Box text-center">
+        <div><img src="__PUBLIC__/two/images/logo.png"/></div>
+
+    </div>
+    <dl class="list_left_main_menu">
+        <dd>
+            <div class="ti clckClass">
+                <a target="/manage"></a><span class="icon-cog"></span>管理中心
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/record"></a><span class="icon-user animated"></span>我的档案
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/signup"></a><span class="icon-bullhorn animated"></span>我要报名
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/orders"></a><span class="icon-credit-card animated"></span>订单管理
+            </div>
+
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/train"></a><span class="icon-toggle-right"></span>集中培训
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/users"></a><span class="icon-group (alias) animated"></span>员工管理
+            </div>
+        </dd>
+        <dd>
+            <div class="ti">
+                <a target="/student"></a><span class="icon-cube animated"></span>学习管理
+            </div>
+        </dd>
+
+    </dl>
+
+</div>
+<div class="admin_right_Box">
+    <div class="r_main">
+        <iframe id="iframeContent" name="iframeContent" src="/manage" style="overflow:visible;" scrolling="yes"
+                frameborder="no" width="100%" height="100%; ">
+        </iframe>
+    </div>
+</div>
+
+</body>
+
+</html>
+<script type="text/javascript">
+    $(function () {
+        $.get("/manage", function (data) {
+            $("#iframeContent").html(data); //初始化加载界面
+        });
+
+        $('.ti').click(function () { //点击li加载界面
+            var current = $(this);
+            var target = current.find('a').attr('target'); // 找到链接a中的targer的值
+            $("#iframeContent").attr("src", target);
+        });
+
+    });
+
+    $('.list_left_main_menu dd .ti').bind('click', function () {
+        $('.clckClass').removeClass('clckClass');
+        $(this).addClass('clckClass');
+
+    });
+</script>

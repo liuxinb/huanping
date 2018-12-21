@@ -1,0 +1,198 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {margin:0;padding:0;} 
+table {border-collapse:collapse;border-spacing:0;} 
+fieldset,img {border:0} 
+address,caption,cite,code,dfn,em,strong,th,var {font-style:normal;font-weight:normal} 
+ol,ul {list-style:none} 
+caption,th {text-align:left} 
+h1,h2,h3,h4,h5,h6 {font-size:100%;font-weight:normal} 
+q:before,q:after {content:''} 
+abbr,acronym { border:0}
+a {
+    color: black;
+    text-decoration: none;
+    -webkit-tap-highlight-color: #4475A7;
+}
+li{
+	list-style: none;
+}
+
+.content_top{
+	padding: 30px 0 0px 40px;
+	display: flex;
+}
+.signup_item_input {
+    border: 1px solid #C9C9C9;
+    border-radius: 2px;
+    width: 230px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    padding: 5px 6px;
+    -webkit-tap-highlight-color: transparent;
+}
+.nav1_left_sousuo{
+	width: 90px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    display: block;
+    font-size: 14px;
+    margin-left: 10px;
+    border-radius: 1px;
+    color: #FFFFFF;
+    background: #0F9529;
+    cursor: default;
+}
+.content_top_help{
+	padding-left: 40px;
+}
+.help_liebiao,.help_liebiao{
+	padding-top: 16px;
+	line-height: 40px;
+}
+.help_liebiao_daan>ul{
+	padding-left: 0px;
+	font-size: 14px;
+}
+.content_main_caozuo2 {
+    padding: 50px 0 0 0;
+    display: flex;
+    width: 300px;
+}
+.content_dingdanxinxi_right_quxiao2 {
+    width: 60px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    display: block;
+    font-size: 14px;
+    margin-left: 10px;
+    border-radius: 1px;
+    color: #000000;
+    background: #ffffff;
+    border: 1px solid #EFEFEF;
+    cursor: default;
+}
+.content_dingdanxinxi_right_zhifu2 {
+    width: 60px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    font-size: 14px;
+    display: block;
+    margin-left: 20px;
+    border-radius: 1px;
+    color: #FFFFFF;
+    background: #2A8AE2;
+    cursor: default;
+}
+.content_dingdanxinxi_right_tijiao {
+    width: 60px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    font-size: 14px;
+    display: block;
+    margin-top: 20px;
+    border-radius: 1px;
+    color: #FFFFFF;
+    background: #2A8AE2;
+    cursor: default;
+}
+.yes,.no,.yes2{
+	display: none;
+}
+
+
+@keyframes hover-color {
+  from {
+    border-color: #c0c0c0; }
+  to {
+    border-color: #3e97eb; } }
+
+.magic-checkbox {
+  position: absolute;
+  display: none; }
+
+
+.magic-checkbox[disabled] {
+  cursor: not-allowed; }
+
+
+.magic-checkbox + label {
+  position: relative;
+  display: block;
+  padding-left: 30px;
+  cursor: pointer;
+  vertical-align: middle; }
+
+  .magic-checkbox + label:hover:before {
+    animation-duration: 0.4s;
+    animation-fill-mode: both;
+    animation-name: hover-color; }
+
+  .magic-checkbox + label:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    content: '';
+    border: 1px solid #c0c0c0; }
+
+  .magic-checkbox + label:after {
+    position: absolute;
+    display: none;
+    content: ''; }
+
+.magic-checkbox[disabled] + label {
+  cursor: not-allowed;
+  color: #e4e4e4; }
+  .magic-checkbox[disabled] + label:hover,
+  .magic-checkbox[disabled] + label:before,
+  .magic-checkbox[disabled] + label:after {
+    cursor: not-allowed; }
+  .magic-checkbox[disabled] + label:hover:before {
+    border: 1px solid #e4e4e4;
+    animation-name: none; }
+  .magic-checkbox[disabled] + label:before {
+    border-color: #e4e4e4; }
+
+.magic-checkbox:checked + label:before {
+  animation-name: none; }
+
+.magic-radio:checked + label:after,
+.magic-checkbox:checked + label:after {
+  display: block; }
+
+
+
+.magic-checkbox + label:before {
+  border-radius: 3px; }
+
+.magic-checkbox + label:after {
+  top: 2px;
+  left: 7px;
+  box-sizing: border-box;
+  width: 6px;
+  height: 12px;
+  transform: rotate(45deg);
+  border-width: 2px;
+  border-style: solid;
+  border-color: #fff;
+  border-top: 0;
+  border-left: 0; }
+
+.magic-checkbox:checked + label:before {
+  border: #3e97eb;
+  background: #3e97eb; }
+
+.magic-checkbox:checked[disabled] + label:before {
+  border: #c9e2f9;
+  background: #c9e2f9; }
+
+.magic_table{
+	padding-top: 5px;
+	font-size: 14px;
+}

@@ -1,0 +1,129 @@
+{extend name="layout"}
+{block name="title"}我要报名{/block}
+{block name="css"}
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+
+    .tab .tab-nav .active a {
+        color: #fff;
+        background: #0a8;
+    }
+    .img_box img{
+        width: 200px;
+        height: 120px;
+    }
+
+
+</style>
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/two/js/pintuer.js"></script>
+<script src="__PUBLIC__/two/js/zui.min.js"></script>
+<script src="__PUBLIC__/two/js/icheck.js"></script>
+<script type="text/javascript">
+    $(".ajax-linkk").each(function() {
+        $(this).click(function() {
+            var diZhi = $(this).attr("rel");
+            htmlobj = $.ajax({
+                url: diZhi,
+                async: false
+            });
+            $(".ajax-Box").html(htmlobj.responseText);
+        });
+    });
+
+    $(function() {
+        $("#button").click(function () {
+            var _nums = $(this).attr("category_id");
+            document.location.href="/addOrder?category_id="+_nums;
+        })
+    });
+</script>
+{/block}
+{block name="content"}
+<div class="r_main">
+<div class="ad_r_top_ti_w">
+    <div class="clearfix">
+        <h2 class="x6"><span class="icon-bullhorn"></span> 我要报名</h2>
+    </div>
+    <ul class="bread">
+        <li>
+            <a href="#" class="icon-home"> 首页</a>
+        </li>
+        <li class="active">我要报名</li>
+    </ul>
+</div>
+<div class="ad_co_Box_warp">
+    <div class="ad_co_Box">
+        <div class="content" style="min-height: 700px;">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>报名信息</th>
+                    <th>名称</th>
+                    <th>标题</th>
+                    <th>价格</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody class="dingdandfk">
+                {volist name="signupList" id="vo"}
+                <tr>
+                    <td class="img_box"><img alt="暂无图片" src="{$vo.bag_img}"/></td>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.title}</td>
+                    <td><span class="text-red">￥{$vo.bag_price}</span></td>
+                    <td>
+                        {if($vo.order_status == 0)}
+                        <button type="button" id="button" class="button bg-gray button-small yigoumai" category_id="{$vo.id}">立即报名</button>
+                        {elseif($vo.order_status == 1)}
+                        <button type="button" class="button bg-gray button-small yigoumai">已购买</button>
+
+                        {elseif($vo.order_status == 2)}
+                        <button type="button" id="button" class="button bg-gray button-small yigoumai" style="background-color:#54ce54" category_id="{$vo.id}">去支付</button>
+                        {/if}
+                    </td>
+                </tr>
+                {/volist}
+
+                </tbody>
+            </table>
+            <!--<div class="padding text-right">-->
+            <!--<ul class="pagination border-blue pagination-small">-->
+            <!--<li>-->
+            <!--<a href="#">上一页</a>-->
+            <!--</li>-->
+            <!--</ul>-->
+            <!--<ul class="pagination pagination-group border-blue pagination-small">-->
+            <!--<li class="active">-->
+            <!--<a href="#">1</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a href="#">2</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a href="#">3</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a href="#">4</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a href="#">5</a>-->
+            <!--</li>-->
+            <!--</ul>-->
+            <!--<ul class="pagination border-blue pagination-small">-->
+            <!--<li>-->
+            <!--<a href="#">下一页</a>-->
+            <!--</li>-->
+            <!--</ul>-->
+            <!--</div>-->
+
+<!--注释-->
+        </div>
+    </div>
+</div>
+<div class="footer"></div>
+</div>
+{/block}

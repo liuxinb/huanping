@@ -1,0 +1,142 @@
+{extend name="layout"}
+{block name="title"}发票详情信息{/block}
+{block name="css"}{/block}
+{block name="script"}{/block}
+{block name="content"}
+    <body>
+        <div class="panel">
+
+        </div>
+        <!--===================================================-->
+        <div class="col-lg-3"></div>
+
+        <div class="col-lg-6">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">发票详情信息</h3>
+                </div>
+                <form class="form-horizontal" method="post" action="" enctype="multipart/form-data">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="demo-is-inputsmall">单位名称:</label>
+                            <div class="col-sm-6">
+                                <label>{$all.name}</label>
+                            </div>
+                        </div>
+                         <div class="form-group">
+                            <label for="demo-is-inputnormal" class="col-sm-3 control-label">单位地址:</label>
+                            <div class="col-sm-6">
+                                <label>{$all.address}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="demo-is-inputnormal" class="col-sm-3 control-label">开户行:</label>
+                            <div class="col-sm-6">
+                                <label>{$all.bank}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">账号:</label>
+                            <div class="col-sm-6">
+                                <label>{$all.account}</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">税号</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.duty}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">电话:</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.phone}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">价格</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.price}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">二维码</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.ewm}</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">所属企业ID:</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.enterId}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">订单号:</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.num}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">机器编号:</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.jqbh}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发票代码:</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.fpdm}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发票号码:</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.fphm}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">开票日期:</label>
+                            <div class="col-sm-6 ">
+                                <label>
+                                    {$all.kprq|date('Y-m-d H:i:s',strtotime($all.kprq));}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发票密文:</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.fp_mw}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发票校验码:</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.jym}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">短码:</label>
+                            <div class="col-sm-6 ">
+                                <label>{$all.dm}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Pdf下载链接:</label>
+                            <div class="col-sm-6 ">
+                                <label><a href="{$all.pdf_url}">{$all.pdf_url}</a></label>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <!--===================================================-->
+        </div>
+    </body>
+{/block}
+
+
+

@@ -1,0 +1,111 @@
+{extend name="layout"}
+{block name="title"}修改视频信息{/block}
+{block name="css"}
+<link href="__PUBLIC__/css/upload_picture.css" rel="stylesheet">   <!--//上传图片样式表-->
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/js/picture_verify.js"></script>  <!--//上传图片验证格式-->
+<script type="text/javascript">
+    $(function(){
+        //上传教师图片预览
+        $(".imgInput").change(function(){
+            $("#myImg").attr("src",URL.createObjectURL($(this)[0].files[0]));
+        });
+    });
+
+</script>
+{/block}
+{block name="content"}
+    <body>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><a href="{:url('Admin/Flv/index')}"><button id="demo-btn-addrow" class="btn btn-info">列表</button></a></h3>
+            </div>
+        </div>
+        <!--===================================================-->
+        <div class="col-lg-3"></div>
+
+        <div class="col-lg-6">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">修改视频</h3>
+                </div>
+
+                <form class="form-horizontal" method="post" action="{:url('Admin/Flv/edit_run',array('id'=>$info.id))}" enctype="multipart/form-data">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" >视频名称</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="title"  class="form-control" value="{$info.title|default=''}" placeholder="视频名称" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">视频分类</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" name="category" required>
+                                    <?php foreach ($category as $key => $vo): ?>
+                                    <option value="{$vo.id}" {if condition="$info.category eq $vo.id"}selected {/if}>
+                                            {$vo._name}
+                                    </option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">视频图片</label>
+                            <div class="col-sm-6 ">
+                                <a class="upload_img_add"><input type="file" id="cover_id" name="image" accept="image/*" class="imgInput">点击更改图片</a>
+                                <img  src="{$info.path}" id="myImg" alt="" width="160" height="90"  >
+                                <span class="text-warning imageFileWarning"></span>
+                                <p style="color: red">上传的图片大小不能超过2M;</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">播放地址</label>
+                            <div class="col-sm-6 ">
+                                <input type="text" id="movie_url" name="movie_url"  class="form-control" value="{$info.movie_url|default=''}">
+                                <!--<textarea id="movie_url" name="movie_url" class="form-control" rows="6" required>{$info.movie_url}</textarea>-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">介绍</label>
+                            <div class="col-sm-6 ">
+                                <textarea id="content" name="content" class="form-control" rows="6" >{$info.content}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">教师</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" name="teacher_id" required>
+                                    <?php foreach ($teacherData as $key => $vo): ?>
+                                    <option value="{$vo.id}"
+                                            {if condition="$info.teacher_id eq $vo.id"}selected {/if}>{$vo.name}
+                                    </option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                    <label class="col-sm-3 control-label" >时长（秒）</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="hour" class="form-control" value="{$info.hour|default=''}" placeholder="请输入时长(秒)" required>
+                    </div>
+                </div>
+                    </div>
+                   <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <input class="btn btn-success" type="submit" value="添加">
+                                <!-- <button class="btn btn-info btn-rounded" type="reset">重置</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+             </div>
+    <!--===================================================-->
+        </div>
+    </body>
+{/block}
+
+
+

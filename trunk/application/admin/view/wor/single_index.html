@@ -1,0 +1,281 @@
+
+{extend name="layout"}
+{block name="title"}单选题列表{/block}
+{block name="css"}{/block}
+{block name="script"}
+<script type="text/javascript">
+    /*添加判断题*/
+    function add() {
+        $("input[name='content']").val('');
+        $("input[name='answer']").val('');
+        $("input[name='A']").val('');
+        $("input[name='B']").val('');
+        $("input[name='C']").val('');
+        $("input[name='D']").val('');
+        $('#thinkright-add').modal('show');
+    }
+
+    // 修改菜单
+    function edit(obj) {
+        var singleId = $(obj).attr('singleId');
+        var singleContent = $(obj).attr('singleContent');
+        var singleAnswer = $(obj).attr('singleAnswer');
+        var singleA = $(obj).attr('singleA');
+        var singleB = $(obj).attr('singleB');
+        var singleC = $(obj).attr('singleC');
+        var singleD = $(obj).attr('singleD');
+        var singleMovie = $(obj).attr('singleMovie');
+
+        $("input[name='id']").val(singleId);
+        $("input[name='content']").val(singleContent);
+        $("input[name='answer']").val(singleAnswer);
+        $("input[name='A']").val(singleA);
+        $("input[name='B']").val(singleB);
+        $("input[name='C']").val(singleC);
+        $("input[name='D']").val(singleD);
+        $("select[name='movie_id']").val(singleMovie);
+
+        for (var i = 0; i < singleAnswer.length; i++) {   //循环答案对应页面
+            if (singleAnswer[i] == 'A') {
+                document.getElementById('AA').checked = true;
+            }
+            if (singleAnswer[i] == 'B') {
+                document.getElementById('BB').checked = true;
+            }
+            if (singleAnswer[i] == 'C') {
+                document.getElementById('CC').checked = true;
+            }
+            if (singleAnswer[i] == 'D') {
+                document.getElementById('DD').checked = true;
+            }
+        }
+
+        $('#thinkright-edit').modal('show');
+    }
+
+    $(function () {
+        $("#cboxAll").CboxAll();
+        //批量删除
+        $("#demo-btn-addrow").click(function () {
+            var deleIds = $("input[name=checkall]").CboxVals();  //全选按钮的name值
+            // 判断是否至少选择一项
+            if(deleIds == 0) {
+                alert("请选择至少一项！");
+                return;
+            }
+            confirm('确定删除？',{confirm:function() {
+                Ajax("{:url('admin/Wor/batchDelete')}", {ids: deleIds});
+            }});
+        });
+    })
+
+    //根据条件搜索
+    $(function () {
+        //搜索功能
+        $("#search").click(function () {
+            var url = $(this).attr('url');
+            var query = $(this).prev('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+            query = query.replace(/^&/g, '');
+            if (url.indexOf('?') > 0) {
+                url += '&' + query;
+            } else {
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+    });
+</script>
+{/block}
+{block name="content"}
+    <body>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">单选题列表</h3>
+            </div>
+            <div class="padding border-bottom">
+                <div class="col-lg-5">
+                    <h3 class="panel-title">
+                        <button id="demo-btn-addrow" class="btn btn-info"> 删除</button>
+                        <button id="demo-btn-addrow" class="btn btn-info" onclick="add(this)">添加单选题</button>
+                    </h3>
+                </div>
+                <div class="col-lg-7" style="padding: 0 20px 0 20px;">
+                    <div class="float-right">
+                        <input type="text" name="content" class="input search-form"
+                               placeholder="请输入题目"/>
+                        <input type="button" id="search" url="{:url('Admin/wor/single_index')}" class="wq-btn" value="搜索"/>
+                    </div>
+                </div>
+            </div>
+        <!--===================================================-->
+
+            <div class="panel-body">
+                <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="all" width="100px">
+                                <label><input type="checkbox" name="checkall" id="cboxAll" value="" >选择</label>
+                            </th>
+                            <th width="40%">单选题</th>
+                            <th  width="10%">答案</th>
+                            <th width="20%">所属视频</th>
+                            <th width="200px">更新时间</th>
+                            <th width="200px">操作</th>
+                        </tr> 
+                    </thead>
+                    <?php foreach($single as $k=>$v): ?>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="child" name="checkall" value="{$v['id']?$v['id']:''}">
+                            </td>
+                            <td>
+                                <!-- 标题 -->
+                                <div>{$k+1}. {$v.content}</div>
+                                <!-- 选项 -->
+                                <div>A.{$v.A} </div>
+                                <div>B.{$v.B} </div>
+                                <div>C.{$v.C} </div>
+                                <div>D.{$v.D} </div>
+                            </td>
+                            <td>{$v.answer?$v.answer:"0"}</td>
+                            <td>{$v.title?$v.title:'环境保护基础知识之一(课程包)'}</td>
+                            <td>{$v.create_time|date="Y-m-d H:i:s",###}</td>
+                            <td>
+                                <button><a href="javascript:;" singleId="{$v['id']}" singleMovie="{$v['movie_id']}" singleContent="{$v['content']}" singleAnswer="{$v['answer']}" singleA="{$v['A']}" singleB="{$v['B']}" singleC="{$v['C']}" singleD="{$v['D']}" onclick="edit(this)">修改</a> </button>
+                                <button><a href="javascript:confirm('确定删除？',{confirm:function(){location='{:url('Admin/Wor/del_single',array('id'=>$v['id']))}'}})">删除</a></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <?php endforeach; ?>
+                </table>
+                <tr>
+                    <td class="center">{$renderSingle->render()}</td>
+                </tr>
+            </div>
+            <!--===================================================-->
+        </div>
+
+        <!-- 添加判断题模态框开始 -->
+        <div class="modal fade" id="thinkright-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            添加单选题
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="{:url('Admin/Wor/add_single')}" method="post">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">题目内容</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"  id="demo-hor-inputemail" class="form-control" name="content" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">选项</label>
+                                    <div class="col-sm-9">
+                                        <div><input type="radio"  name="answer[]"  value="0" checked="checked" >A:<input type="text" id="demo-hor-inputemail" class="form-control"  name="A" required> </div>
+                                        <div><input type="radio"  name="answer[]"  value="1">B:<input type="text" id="demo-hor-inputemail" class="form-control"  name="B" required> </div>
+                                        <div><input type="radio"  name="answer[]"  value="2">C:<input type="text" id="demo-hor-inputemail" class="form-control"  name="C" required> </div>
+                                        <div><input type="radio"  name="answer[]"  value="3">D:<input type="text" id="demo-hor-inputemail" class="form-control"  name="D" required> </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">添加对应视频</label>
+                                    <div class="col-sm-9">
+                                        <select class="input input-auto" name="movie_id" required>
+                                            <option value="">请选择课程或课程包</option>
+                                            {foreach name="cate_title" item="vo"}
+                                            <option value="cid{$vo.id}">
+                                                {$vo.title} (课程包)
+                                            </option>
+                                            {/foreach}
+                                            {foreach name="movie_title" item="vo"}
+                                            <option value="{$vo.id}">
+                                                {$vo.title}
+                                            </option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button class="btn btn-success" type="submit">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 添加判断题模态框结束 -->
+
+        <!-- 修改判断题模态框开始 -->
+        <div class="modal fade" id="thinkright-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            修改单选题信息
+                        </h4> 
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="{:url('Admin/Wor/edit_single')}" method="post">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">题目内容</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="id">
+                                        <input type="text"  id="demo-hor-inputemail" class="form-control" name="content" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">选择答案</label>
+                                    <div class="col-sm-9">
+                                        <div><input type="radio" id="AA" name="answer[]"  value="0">A:<input type="text" id="demo-hor-inputemail" class="form-control"   name="A" required> </div>
+                                        <div><input type="radio" id='BB' name="answer[]"  value="1">B:<input type="text" id="demo-hor-inputemail" class="form-control"  name="B" required></div>
+                                        <div><input type="radio" id='CC'  name="answer[]"  value="2">C:<input type="text" id="demo-hor-inputemail" class="form-control"  name="C" required> </div>
+                                        <div><input type="radio" id="DD" name="answer[]"  value="3">D:<input type="text" id="demo-hor-inputemail" class="form-control"  name="D" required> </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">修改对应视频</label>
+                                    <div class="col-sm-9">
+                                        <select class="input input-auto" name="movie_id" id="movie_id">
+                                            <option value="">请选择课程或课程包</option>
+                                            {foreach name="cate_title" item="vo"}
+                                            <option value="cid{$vo.id}">
+                                                {$vo.title} (课程包)
+                                            </option>
+                                            {/foreach}
+                                            <?php foreach ($movie_title as $k => $vo): ?>
+                                            <option value="{$vo.id}"
+                                                    {if condition="$v.movie_id?$v.movie_id:0 eq $vo.id"}selected {/if}>{$vo.title}
+                                            </option>
+                                            <?php endforeach ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer text-right">
+                            <button class="btn btn-success" type="submit">修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改菜单模态框结束 -->
+
+
+</body>
+{/block}

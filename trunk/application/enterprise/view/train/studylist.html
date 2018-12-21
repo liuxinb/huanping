@@ -1,0 +1,173 @@
+{extend name="layout"}
+{block name="title"}集中培训-学习管理{/block}
+{block name="css"}
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+</style>
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/two/js/pintuer.js"></script>
+<script>
+    function jiedong(id) {
+        var a = document.getElementById(id);
+        var b = document.getElementById("status" + id);
+        $.ajax({
+            url: 'enterprise/users/unfreezeStatus/id/' + id + '/status/1',
+            dataType: 'json',
+            type: 'post',
+            success: function (res) {
+                if (res == '操作成功') {
+                    alert(res, {
+                        callback: function () {
+                            location.assign(location);
+                        }
+                    });
+                }
+            },
+            error: function (res) {
+                layer.msg(res.responseText, {icon: 5, time: 1000, offset: '350px'});
+            }
+        })
+    }
+
+    function dongjie(id) {
+        var a = document.getElementById(id);
+        var b = document.getElementById("status" + id);
+        $.ajax({
+            url: 'enterprise/users/unfreezeStatus/id/' + id + '/status/-1',
+            dataType: 'json',
+            type: 'post',
+            success: function (res) {
+                alert(res, {
+                    callback: function () {
+                        location.assign(location);
+                    }
+                });
+            },
+            error: function (res) {
+                layer.msg(res.responseText, {icon: 5, time: 1000, offset: '350px'});
+            }
+        })
+    }
+</script>
+{/block}
+{block name="content"}
+<div class="ad_co_Box_warp">
+    <div class="ad_co_Box">
+        <div class="content">
+            <div class="fenQuTongJi_shaiXuan clearfix" style="padding-top: 50px;padding-left: 25px;">
+                <form action="/trainStudylist" method="post">
+                    <input type="hidden" name="id" value="{$cid}">
+                <div style="float: left;">
+                    <input style="width:110px;float: left;margin-right: 10px;" name="name" type="text" class="input" placeholder="姓名" />
+                    <div class="" style="width:110px;display:inline-block">
+                        <select name="status" class="input" style="width: 104px;" data-placeholder="状态">
+                            <option value="">所有</option>
+                            <option value="1">正常</option>
+                            <option value="-1">离职</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="button bg-blue icon-search"> 查询</button>
+                </div>
+                </form>
+            </div>
+            <div style="padding: 0px 25px;">
+            <table class="table table-striped table-hover xueyuanguanlitable">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>姓名</th>
+                    <th>学习进度</th>
+                    <th>培训证书</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {if condition="count($data)>0"}
+                {volist name="data" id="vo" }
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.plan}</td>
+
+                    {if condition="$vo.certificate==true"}
+                    <td><span class="text-green">已发</span></td>
+                    {else}
+                    <td><span class="text-red">未发</span></td>
+                    {/if}
+
+                    <td id="status{$vo.uid}">
+                        {if condition="$vo.status==1"}
+                        <span class="text-red">正常</span>
+                        {else}
+                        <span class="text-green">离职</span>
+                        {/if}
+                    </td>
+                    <td class="content_main_caozuo">
+                        {if condition="$vo.status == -1"/}
+                        <button type="button" class="button bg-red button-small icon-asterisk " id="{$vo.uid}"
+                                onclick="jiedong({$vo.uid})" caozuo="2"> 解冻
+                        </button>
+                        {else}
+                        <button type="button" class="button border-red button-small icon-asterisk " id="{$vo.uid}"
+                                onclick="dongjie({$vo.uid})" caozuo="1"> 离职
+                        </button>
+                        {/if}
+                    </td>
+                </tr>
+                {/volist}
+                {else}
+                <tr><td colspan="5">您当前还未购买课程或无员工！</td> </tr>
+                {/if}
+                </tbody>
+            </table></div>
+            {if condition="count($data)>0"}
+            <div style="text-align: center;padding-bottom:30px;">{$list}</div>
+            {/if}
+        </div>
+    </div>
+</div>
+<div id="xiugai">
+    <div class="dialog">
+        <div class="dialog-head"><span class="close rotate-hover"></span><strong>学员修改</strong></div>
+        <div class="dialog-body">
+            <form class="xiugaixueyuan">
+                <div><span>姓名：</span><input type="text" class="input" placeholder="姓名" /></div>
+                <div><span>身份证号：</span><input type="text" class="input" placeholder="身份证号" /></div>
+                <div><span>手机号码：</span><input type="text" class="input" placeholder="手机号码" /></div>
+                <div><span>入职时间：</span><input type="text" class="input datetimepicker" placeholder="入职时间" /></div>
+            </form>
+
+            <div class="dialog-foot">
+                <div class="anNiu">
+                    <button class="button bg-main">修改</button> <button class="button dialog-close">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="mydialog">
+    <div class="dialog">
+        <div class="dialog-head">
+            <span class="close rotate-hover"></span><strong>添加学员</strong>
+        </div>
+        <div class="dialog-body">
+            <form class="xiugaixueyuan">
+                <div><span>姓名：</span><input type="text" class="input" placeholder="姓名" /></div>
+                <div><span>身份证号：</span><input type="text" class="input" placeholder="身份证号" /></div>
+                <div><span>手机号码：</span><input type="text" class="input" placeholder="手机号码" /></div>
+                <div><span>入职时间：</span><input type="text" class="input datetimepicker" placeholder="入职时间" /></div>
+            </form>
+        </div>
+        <div class="dialog-foot">
+            <button class="button dialog-close">
+                取消</button>
+            <button class="button bg-main">
+                确认</button>
+        </div>
+    </div>
+</div>
+{/block}

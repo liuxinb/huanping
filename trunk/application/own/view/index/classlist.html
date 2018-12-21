@@ -1,0 +1,36 @@
+<div class="quanbu_title">
+    课程列表
+</div>
+<div class="kechengmain">
+    {volist name="list" id="vo"}
+    <div class="x4">
+        <a class="kechenglist" rel="/own/index/classshow/id/{$vo.id}/price/{$vo.price}.html">
+            <div class="course-card-top hashadow">
+                <img class="course-banner" src="{$vo.bag_img}">
+                <div class="course-label">
+                    <label>{$vo.title}</label>
+                </div>
+            </div>
+            <div class="course-card-content">
+                <h3 class="course-card-name">{$vo.title}</h3>
+                <div class="clearfix course-card-bottom">
+                    <div class="course-card-price">￥{$vo.price}<span class="lijipay">查看详情</span></div>
+                </div>
+            </div>
+        </a>
+    </div>
+    {/volist}
+</div>
+
+<script type="text/javascript">
+    $(".kechenglist").each(function() {
+        $(this).click(function() {
+            var diZhi = $(this).attr("rel");
+            htmlobj = $.ajax({
+                url: diZhi,
+                async: false
+            });
+            $(".ajax-Box").html(htmlobj.responseText);
+        });
+    });
+</script>

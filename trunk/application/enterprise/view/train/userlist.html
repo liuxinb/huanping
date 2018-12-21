@@ -1,0 +1,118 @@
+{extend name="layout"}
+{block name="title"}企业订单列表{/block}
+{block name="css"}
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+
+    .ad_co_Box_warp {
+        background: #fff !important;
+    }
+
+    .r_main {
+        background: #fff !important;
+    }
+</style>
+{/block}
+{block name="script"}
+<!--<script src="__PUBLIC__/page/js/pintuer.js"></script>-->
+<script>
+    $(function () {
+        $("#cbAll").CboxAll();
+        // $("#cbAll").change(function () {
+        //     $(".userIdInput").each(function(i,item){
+        //         debugger;
+        //         $(this).change();
+        //     })
+        // });
+        var currVal = $(window.parent.frames["iframeContent"].document).find("#userIds").val();
+        if (currVal != undefined && currVal != "0,") {
+            var currArr = currVal.split(",");
+            for (var i = 0, c = currArr.length; i < c; i++) {
+                if (currArr[i] != 0 && currArr[i] != "") {
+                    var cbInput = $("input[name=vehicle][value=" + currArr[i] + "]");
+                    if (cbInput.length == 1) {
+                        $(cbInput).prop("checked", "checked");
+                        $(cbInput).parents("tr").addClass("wq-blue");
+                        $(cbInput).next("span.wq-red").show();
+                    }
+                }
+            }
+        }
+
+        $(".userIdInput.child").change(function () {
+            var userId = $(this).val();
+            var userIds = $(window.parent.frames["iframeContent"].document).find("#userIds").val();
+            var currIds = "";
+            if ($(this).prop("checked")) {
+                currIds = userIds + userId + ",";
+                $(this).parent().find("span").show();
+            } else {
+                currIds = userIds.replace("," + userId + ",", ",");
+                $(this).parent().find("span").hide();
+            }
+            $(window.parent.frames["iframeContent"].document).find("#userIds").val(currIds);
+            $(window.parent.frames["iframeContent"].document).find("#userCount span").text(currIds.split(",").length - 2);
+        });
+    });
+</script>
+{/block}
+{block name="content"}
+<div class="r_main">
+    <div class="ad_co_Box_warp" style="min-height: 604px;">
+        <div class="ad_co_Box">
+            <div class="content" style="padding-top: 0px;">
+                <div class="clearfix">
+                    <form action="/enterprise/train/userList" style="float: left;" method="post">
+                        <div class="content_header_main">
+                            <input type="hidden" name="back" value="train"/>
+                            <input type="text" name="name" style="width:150px;float: left; margin-right: 10px;"
+                                   placeholder="姓名" class="input">
+                            <input type="text" name="idnumber" placeholder="身份证号"
+                                   style="width:150px;float: left; margin-right: 10px;" class="input">
+                            <input type="text" name="phone" placeholder="手机号"
+                                   style="width:150px;float: left; margin-right: 10px;" class="input">&nbsp;&nbsp;
+                            <input type="date" name="create_time" style="width:150px;float: left; margin-right: 10px;"
+                                   class="input">
+                            <input class="button bg-blue icon-search" type="submit" value="查询">
+                        </div>
+                    </form>
+                </div>
+
+                <table class="table table-striped table-hover xueyuanguanlitable">
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>身份证号</th>
+                        <th>手机号</th>
+                        <th>入职时间</th>
+                        <th style="width: 140px;"><input type="checkbox" id="cbAll" value="" class="userIdInput"
+                                                         style="width: 18px;height: 18px;"
+                                                         name="vehicle"><label for="cbAll" style="cursor: pointer;">全选</label>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name="data" id="vo"}
+                    <tr class="{$vo.uid|in_array=$userIds ? 'wq-blue' : ''}">
+                        <td>{$vo.name}</td>
+                        <td>{$vo.idnumber}</td>
+                        <td>{$vo.phone}</td>
+                        <td>{$vo.create_time}</td>
+                        <td class="content_main_caozuo">
+                            <input type="checkbox" class="userIdInput child" style="width: 18px;height: 18px;"
+                                   name="vehicle"
+                                   {$vo.uid|in_array=$userIds ? 'checked' : ''} value="{$vo.uid}"/>
+                            <span style="{$vo.uid|in_array=$userIds ? '' : 'display:none'};" class="wq-red">已添加</span>
+                        </td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="text-align: center;padding-bottom: 30px;">{$page}</div>
+    </div>
+</div>
+{/block}

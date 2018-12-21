@@ -1,0 +1,242 @@
+
+<style type="text/css">
+	.content_jiben {
+		width: 80%;
+		margin: 0 auto;
+		min-height: 200px;
+		padding-bottom: 20px;
+		border: 1px solid #d4f3de;
+	}
+	.content_jiben_tou {
+		width: 100%;
+		background: #d4f3de;
+		margin: 20px 0 20px 0;
+		padding: 10px;
+		margin: 0 auto;
+		font-weight: 700;
+	}
+	.content_jiben_main {
+		padding-top: 25px;
+	}
+	.signup_item {
+		margin: 0 auto;
+		width: 500px;
+	}
+	.signup_item_one {
+		padding-top: 0px;
+	}
+	.signup_item_left {
+		width: 110px;
+		height: 30px;
+		line-height: 30px;
+		font-size: 14px;
+		color: #7F7F7F;
+		display: inline-block;
+		vertical-align: 27px;
+		text-align: right;
+		padding-right: 20px;
+	}
+	.signup_item_right {
+		display: inline-block;
+		vertical-align: top;
+		position: relative;
+	}
+	.yuanxibtn div button{
+		margin-right: 10px;
+		color: #333;
+
+	}
+	.xiugaixueyuan div {
+		width: 340px;
+		height: 35px;
+		margin: 10px auto;
+		clear: both;
+	}
+	.close{
+		display: none;
+		font-size: 14px;
+		line-height: 14px;
+	}
+	.content_jiben {
+		width: 80%;
+		margin: 0 auto;
+		min-height: 200px;
+		padding-bottom: 20px;
+		border: 1px solid #ebebef;
+	}
+	.fapiao_jiben{
+		margin-bottom: 30px;
+	}
+	.content_jiben_tou {
+		width: 100%;
+		background: #ebebef;
+		margin: 20px 0 20px 0;
+		padding: 5px 10px;
+		height: 40px;
+		line-height: 32px;
+		margin: 0 auto;
+		font-weight: 700;
+	}
+
+	.content_jiben_main {
+		padding-top: 25px;
+	}
+
+	.signup_item {
+		margin: 0 auto;
+		width: 500px;
+	}
+
+	.signup_item_one {
+		padding-top: 0px;
+	}
+
+	.signup_item_left {
+		width: 110px;
+		height: 30px;
+		line-height: 30px;
+		font-size: 14px;
+		color: #7F7F7F;
+		display: inline-block;
+		vertical-align: 27px;
+		text-align: right;
+		padding-right: 20px;
+	}
+
+	.signup_item_right {
+		display: inline-block;
+		vertical-align: top;
+		position: relative;
+	}
+
+	.yuanxibtn div button {
+		margin-right: 10px;
+		color: #333;
+	}
+
+	.xiugaixueyuan div {
+		width: 340px;
+		height: 35px;
+		margin: 10px auto;
+		clear: both;
+	}
+
+	.close {
+		display: none;
+		font-size: 14px;
+		line-height: 14px;
+	}
+	.fapiao_main{
+		margin: 30px 0px 0px 320px;
+		height: 160px;
+	}
+	.fapiao_item {
+		line-height: 45px;
+		color: #666;
+	}
+	.right_float{
+		float: right;
+	}
+	.yaunxi_btn{min-width: 113px !important}
+</style>
+
+<script>
+    function savedraw() {
+        var invoice_name =$('form').eq(0).find('input').eq(0).val();//发票名称
+        var identification =$('form').eq(0).find('input').eq(1).val();//纳税人识别号
+        var address =$('form').eq(0).find('input').eq(2).val();//发票地址
+        var phone =$('form').eq(0).find('input').eq(3).val();//电话
+        var bank =$('form').eq(0).find('input').eq(4).val();//开户行名称
+        var number =$('form').eq(0).find('input').eq(5).val();//开户行账号
+        var tid =$('form').eq(0).find('input').eq(6).val();//开户行账号
+
+        if (invoice_name == '' || invoice_name == null) {
+            alert("发票名称不能为空");
+            return false
+        }
+        if (identification == '' || identification == null) {
+            alert("纳税号不能为空");
+            return false
+        }
+        if (phone == '' || phone == null) {
+            alert("手机号不能为空");
+            return false
+        }
+        if (address == '' || address == null) {
+            alert("发票地址不能为空");
+            return false
+        }
+        if (bank == '' || bank == null) {
+            alert("开户行不能为空");
+            return false
+        }
+        if (number == '' || number == null) {
+            alert("账号不能为空");
+            return false
+        }
+        if (!phone.match(/^1[3456789]\d{9}$/)) {
+            // $flag = false;
+            alert('手机号格式不正确', {
+                    callback: function () {
+                        $('#addphone').val("").focus();
+                    }
+                }
+            );
+            return false
+        }
+        $.ajax({
+            url: '/own/index/saveTicket',
+            dataType: 'json',
+            type: 'post',
+            data: {
+                id:tid,
+                invoice_name:invoice_name,
+                identification:identification,
+                phone:phone,
+                address:address,
+                bank:bank,
+                number:number,
+            },
+            success: function (res) {
+                if (res == '保存成功') {
+                    alert(res, {
+                        callback: function () {
+                            return location.assign(location);
+                        }
+                    });
+                } else {
+                    alert(res);
+                }
+            }, error: function (res) {
+                alert('网络错误');
+            }
+        });
+    }
+</script>
+
+<div class="content_jiben fapiao_jiben">
+
+	<div class="content_jiben_tou">发票信息</div>
+	<div id="xiugaifapiao">
+		<div>
+			<div class="dialog-body">
+				<form class="xiugaixueyuan" id="drawform" style="height:260px;">
+					<div><span style="width:85px;">发票名称：</span><input type="text" id="invoice_name" value="{$dataDraw['invoice_name']}" class="input"  /></div>
+					<div><span style="width:85px;">纳税识别号：</span><input type="text" id="identification" value="{$dataDraw['identification']}" class="input" /></div>
+					<div><span style="width:85px;">发票地址：</span><input type="text" id="address" value="{$dataDraw['address']}" class="input" /></div>
+					<div><span style="width:85px;">电话：</span><input type="text" id="phone" value="{$dataDraw['phone']}" class="input" /></div>
+					<div><span style="width:85px;">开户行名称：</span><input type="text" id="bank" value="{$dataDraw['bank']}" class="input" /></div>
+					<div><span style="width:85px;">开户行账号：</span><input type="text" id="number" value="{$dataDraw['number']}" class="input" /></div>
+					<input type="hidden" id="tid" value="{$dataDraw['id']}"/>
+				</form>
+			</div>
+			<div class="dialog-foot" style="text-align:right;padding-right:20px;">
+				{if($dataDraw['id']==0)}
+				<button class="button bg-main" onclick="savedraw()">添加</button>
+				{else/}
+				<button class="button bg-main" onclick="savedraw()">修改</button>
+				{/if}
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,90 @@
+
+{extend name="layout"}
+{block name="title"}添加消息{/block}
+{block name="css"}{/block}
+{block name="script"}
+<script type="text/javascript">
+    $(function() {
+//        $(".type").change(function () {
+//        $('.hidden').show();
+//        if($(this).value=="0"){
+//            $('.hidden').hide();
+//        }
+//        if($(this).value=="2"){
+//            $('.hidden').hide();
+//        }
+        $(".type").change(function () {
+            $(this).parents(".form-group").next().toggleClass('hidden');
+        });
+    });
+</script>
+{/block}
+{block name="content"}
+    <body>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><a href="{:url('Admin/Msg/index')}"><button id="demo-btn-addrow" class="btn btn-info">列表</button></a></h3>
+            </div>
+        </div>
+        <!--===================================================-->
+        <div class="col-lg-3"></div>
+
+        <div class="col-lg-6">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">发送用户消息</h3>
+                </div>
+
+                <form class="form-horizontal" method="post" action="{:url('Admin/Msg/add_run')}" enctype="multipart/form-data">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="demo-is-inputsmall">类型</label>
+                            <div class="col-sm-7">
+                                <select class="input input-auto type" name="type">
+                                    <option value="0">系统消息</option>
+                                    <option value="1">用户消息</option>
+                                    <option value="2">app轮播图</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group hidden" >
+                            <label class="col-sm-3 control-label">用户名</label>
+                            <div class="col-sm-7">
+                                <input type="text" name="username" class="input input-auto" size="50" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">标题</label>
+                            <div class="col-sm-7">
+                                <input type="text" name="title" class="input input-auto" size="50" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">消息内容</label>
+                            <div class="col-sm-7 ">
+                                <textarea name="content" id="LAY_desc" rows="8" cols="50" required></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <input class="btn btn-success" type="submit" value="提交">
+                                <!-- <button class="btn btn-info btn-rounded" type="reset">重置</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--===================================================-->
+        </div>
+
+
+
+    </body>
+{/block}
+
+
+

@@ -1,0 +1,288 @@
+
+{extend name="layout"}
+{block name="title"}判断题列表{/block}
+{block name="css"}{/block}
+{block name="script"}
+<script type="text/javascript">
+    /*添加判断题*/
+    function add() {
+        $("input[name='content']").val('');
+        $("input[name='answer']").val('');
+        $('#thinkright-add').modal('show');
+    }
+
+    // 修改菜单
+    function edit(obj) {
+        var binaryId = $(obj).attr('binaryId');
+        var binaryContent = $(obj).attr('binaryContent');
+        var binaryAnswer = $(obj).attr('binaryAnswer');
+        var binaryMovie = $(obj).attr('binaryMovie');
+
+        $("input[name='id']").val(binaryId);
+        $("input[name='content']").val(binaryContent);
+        $("select[name='movie_id']").val(binaryMovie);
+        if (binaryAnswer == '0') {
+            document.getElementById('TRUE').checked = true;
+        }
+        if (binaryAnswer == '1') {
+            document.getElementById('FALSE').checked = true;
+        }
+
+        $('#thinkright-edit').modal('show');
+    }
+
+    //根据条件搜索
+    $(function () {
+        //搜索功能
+        $("#search").click(function () {
+            var url = $(this).attr('url');
+            var query = $(this).prev('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+            query = query.replace(/^&/g, '');
+            if (url.indexOf('?') > 0) {
+                url += '&' + query;
+            } else {
+                url += '?' + query;
+            }
+            window.location.href = url;
+        });
+    });
+
+    function ajaxPost() {
+        //获取表单数据
+        var d = {};
+        var t = $('#formAjax').serializeArray();
+        $.each(t, function () {
+            d[this.name] = this.value;
+        });
+
+        //ajax发送请求
+        $.ajax({
+            url: '{:url("Admin/Wor/edit")}',
+            dataType: 'json',
+            data: d,
+            success: function(res) {
+                //成功跳转到update页面
+                layer.msg("修改成功~",{icon:'1',time:'1000'});
+            },
+            error: function(res){
+                layer.msg(res.responseText,{icon:5,time:1000});
+            }
+        })
+    }
+
+    $(function () {
+        $("#cboxAll").CboxAll();
+        //批量删除
+        $("#demo-btn-addrow").click(function () {
+            var deleIds = $("input[name=checkall]").CboxVals();  //全选按钮的name值
+            // 判断是否至少选择一项
+            if(deleIds == 0) {
+                alert("请选择至少一项！");
+                return;
+            }
+            confirm('确定删除？',{confirm:function() {
+                Ajax("{:url('admin/Wor/batchDelete')}", {ids: deleIds});
+            }});
+
+        });
+    })
+ //课程包隐藏 显示
+    $(function() {
+        $(".movie_id").change(function () {
+            $(this).parents(".form-group").next().toggleClass('hidden');
+        });
+    });
+
+</script>
+{/block}
+{block name="content"}
+    <body>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">判断题列表</h3>
+            </div>
+            <div class="padding border-bottom">
+                <div class="col-lg-5">
+                    <h3 class="panel-title">
+                        <button id="demo-btn-addrow" class="btn btn-info"> 删除</button>
+                        <button id="demo-btn-addrow" class="btn btn-info" onclick="add()">添加判断题</button>
+                        <button type="button"
+                                onclick="window.location='/admin/wor/batchIndex'"
+                                class="btn btn-info">批量上传
+                        </button>
+                    </h3>
+                </div>
+                <div class="col-lg-7 " style="padding: 0 20px 0 20px;">
+                    <div class="float-right">
+                        <input type="text" name="content" class="input search-form"
+                               placeholder="请输入题目"/>
+                        <input type="button" id="search" url="{:url('Admin/wor/index')}" class="wq-btn" value="搜索"/>
+                    </div>
+                </div>
+            </div>
+        <!--===================================================-->
+
+            <div class="panel-body">
+                <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="all" width="100px">
+                                <label><input type="checkbox" name="checkall" id="cboxAll" value="" >选择</label>
+                            </th>
+                            <th width="40%">判断题</th>
+                            <th width="10%">答案</th>
+                            <th width="20%">所属视频</th>
+                            <th width="200px">更新时间</th>
+                            <th width="200px">操作</th>
+                        </tr> 
+                    </thead>
+                    <?php foreach($binary as $k=>$v): ?>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="child" name="checkall" value="{$v['id']?$v['id']:''}">
+                            </td>
+                            <td>
+                                <!-- 标题 -->
+                                <div>{$k+1}. {$v.content}</div>
+                                <!-- 选项 -->
+                                <div><input type="radio" value="TRUE"  name="answer[]" required>对</div>
+                                <div><input type="radio" value="FALSE" name="answer[]" required>错</div>
+                            </td>
+                            <td>{$v.answer?'错':'对'}</td>
+                            <td>{$v.title?$v.title:'环境保护基础知识之一(课程包)'}</td>
+                            <td>{$v.create_time|date="Y-m-d H:i:s",###}</td>
+                            <td>
+                                <button><a href="javascript:;" binaryId="{$v['id']}" binaryMovie="{$v['movie_id']}" binaryContent="{$v['content']}" binaryAnswer="{$v['answer']}" onclick="edit(this)">修改</a> </button>
+                                <button><a href="javascript:confirm('确定删除？',{confirm:function(){location='{:url('Admin/Wor/del',array('id'=>$v['id']))}'}})">删除</a></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <?php endforeach; ?>
+                </table>
+                <tr>
+                    <td class="center">{$renderBinary->render()}</td>
+                </tr>
+            </div>
+            <!--===================================================-->
+        </div>
+
+        <!-- 添加判断题模态框开始 -->
+        <div class="modal fade" id="thinkright-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            添加判断题
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="{:url('Admin/Wor/add')}" method="post">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">题目内容</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"  id="demo-hor-inputemail" class="form-control" name="content" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">选项</label>
+                                    <div class="col-sm-9">
+                                        <input type="radio"  id="demo-hor-inputemail"  name="answer[]" value="0" required>对
+                                        <input type="radio"  id="demo-hor-inputemail"  name="answer[]" value="1" required>错
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">添加对应视频</label>
+                                    <div class="col-sm-9">
+                                        <select class="input input-auto" name="movie_id" required>
+                                            <option value="">请选择课程或课程包</option>
+                                            {foreach name="cate_title" item="vo"}
+                                            <option value="cid{$vo.id}">
+                                                {$vo.title} (课程包)
+                                            </option>
+                                            {/foreach}
+                                            {foreach name="movie_title" item="vo"}
+                                            <option value="{$vo.id}">
+                                                {$vo.title}
+                                            </option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button class="btn btn-success" type="submit">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 添加判断题模态框结束 -->
+
+        <!-- 修改判断题模态框开始 -->
+        <div class="modal fade" id="thinkright-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            修改判断题信息
+                        </h4> 
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" id="formAjax" action='{:url("Admin/Wor/edit")}' method="post">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">题目内容</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="id">
+                                        <input type="text"  id="demo-hor-inputemail" class="form-control" name="content" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">选择答案</label>
+                                    <div class="col-sm-9">
+                                        <input class="xb-icheck"  type="radio"  id="TRUE"  name="answer[]" value="0" >对
+                                        <input class="xb-icheck"  type="radio"  id="FALSE"  name="answer[]" value="1" >错
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">修改对应视频</label>
+                                    <div class="col-sm-9">
+                                        <select class="input input-auto" name="movie_id" id="movie_id">
+                                            <option value="">请选择课程或课程包</option>
+                                            {foreach name="cate_title" item="vo"}
+                                            <option value="cid{$vo.id}">
+                                                {$vo.title} (课程包)
+                                            </option>
+                                            {/foreach}
+                                            {foreach name="movie_title" item="vo"}
+                                            <option value="{$vo.id}"
+                                                    {if condition="$v.movie_id?$v.movie_id:0 eq $vo.id"}selected {/if}>{$vo.title}
+                                            </option>
+                                            {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button class="btn btn-success" type="submit" onclick="ajaxPost()">修改</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 修改菜单模态框结束 -->
+
+
+    </body>
+{/block}

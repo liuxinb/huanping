@@ -1,0 +1,298 @@
+{extend name="layout"}
+{block name="title"}我的档案{/block}
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/two/css/mydangan.css"/>
+{/block}
+{block name="script"}
+<script class="resources library" src="__PUBLIC__/two/js/area.js" type="text/javascript"></script>
+<script src="__PUBLIC__/two/js/mydangan.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    var Gid = document.getElementById;
+
+    var showArea = function () {
+
+        Gid('show').innerHTML = "<h3>省" + Gid('s_province').value + " - 市" +
+
+            Gid('s_city').value + " - 县/区" +
+
+            Gid('s_county').value + "</h3>"
+
+    }
+
+    //上传图片
+    $(function () {
+        $(".upload_pic").change(uploadImage);
+    })
+
+    function uploadImage() {
+        //  判断是否有选择上传文件
+        var imgPath = $("#file_upload").val();
+        var img = $(this).parent().siblings('img');
+        var input = $(this).parent().siblings('input[type="hidden"]');
+        if (imgPath == "") {
+            alert("请选择上传图片！");
+            return;
+        }
+        var formData = new FormData();
+        formData.append('fileupload', this.files[0]);
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "/enterprise/record/upload",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data == 404) {
+                    alert('上传图片后缀不允许');
+                } else {
+                    img.attr('src', data);
+                    input.val(data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("上传失败，请检查网络后重试");
+            }
+        });
+    }
+
+    function ajaxPost() {
+        var firmname = $('#addfirmname').val();
+        var registersite = $('#addregistersite').val();
+        var invoicename = $('#addinvoicename').val();
+        var identifynumber = $('#addidentifynumber').val();
+        var addressphone = $('#addaddressphone').val();
+        var name = $('#addname').val();
+        var phone = $('#addphone').val();
+        var email = $('#addemail').val();
+
+        $flag = true;
+        if (firmname == '') {
+            $flag = false;
+            alert('企业名称不能为空~');
+        } else if (registersite == '') {
+            $flag = false;
+            alert('注册地址不能为空~');
+        } else if (invoicename == '') {
+            $flag = false;
+            alert('发票名称不能为空~');
+        } else if (identifynumber == '') {
+            $flag = false;
+            alert('纳税人识别号不能为空~');
+        } else if (addressphone == '') {
+            $flag = false;
+            alert('电话不能为空~');
+        } else if (name == '') {
+            $flag = false;
+            alert('姓名不能为空~');
+        } else if (phone == '') {
+            $flag = false;
+            alert('手机号不能为空~');
+        } else if (!phone.match(/^1[3456789]\d{9}$/)) {
+            $flag = false;
+            alert('手机号格式不正确', {
+                    callback: function () {
+                        $('#addphone').val("").focus();
+                    }
+                }
+            );
+        } else if (email == '') {
+            $flag = false;
+            alert('邮箱不能为空~');
+        } else if (!email.match(/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/)) {
+            $flag = false;
+            alert('邮箱格式不正确', {
+                    callback: function () {
+                        $('#addemail').val("").focus();
+                    }
+                }
+            );
+        }
+        if ($flag == false) {
+            return false;
+        }
+
+        //获取表单数据
+        var d = {};
+        var t = $('#formAjax').serializeArray();
+        $.each(t, function () {
+            d[this.name] = this.value;
+        });
+
+        //ajax发送请求
+        $.ajax({
+            url: '/enterprise/record/add',
+            dataType: 'json',
+            data: d,
+            success: function (res) {
+
+                //成功跳转到update页面
+                alert("提交成功!", {
+                    callback: function () {
+                        location.href = "/record"
+                    }
+                });
+            },
+            error: function (res) {
+                alert(res.responseText);
+            }
+        })
+    }
+</script>
+{/block}
+{block name="content"}
+<div class="r_main">
+    <form action="" id="formAjax" method="post">
+        <div class="ad_co_Box_warp">
+            <div class="ad_co_Box">
+                <div class="content">
+                    <div class="content_header_red">
+                        <div class="content_header_red_text icon-pencil"> 请填写真实资料，企业资料仅作为培训存档，不做其他用途</div>
+                    </div>
+
+                    <div class="content_jiben">
+                        <div class="content_jiben_tou">企业基本信息</div>
+                        <div class="content_jiben_main">
+                            <div class="signup_item signup_item_one">
+                                <div class="signup_item_left">企业名称</div>
+                                <div class="signup_item_right">
+                                    <div class="ww_inputWithMagnifier_info js_num_input_tips"
+                                         style="display: none;"></div>
+                                    <input type="text" class="input intext" name="firmname" id="addfirmname"
+                                           data-default="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="signup_item info">
+                            <div class="info_xuanze">
+                                <select id="s_province" name="province"></select>
+                                <select id="s_city" name="city"></select>
+                                <select id="s_county" name="county"></select>
+                            </div>
+                        </div>
+                        <div class="signup_item signup_item_one">
+                            <div class="signup_item_left">注册地址</div>
+                            <div class="signup_item_textarea">
+                                <label class="label"></label>
+                                <input type="text" class="input intext" name="registersite" id="addregistersite"
+                                       placeholder=""/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="content_lianxiren">
+                        <div class="content_jiben">
+                            <div class="content_jiben_tou">企业发票信息</div>
+                            <div class="content_jiben_main">
+                                <div class="signup_item signup_item_one">
+                                    <div class="signup_item_left">发票名称</div>
+                                    <div class="signup_item_right">
+                                        <div class="ww_inputWithMagnifier_info js_num_input_tips"
+                                             style="display: none;"></div>
+                                        <input type="text" class="input intext" id="addinvoicename"
+                                               name="invoicename" data-default="">
+                                    </div>
+                                </div>
+
+                                <div class="signup_item signup_item_one">
+                                    <div class="signup_item_left">纳税人识别号</div>
+                                    <div class="signup_item_right">
+                                        <div class="ww_inputWithMagnifier_info js_num_input_tips"
+                                             style="display: none;"></div>
+                                        <input type="text" class="input intext" id="addidentifynumber"
+                                               name="identifynumber" data-default="">
+                                    </div>
+                                </div>
+                                <div class="signup_item signup_item_one">
+                                    <div class="signup_item_left">电话</div>
+                                    <div class="signup_item_right">
+                                        <div class="ww_inputWithMagnifier_info js_num_input_tips"
+                                             style="display: none;"></div>
+                                        <input type="text" class="input intext" id="addaddressphone"
+                                               name="addressphone"
+                                               data-default="">
+                                    </div>
+                                </div>
+                                <div class="signup_item signup_item_one">
+                                    <div class="signup_item_left">发票地址</div>
+                                    <div class="signup_item_right">
+                                        <div class="ww_inputWithMagnifier_info js_num_input_tips"
+                                             style="display: none;"></div>
+                                        <input type="text" class="input intext" id="invoiceaddress" name="invoiceaddress" data-default="">
+                                    </div>
+                                </div>
+                                <div class="signup_item signup_item_one">
+                                    <div class="signup_item_left">开户行</div>
+                                    <div class="signup_item_right">
+                                        <div class="ww_inputWithMagnifier_info js_num_input_tips"
+                                             style="display: none;"></div>
+                                        <input type="text" class="input intext" id="openingbank" name="openingbank" data-default="">
+                                    </div>
+                                </div>
+                                <div class="signup_item signup_item_one">
+                                    <div class="signup_item_left">账号</div>
+                                    <div class="signup_item_right">
+                                        <div class="ww_inputWithMagnifier_info js_num_input_tips"
+                                             style="display: none;"></div>
+                                        <input type="text" class="input intext" id="accountnumber" name="accountnumber" " data-default="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content_lianxiren">
+                            <div class="content_jiben">
+                                <div class="content_jiben_tou">企业联系人信息</div>
+                                <div class="content_jiben_main">
+                                    <div class="signup_item signup_item_one">
+                                        <div class="signup_item_left">姓名</div>
+                                        <div class="signup_item_right">
+                                            <div class="ww_inputWithMagnifier_info js_num_input_tips"
+                                                 style="display: none;"></div>
+                                            <input type="text" class="input intext" id="addname" name="name"
+                                                   data-default="">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="signup_item signup_item_one">
+                                    <div class="signup_item_left">手机</div>
+                                    <div class="signup_item_right">
+                                        <div class="ww_inputWithMagnifier_info js_num_input_tips"
+                                             style="display: none;"></div>
+                                        <input type="text" class="input intext" id="addphone" name="phone"
+                                               data-default="">
+                                    </div>
+                                </div>
+                                <div class="signup_item signup_item_one">
+                                    <div class="signup_item_left">邮箱</div>
+                                    <div class="signup_item_right">
+                                        <div class="ww_inputWithMagnifier_info js_num_input_tips"
+                                             style="display: none;"></div>
+                                        <input type="text" class="input intext" id="addemail" name="email"
+                                               data-default="">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="nav1_left_tijiao1">
+                            <div class="nav1_left_tijiao" onclick="ajaxPost()">确认提交</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </form>
+</div>
+<script>
+    $("#lllhj").click(function () {
+        alert("请完善企业信息~");
+        $("#iframeContent").attr("src", '/recordadd');
+    });
+
+    var llhj = $("#lllhj").attr('name');
+    if (llhj == 0){
+        $("#lllhj").click();
+    }
+</script>
+{/block}

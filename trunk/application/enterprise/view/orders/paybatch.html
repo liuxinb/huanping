@@ -1,0 +1,331 @@
+{extend name="layout"}
+{block name="title"}批量缴费{/block}
+{block name="css"}
+<link href="__PUBLIC__/two/css/chosen.min.css" rel="stylesheet">
+<link href="__PUBLIC__/two/css/icheck-green.css" rel="stylesheet">
+<link href="__PUBLIC__/two/css/jquery.datetimepicker.css" rel="stylesheet">
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+
+    .tab .tab-nav .active a {
+        color: #fff;
+        background: #0a8;
+    }
+</style>
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/two/js/pintuer.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#allbatch").click(function () {
+            var num = $("input[type=checkbox].child").CboxVals();
+            if (num == false) {
+                alert("暂无订单可付款")
+                return false;
+            } else {
+                    confirm("您已选择付款人数为:" + num.length + "<br/>确定付款吗?", {
+                    confirm: function () {
+                        $.ajax({
+                            type: "post",
+                            async: false,
+                            url: '/totalorder',
+                            data: {
+                                'arrnum': num,
+                            },
+                            success: function (data) {
+                                if (data.status == 1) {
+                                    var r = confirm("请选择付款方式",
+                                        {
+                                            okVal: "在线付款",
+                                            cancelVal: "银行汇款",
+                                            //线上支付
+                                            confirm: function () {
+                                                location.href = "/onlinepay?num=" + data.num
+                                            },
+                                            //线下支付
+                                            cancel: function () {
+                                                var offInfo = getOffLineInfo(data.num, data.price);
+                                                confirm(offInfo, {
+                                                        confirm: function () {
+                                                            location.href = "/payment?num=" + data.num;
+                                                        }, cancel: function () {
+                                                        location.href ="/orders";
+                                                        }
+                                                    }
+                                                );
+                                            }
+                                        })
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+            return false;
+        });
+        $("#student").CboxAll();
+        var search = location.search;
+        if (search.indexOf("payed=1") > -1) {
+            $(".tab-head ul li").last().click();
+        }
+        $(".bg-main").click(function () {
+            var _nums = $(this).attr("category_id");
+            document.location.href = "/addOrder?category_id=" + _nums;
+        })
+
+        $(".ajax-linkk").each(function () {
+            $(this).click(function () {
+                var self = $(this);
+                var diZhi = $(this).attr("rel");
+                var num = $(this).attr("num");
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: '/selinvoice',
+                    data: {
+                        'arrnum': num,
+                    },
+                    success: function (data) {
+                        if (data.status == 1) {
+                            var r = confirm("确认信息", {
+                                confirm: function () {
+                                    $("#tianjia").center();
+                                    var a = data.arr;
+                                    if (a != '') {
+                                        for (var i in a) {
+                                            $('#editMember div').find('input[name="' + i + '"]').val(a[i]);
+                                            $('#editMember div').find('input[name="' + i + '"]').attr("readOnly", "true");
+                                        }
+                                    }
+
+                                },
+                                caneel: function () {
+
+                                }
+                            });
+                        } else {
+                            var r = confirm("请填写发票信息", {
+                                confirm: function () {
+                                    $('#editMember div').find('input[name=num]').val(num);
+                                    $("#tianjia").center();
+                                },
+                                caneel: function () {
+
+                                }
+                            });
+                        }
+                    }
+                });
+
+            });
+        });
+    });
+</script>
+{/block}
+{block name="content"}
+
+<script>
+    function rf(obj) {
+        $(obj).attr("disabled", "disabled");
+        $(obj).html('已下载');
+    }
+</script>
+<div class="ad_r_top_ti_w">
+
+</div>
+<div class="ad_co_Box_warp">
+    <div class="ad_co_Box">
+        <div class="content" style="padding-top: 35px;padding-left: 10px;padding-right: 20px;">
+            <div class="tab">
+                <div class="tab-head">
+                    <ul class="tab-nav">
+                        <li class="active">
+                            <a href="#tab-daifukuan">待付款</a>
+                        </li>
+                        <li>
+                            <a href="#tab-fukuaning">付款中</a>
+                        </li>
+                        <li>
+                            <a href="#tab-yifukuan">已付款</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-body">
+                    <div class="tab-panel active" id="tab-daifukuan">
+                        <table class="table Dingdanxinxi">
+                            <thead>
+                            <tr>
+                                <th><input type="checkbox" value="0" id="student" name="student">课程</th>
+                                <th>学生</th>
+                                <th>身份证</th>
+                                <th>订单号</th>
+                                <th>类型</th>
+                                <th>价格</th>
+                            </tr>
+                            </thead>
+                            <tbody class="dingdandfk">
+                            {volist name="unpayList" id="vo"}
+                            <tr>
+                                <td>
+                                    {if $vo.role == "个人报名"}
+                                    <span style="font-size: 34px;margin-left: -2px;    line-height: 10px;">■</span>
+                                    {else /}
+                                    <input type="checkbox" class="child" name="student" value="{$vo.num}">
+                                    {/if}
+                                    {$vo.title}
+                                </td>
+                                <td>{$vo.uname}</td>
+                                <td>{$vo.idnumber}</td>
+                                <td>{$vo.num}</td>
+                                <td>
+                                    {if($vo.order_status == "0")/}
+                                    <span style="color:blue;">个人报名</span>
+                                    {else/}
+                                    <span style="color:blue;">{$vo.role}</span>
+                                    {/if}</td>
+                                <td><span class="text-red tips">￥{$vo.price}</span></td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                        <input class="button bg-blue icon-search" type="submit" value="批量付款" id="allbatch">
+                    </div>
+                    <div class="tab-panel" id="tab-fukuaning">
+                        <table class="table Dingdanxinxi">
+                            <thead>
+                            <tr>
+                                <th>课程</th>
+                                <th>订单号</th>
+                                <th>姓名</th>
+                                <th>身份证</th>
+                                <th>报名时间</th>
+                                <th>类型</th>
+                                <th>价格</th>
+                            </tr>
+                            </thead>
+                            <tbody class="dingdandfk">
+                            {volist name="payingList" id="vo"}
+                            <tr>
+                                <td>{$vo.title}</td>
+                                <td>{$vo.num}</td>
+                                <td>{$vo.uname}</td>
+                                <td>{$vo.idnumber}</td>
+                                <td>{$vo.add_time}</td>
+                                <td>
+                                    {if($vo.order_status == 3)/}
+                                    <span style="color:blue;">个人报名</span>
+                                    {else/}
+                                    <span style="color:blue;">批量报名</span>
+                                    {/if}</td>
+                                <td><span class="text-red tips">￥{$vo.price}</span></td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-panel" id="tab-yifukuan">
+                        <table class="table Dingdanxinxi">
+                            <thead>
+                            <tr>
+                                <th>课程</th>
+                                <th>订单号</th>
+                                <th>姓名</th>
+                                <th>身份证</th>
+                                <th>报名时间</th>
+                                <th>支付时间</th>
+                                <th>类型</th>
+                                <th>价格</th>
+                            </tr>
+                            </thead>
+                            <tbody class="dingdandfk">
+                            {volist name="payList" id="vo"}
+                            <tr>
+                                <td>{$vo.title}</td>
+                                <td>{$vo.num}</td>
+                                <td>{$vo.uname}</td>
+                                <td>{$vo.idnumber}</td>
+                                <td>{$vo.add_time}</td>
+                                <td>{$vo.pay_time}</td>
+                                <td>
+                                    {if($vo.order_status == 3)/}
+                                    <span style="color:blue;">个人报名</span>
+                                    {else/}
+                                    <span style="color:blue;">批量报名</span>
+                                    {/if}</td>
+                                <td><span class="text-red tips">￥{$vo.price}</span></td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="tianjia" class="dialog" style="width:500px;">
+    <div class="dialog-head"><strong></strong></div>
+    <div class="dialog-body">
+        <form class="xiugaixueyuan" id="editMember">
+            <div><span>发票名称：</span><input type="text" id="invoice_name" name="invoice_name" class="input updatsename"
+                                          placeholder="请输入发票名称"/></div>
+            <div><span>纳税号：</span><input type="text" id="identification" name="identification" class="input updatephone"
+                                         placeholder="纳税人识别号"/></div>
+            <div><span>电话：</span><input type="text" id="phone" name="phone" class="input" placeholder="请输入电话"/></div>
+            <div><span>发票地址：</span><input type="text" id="address" name="address" class="input" placeholder="发票地址"/>
+            </div>
+            <div><span>开户行：</span><input type="text" id="bank" name="bank" class="input" placeholder="开户行"/>
+            </div>
+            <div><span>账号：</span><input type="text" id="number" name="number" class="input" placeholder="账号"/>
+            </div>
+            <div><input type="hidden" id="num" name="num" class="input"/>
+            </div>
+            <!--<div><input type="text" id="num" name="num" class="input"/>-->
+            <!--</div>-->
+        </form>
+        <div class="dialog-foot">
+            <div class="anNiu">
+                <button class="button btnAddOrUpdate" onclick="addInvoice();">确定</button>
+                <button href="#0" class="button dialog-close">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="selDetail" class="dialog" style="width:500px;">
+    <div class="dialog-head"><strong></strong></div>
+    <div class="dialog-body">
+        <form class="xiugaixueyuan" id="orderdetail">
+            <thead>
+            <tr>
+                <th>姓名</th>
+                <th>订单号</th>
+                <th>身份证</th>
+                <th>报名时间</th>
+                <th>价格</th>
+            </tr>
+            </thead>
+            <tbody class="dingdandfk" id="seldetails">
+            <tr>
+                <td id="name"></td>
+                <td id="enum"></td>
+                <td id="idnumber"></td>
+                <td id="create_time"></td>
+                <td id="price"></td>
+            </tr>
+            </tbody>
+        </form>
+        <div class="dialog-foot">
+            <div class="anNiu">
+                <button class="button btnAddOrUpdate" onclick="addInvoice();">确定</button>
+                <button href="#0" class="button dialog-close">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{/block}
+

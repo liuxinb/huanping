@@ -1,0 +1,21 @@
+{extend name="layout"}
+{block name="title"}首页{/block}
+{block name="script"}
+<script type="text/javascript">
+    $(function () {
+        setInterval(function () {
+            $("#dates").html(getCurDate());
+        }, 1000);
+    });
+</script>
+{/block}
+
+{block name="content"}
+<div id="page-content">
+    <div class="panel">
+        <div class="panel-body">
+            您好:{$Think.session.user.username}！欢迎使用__TITLE__ <span class="today" data-href="/admin/order/enterprise_index.html" data-title="企业订单列表" data-confirm="确定要打开吗！" data-width="80" data-height="60" id="dates">123123</span>
+        </div>
+    </div>
+</div>
+{/block}

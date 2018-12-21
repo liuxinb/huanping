@@ -1,0 +1,59 @@
+{extend name="layout"}
+{block name="title"}发票管理列表{/block}
+{block name="css"}
+{/block}
+{block name="script"}
+{/block}
+{block name="content"}
+    <body>
+        <!--===================================================-->
+        <div id="page-content">
+            <!--===================================================-->
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">发票信息</h3>
+                </div>
+                <div class="panel-body">
+                    <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th width="100px">Id</th>
+                                <th>订单号</th>
+                                <th>发票代码-编号</th>
+                                <th>发票抬头</th>
+                                <th>开票时间</th>
+                                <th>开票机构</th>                                        
+                                <th>发票号码</th>
+                                <th class="min-tablet" width="200px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($all as $k => $v): ?>
+                            <tr>
+                                <td>{$v.id}</td>
+                                <td>{$v.num}</td>
+                                <td>{$v.fpdm}</td>
+                                <td>{$v.name}</td>
+                                <td>{$v.kprq|date('Y-m-d H:i:s',strtotime($v.kprq));}</td>
+                                <td>{$v.bank}</td>
+                                <td>{$v.fphm}</td>
+                                <td>
+                                    <button><a class="today showIframeDialog" data-href="{:url('Admin/Bill/detail_invoice',array('id'=>$v['id']))}" data-title="企业订单详情"  data-width="50"  >详情</a> </button>
+                                    <button><a href="javascript:confirm('暂不能删除？',{confirm:function(){location=''}})">删除</a></button>
+                                </td>
+                            </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                    <tr>
+                        <td class="center">{$all->render()}</td>
+                    </tr>
+                </div>
+            </div>
+            <!--===================================================-->
+        </div>
+        <!--===================================================-->
+
+
+    </body>
+{/block}

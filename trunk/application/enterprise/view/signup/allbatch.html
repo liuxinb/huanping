@@ -1,0 +1,163 @@
+{extend name="layout"}
+{block name="title"}我要报名{/block}
+{block name="css"}
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+
+    .tab .tab-nav .active a {
+        color: #fff;
+        background: #0a8;
+    }
+
+    .img_box img {
+        width: 200px;
+        height: 120px;
+    }
+
+
+</style>
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/two/js/pintuer.js"></script>
+<script src="__PUBLIC__/two/js/zui.min.js"></script>
+<script src="__PUBLIC__/two/js/icheck.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $(".ajax-linkk").click(function () {
+            var uid = $("input[type=checkbox].child").CboxVals();
+            if (uid.length == 0) {
+                alert("请去添加学生");
+                return false
+            }
+            confirm("您已选择批量报名人数为:{0}<br/>确定报名吗?".Format(uid.length), {
+                confirm: function () {
+                    var cid = $("#hidId").val();
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: '/addbatch',
+                        data: {
+                            'uid': uid,
+                            'category_id': cid
+                        },
+                        success: function (data) {
+
+                            if (data.status == 1) {
+                                confirm(data.msg + ",是否去立即批量缴费", {
+                                    confirm: function () {
+                                        $.ajax({
+                                            type: "post",
+                                            async: false,
+                                            url: '/totalorder',
+                                            data: {
+                                                'arrnum': data.num,
+                                            },
+                                            success: function (data) {
+                                                // alert(data);
+                                                if (data.status == 1) {
+                                                    var r = confirm("请选择付款方式",
+                                                        {
+                                                            okVal: "在线付款",
+                                                            cancelVal: "银行汇款",
+                                                            //线上支付
+                                                            confirm: function () {
+                                                                location.href = "/onlinepay?num=" + data.num
+                                                            },
+                                                            //线下支付
+                                                            cancel: function () {
+                                                                var offInfo = getOffLineInfo(data.num, data.price);
+                                                                confirm(offInfo, {
+                                                                        confirm: function () {
+                                                                            location.href = "/payment?num=" + data.num;
+                                                                        }, cancel: function () {
+                                                                            location.href = "/orders";
+                                                                        }
+                                                                    }
+                                                                );
+                                                            }
+                                                        })
+                                                }
+                                            }
+                                        });
+
+                                    },
+                                    cancel: function () {
+                                        location.href = "/paybatch"
+                                    }
+                                })
+                            }
+                        }
+                    });
+                }
+            });
+
+        })
+        $("#student").CboxAll();
+    })
+</script>
+{/block}
+{block name="content"}
+<div class="r_main">
+    <div class="ad_co_Box_warp">
+        <div class="ad_co_Box">
+            <div class="content">
+                <div style="float: right;">
+                    <button class="button bg-main icon-plus-circle ajax-linkk" rel="trainAdd"> 批量报名</button>
+                </div>
+                <input type="hidden" name="hidId" id="hidId" value="{$signupList.0.id}">
+                <h2>课程名称:{$signupList.0.title} &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    课程价格:{$signupList.0.sign_price}</h2>
+                <table class="table ">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" value="0" id="student" name="student">姓名</th>
+                        <th>身份证号</th>
+                        <th>手机号</th>
+                        <th>状态</th>
+                    </tr>
+                    </thead>
+                    <tbody class="">
+                    {volist name="arrUser" id="vo"}
+                    <tr>
+
+                        <td>
+                            {if $vo.order_status == "0"}
+                            <input type="checkbox" class="child" name="student" style="width:18px;height:18px;"
+                                   value="{$vo.id}">
+                            {else/}
+                            <span style="font-size: 34px;margin-left: -2px;    line-height: 10px;">■</span>
+                            {/if}
+                            {$vo.adminUserDetails.0.name == ''?"暂无":$vo.adminUserDetails.0.name}
+
+                        </td>
+
+                        {if $vo.adminUserDetails.0.idnumber == ''}
+                        <td>暂无</td>
+                        {else/}
+                        <td>{$vo.adminUserDetails.0.idnumber}</td>
+                        {/if}
+                        <td uid="{$vo.id}">{$vo.phone}</td>
+                        <td>
+                            {if ($vo.order_status == "0")}
+                            <span style="color:blue;">未报名</span>
+                            {else/}
+                            <span style="color:red;">{$vo.order_status}</span>
+                            {/if}
+                        </td>
+
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+                <!--<div style="text-align: center;padding-bottom:30px;"></div>-->
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{/block}

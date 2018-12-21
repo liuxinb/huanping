@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link rel="stylesheet" type="text/css" href="css/quanxianguanli.css"/>
+	<script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<title>权限管理</title>
+</head>
+<body>
+	<div class="content">
+		<div class="content_dfk">
+			<div class="tab_tbb"> 
+				<ul> 
+					<li class="selectedbb tab_tb_left">角色管理</li> 
+					<li class="yifufufu">权限分配</li> 
+				</ul> 
+			</div>
+		</div>
+		<div class="tab_cbb"> 
+			<ul style="padding: 0;"> 
+			<li>
+				<div class="zxhdb">
+					<div class="quanx_head">
+						<div><input type="text" placeholder="角色名" class="signup_item_input signup_item_input_shenfenzheng" name=""></div>
+						<div><input type="text" placeholder="管理员姓名" class="signup_item_input signup_item_input_shenfenzheng" name=""></div>
+						<div><input type="password" placeholder="密码" class="signup_item_input signup_item_input_shenfenzheng" name=""></div>
+						<div class="nav1_left_tianjia"><a href="#" class="quanx_tianjia" >添加</a></div>
+					</div>
+					<div class="quanx_main">
+						<table class="table listext" data-resizable-columns-id="demo-table">
+							<thead>
+								<tr>
+									<th width="20%">角色名称</th>
+									<th width="30%">管理员姓名</th>
+									<th width="40%" data-noresize="">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>小李飞刀</td>
+									<td>李同志</td>
+					                <td class="content_main_caozuo">
+					                	<div class="content_dingdanxinxi_right_quxiao">重置密码</div>
+										<div class="content_dingdanxinxi_right_shanchu">删除</div>
+					                </td>
+								</tr>
+								<tr>
+									<td>多情剑客无情剑</td>
+									<td>李同志</td>
+					                <td class="content_main_caozuo">
+					                	<div class="content_dingdanxinxi_right_quxiao">重置密码</div>
+										<div class="content_dingdanxinxi_right_shanchu">删除</div>
+					                </td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</li> 
+			<li class="hidebb">
+				<div class="zxhdb">
+					<div class="quanx_main_fot">
+						<div class="quanx_main_one">
+							<table class="table listext" data-resizable-columns-id="demo-table">
+								<thead>
+									<tr>
+										<th width="20%">角色名称</th>
+								</thead>
+								<tbody>
+									<tr>
+										<td>财务</td>
+									</tr>
+									<tr>
+										<td>人事</td> 
+									</tr>
+									<tr>
+										<td>资源</td> 
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="quanx_main_two">
+							<table class="table listext" data-resizable-columns-id="demo-table">
+								<thead>
+									<tr>
+										<th  colspan="2" width="50%">
+											<div style="display: flex;justify-content: space-between;">
+												<div class="quanx_main_two_caicai">菜单权限</div>
+												<div class="content_dingdanxinxi_right_yes">确定</div>
+											</div>
+										</th>
+								</thead>
+								<tbody>
+									<tr>
+										<td >父级菜单</td>
+										<td >功能</td>
+									</tr>
+									<tr>
+										<td><input class="magic-checkbox" type="checkbox" name="layout" id="c1"><label for="c1">员工管理</label></td> 
+										<td>
+											<div style="display: flex;">
+												<input class="magic-checkbox" type="checkbox" name="layout" id="c2"><label class="magic_yi" for="c2">添加学员</label>
+												<input class="magic-checkbox" type="checkbox" name="layout" id="c3"><label for="c3">批量导入</label>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td><input class="magic-checkbox" type="checkbox" name="layout" id="c4"><label for="c4">订单管理</label></td> 
+										<td>
+											<div style="display: flex;">
+												<input class="magic-checkbox" type="checkbox" name="layout" id="c5"><label class="magic_yi" for="c5">待付款</label>
+												<input class="magic-checkbox" type="checkbox" name="layout" id="c6"><label for="c6">已付款</label>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td><input class="magic-checkbox" type="checkbox" name="layout" id="c7"><label for="c7">发票管理</label></td> 
+										<td><input class="magic-checkbox" type="checkbox" name="layout" id="c8"><label for="c8">打印发票</label></td>
+									</tr>
+									<tr>
+										<td><input class="magic-checkbox" type="checkbox" name="layout" id="c9"><label for="c9">我的帖子</label></td>
+										<td><input class="magic-checkbox" type="checkbox" name="layout" id="c10"><label for="c10">发帖</label></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+				</div>
+			</li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+		$(function(){ 
+		var libb=$('.tab_tbb ul li'); 
+		var li_cbb=$('.tab_cbb ul li'); 
+		libb.click(function(){ 
+		$(this).addClass('selectedbb').siblings().removeClass('selectedbb'); 
+		var h=$(this).index(); 
+		li_cbb.eq(h).show().siblings().hide(); 
+		}); 
+	}); 
+	
+</script>

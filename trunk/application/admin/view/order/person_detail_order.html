@@ -1,0 +1,112 @@
+{extend name="layout"}
+{block name="title"}企业订单详情{/block}
+{block name="css"}{/block}
+{block name="script"}{/block}
+{block name="content"}
+<body>
+<div class="panel">
+
+</div>
+<div class="col-lg-3"></div>
+
+<div class="col-lg-6">
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">个人订单基本详情</h3>
+        </div>
+        <!--===================================================-->
+        <div class="panel-body">
+            <form class="form-horizontal" method="post" action=""  enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">订单号:</label>
+                    <div class="col-sm-6">
+                        <label>{$One['num']}</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">订购产品:</label>
+                    <div class="col-sm-6">
+                        <label>{$One['title']}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">个人名称:</label>
+                    <div class="col-sm-6">
+                        <label>{$One['enterprise_name']}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">成交单价:</label>
+                    <div class="col-sm-6">
+                        <label>{$One['price']}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">订购数量:</label>
+                    <div class="col-sm-6">
+                        <label>{$One['count']}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">手机号:</label>
+                    <div class="col-sm-6">
+                        <label>{$One['phone']}</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">订单角色:</label>
+                    <div class="col-sm-6">
+                        <label> {if condition="$One.type eq 2"}院校
+                            {elseif condition="$One.type eq 3"}个人
+                            {/if}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">备注:</label>
+                    <div class="col-sm-6">
+                        <label> {$One['note']}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">支付方式:</label>
+                    <div class="col-sm-6">
+                        <label>{$Pay[$One['pay']] ? $Pay[$One['pay']]:""}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">订单状态:</label>
+                    <div class="col-sm-6">
+                        <label>{$State[$One['order_status']] ? $State[$One['order_status']]:""}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">支付平台成交价格:</label>
+                    <div class="col-sm-6">
+                        <label>{$One['payprice']?$One['payprice']:""}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">交易流水号:</label>
+                    <div class="col-sm-6">
+                        <label> {$One['tradenum']?$One['tradenum']:""}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 wq-text-right" for="demo-is-inputsmall">支付时间:</label>
+                    <div class="col-sm-6">
+                        <label>
+                            {if condition="$One['order_status'] eq 1"}{$One['update_time']?$One['update_time']:""}
+                            {else /}
+                            {/if}
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--===================================================-->
+    </div>
+</div>
+</body>
+{/block}

@@ -1,0 +1,153 @@
+{extend name="layout"}
+{block name="title"}集中培训-培训列表{/block}
+{block name="css"}
+
+{/block}
+{block name="script"}
+<!--<script src="__PUBLIC__/js/pintuer.js"></script>-->
+<script src="__PUBLIC__/js/boli/polyvplayer.min.js"></script>
+<script src="__PUBLIC__/js/boli/swfobject.js"></script>
+<script src="__PUBLIC__/js/boli/StudyBoLi.js"></script>
+<script type="text/javascript">
+    $('.right_list_main li').bind('click', function() {
+        $('.video_listClass').removeClass('video_listClass');
+        $(this).addClass('video_listClass');
+
+    });
+    //右侧导航栏
+    function buttondiv(id) {
+        var obj = document.getElementById('ChildMenu'+id);
+        if (obj.style.display=='none') {
+            $('#ChildMenu'+id).css("display","block");
+        } else {
+            $('#ChildMenu'+id).css("display","none");
+        }
+    }
+    //获取url参数
+    function getUrlParam (name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURIComponent(r[2]); return null;
+    }
+    //定时储存学习时间
+    var interval=setInterval("bili()",5000);
+    //中断，获取:培训计划id，视频地址url,视频的观看时间videoTime(单位:秒)
+    function bili() {
+        var trainId = getUrlParam('id');
+        var videoUrl = getUrlParam('url');
+        var videoTime = render(videoUrl)
+
+        if (videoUrl !== '' && typeof(videoTime) !== "undefined") {
+            //第一次看得企业视频时间 需要获取当时的视频播放时间 videoTime
+            $.ajax({
+                url: 'trainVideoplanSave',
+                dataType: 'json',
+                type: 'post',
+                data: {
+                    'id': trainId,
+                    'url': videoUrl,
+                    'videoTime': videoTime
+
+                },
+                success: function (res) {
+                    // alert(res);
+                },
+                error: function (res) {
+                    // alert(res.responseText);
+                }
+            })
+        }
+    }
+    //返回当前播放头的时间,单位:秒
+    function getPlayer(movieName) {
+        if (navigator.appName.indexOf("Microsoft") != -1) {
+            var reObj=window[movieName];
+            try
+            {
+                if(reObj.length>0)
+                {
+                    return reObj[0];
+                }
+                else
+                {
+                    return reObj;
+                }
+            }catch(e)
+            {
+
+            }
+            return document[movieName];
+        }
+        else {
+            return document[movieName];
+        }
+    }
+    function render(moveurl)
+    {
+        var player=getPlayer(moveurl);
+        if(player!=undefined && player.j2s_getCurrentTime!=undefined && player.j2s_getCurrentTime()>0)
+        {
+            var sec=player.j2s_getCurrentTime();
+            return sec;
+        }
+    }
+
+    $(function () {
+        if (getUrlParam('url') != 0) {
+            videoblock(getUrlParam('url'),getUrlParam('videoTime'));
+        }
+    });
+    //播放器参数配置
+    function videoblock(url,videoTime) {
+        $("#videoCentent img").remove();
+        $("#videoCentent").append("<div id='xxoo' style='height: 100%;'></div>");
+        var player = polyvObject('#xxoo').videoPlayer({
+            'width': '100%',
+            'height': '100%',
+            'vid': url,
+            'ban_history_time': 'on',
+            'watchStartTime': videoTime
+        });
+    }
+</script>
+{/block}
+{block name="content"}
+<div class="ad_co_Box_warp">
+    <div class="ad_co_Box">
+        <div class="content">
+            <h2 class="video_list_title">环保Link集中课第一期</h2>
+            <div class="header_banner video_left">
+                <div class="banner video_main">
+                    <div class="banner_left video_left">
+                        <ul>
+                            <li id="videoCentent">
+                                <img src="__PUBLIC__/two/images/banner1.png" />
+                                <script src='//player.polyv.net/script/polyvplayer.min.js'></script>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="banner_right">
+                        <div class="collapse">
+                            {volist name="videoData" id="vo"}
+                            <div class="panel video_list active">
+                                <div onclick="buttondiv({$vo.id})" id="{$vo.id}" class="panel-head right_list">
+                                    <h4>{$vo.name}</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <ul class="right_list_main" style="display:none" id="ChildMenu{$vo.id}">
+                                        {volist name="$vo.movie" id="v"}
+                                        <li>
+                                            <span onclick="window.location.href='/trainVideolist?cid={$vo.category_id}&videoTime=10&url={$v.movie_url}&id={$vo.train_id}'" class="icon-circle">{$v.title}</span><span onclick="window.location.href='/trainVideolist?cid={$vo.category_id}&videoTime=0&url={$v.movie_url}&id={$vo.train_id}'" class="icon-play-circle"></span></li>
+                                        {/volist}
+                                    </ul>
+                                </div>
+                            </div>
+                            {/volist}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

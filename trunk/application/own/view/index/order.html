@@ -1,0 +1,292 @@
+<script src="__PUBLIC__/two/js/pintuer.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/two/css/loginkuang.css"/>
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+
+    .tab .tab-nav .active a {
+        color: #fff;
+        background: #0a8;
+    }
+
+    .table td {
+        line-height: 35px !important;
+        padding: 0 12px !important;
+    }
+</style>
+
+
+<div class="ad_co_Box_warp">
+    <div class="ad_co_Box">
+        <div class="content" style="min-height: 700px;">
+            <div class="tab">
+                <div class="tab-head">
+                    <ul class="tab-nav">
+                        <li class="active">
+                            <a href="#tab-daifukuan">待付款</a>
+                        </li>
+                        <li>
+                            <a href="#tab-yifukuan">已付款</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-body">
+                    <div class="tab-panel active" id="tab-daifukuan">
+                        <table class="table Dingdanxinxi">
+                            <thead>
+                            <tr>
+                            <tr>
+                                <th>订单信息</th>
+                                <th>订单号</th>
+                                <th>报名方式</th>
+                                <th>价格</th>
+                                <th>操作</th>
+                            </tr>
+                            </tr>
+                            </thead>
+                            <tbody class="dingdandfk">
+                            {volist name="unpayList" id="vo"}
+                            <tr>
+                                <td>{$vo.title}</td>
+                                <td>{$vo.num}</td>
+                                <td>{$vo.role}</td>
+                                <td><span class="text-red tips">￥{$vo.price}</span></td>
+                                <td>
+                                    {if($vo.role == "个人报名")}
+                                    <button type="button" class="button  button-small bg-main"
+                                            category_id="{$vo.category_id}">立即付款
+                                    </button>
+                                    {else\}
+                                    --
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/volist}
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-panel" id="tab-yifukuan">
+
+                        <table class="table Dingdanxinxi">
+                            <thead>
+                            <tr>
+                                <th>订单信息</th>
+                                <th>订单号</th>
+                                <th>缴费方式</th>
+                                <th>报名时间</th>
+                                <th>支付时间</th>
+                                <th>价格</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody class="dingdandfk">
+                            {volist name="payList" id="vo"}
+                            <tr>
+                                <td>{$vo.title}</td>
+                                <td>{$vo.num}</td>
+                                <td>{$vo.role}</td>
+                                <td>{$vo.add_time}</td>
+                                <td>{$vo.eupdate_time}</td>
+                                <td><span class="text-red tips">￥{$vo.price}</span></td>
+                                <td>
+                                    {if($vo.epay < 4)}
+                                    {if($vo.pdf_url == "")}
+                                    <button type="button" num="{$vo.num}" class="button bg-red button-small ajax-linkk"
+                                            rel="/drawing">开具发票
+                                    </button>
+                                    {else}
+                                    <a href="{$vo.pdf_url}" download class="button bg-red">下载</a>
+                                    {/if}
+                                    {else/}
+                                    --
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/volist}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="tianjia" class="dialog" style="width:500px;">
+    <div class="dialog-head"><strong>请输入发票信息</strong></div>
+    <div class="dialog-body">
+        <form class="xiugaixueyuan" id="editMember" style="height:290px;">
+            <div><span>发票名称：</span><input type="text" id="invoice_name" name="invoice_name" class="input updatsename"
+                                          placeholder="请输入发票名称"/></div>
+            <div><span>纳税号：</span><input type="text" id="identification" name="identification" class="input updatephone"
+                                         placeholder="纳税人识别号"/></div>
+            <div><span>手机号：</span><input type="text" id="phone" name="phone" class="input" placeholder="请输入电话"/></div>
+            <div><span>发票地址：</span><input type="text" id="address" name="address" class="input" placeholder="发票地址"/>
+            </div>
+            <div><span>开户行：</span><input type="text" id="bank" name="bank" class="input" placeholder="开户行"/>
+            </div>
+            <div><span>账号：</span><input type="text" id="number" name="number" class="input" placeholder="账号"/>
+            </div>
+            <div class="tConfirm" style="display: none;text-align:center;color:red;">请确认以上开票信息</div>
+            <div><input type="hidden" id="num" name="num" class="input"/>
+            </div>
+            <!--<div><input type="text" id="num" name="num" class="input"/>-->
+            <!--</div>-->
+        </form>
+        <div class="dialog-foot">
+            <div class="anNiu">
+                <button class="button dialog-close btnAddOrUpdate" onclick="addInvoice();">确认开票</button>
+                <button class="button dialog-close">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="__PUBLIC__/two/js/payLogins.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $(".ajax-linkk").each(function () {
+            $(this).click(function () {
+                var self = $(this);
+                var diZhi = $(this).attr("rel");
+                var num = $(this).attr("num");
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: '/own/Invoice/selinvoice',
+                    data: {
+                        'arrnum': num,
+                    },
+                    success: function (data) {
+                        if (data.status == 1) {
+                            $("#tianjia").center();
+                            $(".tConfirm").show();
+                            var a = data.arr;
+                            if (a != '') {
+                                for (var i in a) {
+                                    $('#editMember div').find('input[name="' + i + '"]').val(a[i]);
+                                    $('#editMember div').find('input[name="' + i + '"]').attr("readOnly", "true");
+                                }
+                            }
+                        } else {
+                            confirm("请先填写发票信息", {
+                                confirm: function () {
+                                    $('#editMember div').find('input[name=num]').val(num);
+                                    $(".tConfirm").hide();
+                                    $("#tianjia").center();
+                                },
+                                caneel: function () {
+
+                                }
+                            });
+                        }
+                    }
+                });
+
+            });
+        });
+
+        $(".bg-main").click(function () {
+            var _nums = $(this).attr("category_id");
+            //document.location.href = "/own/orders/addOrder?category_id=" + _nums;
+            var diZhi = "/own/orders/addOrder?category_id=" + _nums;
+            $.ajax({
+                url: diZhi,
+                async: false,
+                success: function (res) {
+                    if (res.error) {
+                        alert(res.message);
+                    } else {
+                        $(".ajax-Box").html(res);
+                    }
+                }
+            });
+        })
+    })
+
+    function addInvoice() {
+        var invoice_name = $("#invoice_name").val();
+        var identification = $("#identification").val();
+        var phone = $("#phone").val();
+        var address = $("#address").val();
+        var bank = $("#bank").val();
+        var number = $("#number").val();
+        if (invoice_name == '' || invoice_name == null) {
+            alert("发票名称不能为空");
+            return false
+        }
+        if (identification == '' || identification == null) {
+            alert("纳税号不能为空");
+            return false
+        }
+        if (phone == '' || phone == null) {
+            alert("手机号不能为空");
+            return false
+        }
+        if (address == '' || address == null) {
+            alert("发票地址不能为空");
+            return false
+        }
+        if (bank == '' || bank == null) {
+            alert("开户行不能为空");
+            return false
+        }
+        if (number == '' || number == null) {
+            alert("账号不能为空");
+            return false
+        }
+        if (!phone.match(/^1[3456789]\d{9}$/)) {
+            $flag = false;
+            alert('手机号格式不正确', {
+                    callback: function () {
+                        $('#addphone').val("").focus();
+                    }
+                }
+            );
+            return false
+        }
+
+        var d = {};
+        var t = $('#editMember').serializeArray();
+        $.each(t, function () {
+            d[this.name] = this.value;
+        });
+        AlertBox.waiting();
+        var num = $("#num").val();
+        $.ajax({
+            url: '/own/Invoice/drawing',
+            dataType: 'json',
+            type: 'post',
+            data: {d: d, num: num},
+            success: function (msg) {
+                //1 开票成功 2重复开票 -2开票失败
+                if (msg.code == 1) {
+                    confirm("开票成功,是否立即下载？", {
+                        okVal: "是",
+                        cancelVal: "否",
+                        confirm: function () {
+                            window.open(msg.pdf_url);
+                            location.href = "/own?payed=1";
+                        }, cancel: function () {
+                            location.href = "/own?payed=1";
+                        }
+                    });
+                } else if (msg.code == -1) {
+                    alert("请完善档案");
+                } else if (msg.code == 2) {
+                    alert("重复开票");
+                } else if (msg.code == -2) {
+                    alert(msg.msg);
+                } else {
+                    alert("开票失败");
+                }
+            }, error: function (res) {
+                alert('网络错误');
+            }
+        });
+    }
+</script>
+

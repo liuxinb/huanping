@@ -1,0 +1,226 @@
+{extend name="layout"}
+{block name="title"}招聘管理{/block}
+{block name="css"}
+<style type="text/css">
+    .content_jiben {
+        width: 80%;
+        margin: 0 auto;
+        min-height: 200px;
+        padding-bottom: 20px;
+        border: 1px solid #d4f3de;
+    }
+
+    .content_jiben_tou {
+        width: 100%;
+        background: #d4f3de;
+        margin: 20px 0 20px 0;
+        padding: 10px;
+        margin: 0 auto;
+        font-weight: 700;
+    }
+
+    .content_jiben_main {
+        padding-top: 25px;
+    }
+
+    .signup_item {
+        margin: 0 auto;
+        width: 500px;
+    }
+
+    .signup_item_one {
+        padding-top: 0px;
+    }
+
+    .signup_item_left {
+        width: 110px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 14px;
+        color: #7F7F7F;
+        display: inline-block;
+        vertical-align: 27px;
+        text-align: right;
+        padding-right: 20px;
+    }
+
+    .signup_item_right {
+        display: inline-block;
+        vertical-align: top;
+        position: relative;
+    }
+
+    .yuanxibtn div button {
+        margin-right: 10px;
+        color: #333;
+        width: 113px;
+    }
+
+    .xiugaixueyuan div {
+        width: 340px;
+        height: 35px;
+        margin: 10px auto;
+        clear: both;
+    }
+
+    .close {
+        display: none;
+        font-size: 14px;
+        line-height: 14px;
+    }
+</style>
+{/block}
+{block name="script"}
+<script>
+
+    //添加院系
+    function subjects() {
+        var name = $('form').eq(2).find('input').eq(1).val();
+        var flag = true;
+        if (name == '') {
+            flag = false;
+            alert('院系不能为空~');
+        } else if (!name.match(/^[\u4e00-\u9fa5]+$/)){
+            flag = false;
+            alert('院系只限中文~');
+        }
+        if (flag == false) {
+            return false;
+        }
+        //动态添加button
+        $('#addyx').append('<button class="button"><span class="subject">' + name + '</span><span class="icon-trash-o close" onclick="del($(this))"></span></button>');
+    }
+    //删除院系
+    function del(obj) {
+        obj.parent().remove(); //删除父级button
+    }
+    //提交保存
+    function saveName() {
+        var name = $('#name').val();
+        var organization_code = $('#organization_code').val();
+
+
+        var flag = true;
+        if (name == '') {
+            flag = false;
+            alert('院校名称不能为空~');
+        } else if (!name.match(/^[\u4e00-\u9fa5]+$/)){
+            flag = false;
+            alert('院校名称只限中文~');
+        } else if(organization_code == '') {
+            flag = false;
+            alert('组织机构代码不能为空~');
+        }
+        var d = {};
+        var t = $('#addName').serializeArray();
+        $.each(t, function () {
+            d[this.name] = this.value;
+        });
+        //便利span获取值 追加数组
+        d['subjects'] = new Array();
+        $.each($(".subject"),function (i,item) {
+            d['subjects'].push($(item).html());
+        });
+        if (d['subjects'] == '') {
+            flag = false;
+            alert('院系名称不能为空~');
+        }
+        if (flag == false) {
+            return false;
+        }
+        //发送Ajax
+        $.ajax({
+            url: 'index/Academy/saveName',
+            dataType: 'json',
+            type: 'post',
+            data: d,
+            success: function (res) {
+                if (res) {
+                    alert('保存成功,请等待审核', {
+                        callback: function () {
+                            location.assign('/');
+                        }
+                    });
+                } else {
+                    alert('保存失败');
+                }
+            }, error: function () {
+                alert('网络错误');
+            }
+        });
+    }
+</script>
+{/block}
+{block name="content"}
+<div class="ad_co_Box_warp">
+    <div class="ad_co_Box">
+        <div class="content" style="padding-top: 40px">
+
+            <div class="content_jiben">
+                <form id="addName" onsubmit="return false;">
+                    <div class="content_jiben_tou">院校基本信息</div>
+                    <div class="content_jiben_main">
+                        <div class="signup_item signup_item_one">
+                            <div class="signup_item_left">院校名称</div>
+                            <div class="signup_item_right">
+                                <div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+                                <input name="academy_name" id="name" value="{$vo.academy_name}"
+                                       style="width:294px;float: left;margin-right: 10px;" type="text" class="input"
+                                       placeholder="院校名称"/>
+                            </div>
+                        </div>
+                        <div class="signup_item signup_item_one">
+                            <div class="signup_item_left">组织机构代码</div>
+                            <div class="signup_item_right">
+                                <div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+                                <input name="organization_code" id="organization_code" value="" style="width:294px;float: left;margin-right: 10px;" type="text" class="input" placeholder="组织机构代码"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="signup_item signup_item_one yuanxibtn">
+                        <div class="signup_item_left" style="line-height: 55px;">院系</div>
+                        <div class="signup_item_right " style="line-height: 55px;">
+                            <div class="ww_inputWithMagnifier_info js_num_input_tips" style="display: none;"></div>
+                            <div style="width: 380px;">
+                                <div id="addyx">
+
+                                </div>
+                                <div>
+                                    <button class="button bg-main icon-plus-circle dialogs" data-toggle="click"
+                                            data-target="#tianjiayuanxi" data-mask="1" data-width="500px">添加院系
+                                    </button>
+                                    <button class="button bg-red icon-trash-o deletebtn">删除院系</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <button style="display:block;margin:0 auto" class="button bg-main" onclick="saveName();">确认</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <div id="tianjiayuanxi">
+        <div class="dialog">
+            <div class="dialog-head">
+                <span class="close rotate-hover"></span><strong>添加院系</strong>
+            </div>
+            <div class="dialog-body">
+                <form class="xiugaixueyuan " id="subjects" style="height:70px;">
+                    <input type="hidden" name="pid" value="{$vo.pid}">
+                    <div><span>院系：</span><input type="text" id="yxname" name="academy_name" class="input"
+                                                placeholder="名称"/></div>
+                </form>
+            </div>
+            <div class="dialog-foot">
+                <button class="button dialog-close">取消</button>
+                <button id="xxoo" class="button bg-main dialog-close" onclick="subjects();">确认</button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(".deletebtn").click(function () {
+            $(".close").css('display', 'inline-block');
+        });
+    </script>
+    {/block}

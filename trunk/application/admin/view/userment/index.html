@@ -1,0 +1,244 @@
+
+{extend name="layout"}
+{block name="title"}员工列表{/block}
+{block name="css"}{/block}
+{block name="script"}
+<script>
+// 修改菜单
+function edit(obj) {
+    var usermentId = $(obj).attr('usermentId');
+    var usermentName = $(obj).attr('usermentName');
+    var usermentPhone = $(obj).attr('usermentPhone');
+//    var usermentPassword = $(obj).attr('usermentPassword');
+    var usermentIdnumber = $(obj).attr('usermentIdnumber');
+    var usermentTime = $(obj).attr('usermentTime');
+    var xh=shortDate('',usermentTime);
+
+    $("input[name='uid']").val(usermentId);
+    $("input[name='name']").val(usermentName);
+    $("input[name='phone']").val(usermentPhone);
+//    $("input[name='password']").val(usermentPassword);
+    $("input[name='idnumber']").val(usermentIdnumber);
+    $("input[name='create_time']").val(xh);
+
+
+    $('#thinkright-edit').modal('show');
+}
+
+
+    //根据条件搜索
+    $(function () {
+        //搜索功能
+        $("#search").click(function () {
+            var url = $(this).attr('url');
+            var name = $(this).prev().prev().prev('input').serialize();  //姓名
+            var idnumber = $(this).prev().prev('input').serialize();   //身份证号
+            var query = $(this).prev('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+            query = query.replace(/^&/g, '');
+            if (url.indexOf('?') > 0) {
+                url += '&' + query + ',' + idnumber + ',' + name;
+            } else {
+                url += '?' + query + '&' + idnumber + '&' + name;
+            }
+            window.location.href = url;
+        });
+
+        //批量删除
+        $("#demo-btn-addrow").click(function () {
+            var deleIds = $("input[name=checkall]").CboxVals();  //全选按钮的name值
+            // 判断是否至少选择一项
+            if(deleIds == 0) {
+                alert("请选择至少一项！");
+                return;
+            }
+//            if(confirm("确定要删除所选项目？")) {
+                Ajax("{:url('admin/Userment/batchDelete')}", {ids: deleIds}, function (result) {
+                    if (result.success) {
+                        AjaxSuccess({
+//                        callback: function () {
+//                            console.info(result.ids);
+//                            alert(result.ids);
+//                        }
+                        });
+                    }
+                    ;
+                });
+//            }
+        });
+    });
+
+function dongjie(id) {
+    var a = document.getElementById(id);
+    $.ajax({
+        url: 'unfreezeStatus/id/'+id+'/status/-1',
+        dataType: 'json',
+        type: 'post',
+        success: function(res) {
+            if (res == '操作成功') {
+                a.innerHTML = '<a onclick="jiedong('+id+')" style="color:#0f80db">解冻</a>';
+            }
+            alert(res);
+        },
+        error: function(res) {
+            layer.msg(res.responseText,{icon:5,time:1000,offset: '350px'});
+        }
+    })
+}
+function jiedong(id) {
+    var a = document.getElementById(id);
+    $.ajax({
+        url: 'unfreezeStatus/id/'+id+'/status/1',
+        dataType: 'json',
+        type: 'post',
+        success: function(res) {
+            if (res == '操作成功') {
+                a.innerHTML = '<a onclick="dongjie('+id+')" style="color:red">冻结</a>';
+            }
+            alert(res);
+        },
+        error: function(res) {
+            layer.msg(res.responseText,{icon:5,time:1000,offset: '350px'});
+        }
+    })
+}
+
+</script>
+{/block}
+{block name="content"}
+    <body>
+                <div id="page-content">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                               <label>学员列表</label>
+                            </h3>
+                        </div>
+
+                        <div class="padding border-bottom">
+                            <div class="col-lg-7">
+                                <h3 class="panel-title">
+                                    <!--<button id="demo-btn-addrow" class="btn btn-info"> 删除</button>-->
+                                </h3>
+                            </div>
+                            <div class="col-lg-5 " style="padding: 0 20px 0 20px;">
+                                <div class="float-right">
+                                    <input type="text" name="name" class="input search-form"
+                                           placeholder="用户名"/>
+                                    <input type="text" name="idnumber" class="input search-form"
+                                           placeholder="身份证号"/>
+                                    <input type="text" name="phone" class="input search-form"
+                                           placeholder="手机号"/>
+                                    <input type="button" id="search" url="{:url('Admin/Userment/index')}" class="wq-btn" value="搜索"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-body" >
+                            <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <!--<th class="all">-->
+                                            <!--<label><input type="checkbox"  id="cboxAll" name="checkall"   value="">选择</label>-->
+                                        <!--</th>-->
+                                        <th class="id" width="50px">Id</th>
+                                        <th class="name" width="10%">用户名</th>
+                                        <th class="phone" width="10%">用户手机号</th>
+                                        <th class="idnumber" width="15%">用户身份证号</th>
+                                        <th class="firmname" width="20%">所在企业</th>
+                                        <th class="create_time" width="100px">入职时间</th>
+                                        <th class="croller" width="100px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {foreach name="all" id="value"}
+                                           <tr>
+                                               <!--<td>-->
+                                                   <!--<input type="checkbox" class="child" name="checkall" value="{$value['uid']?$value['uid']:''}">-->
+                                               <!--</td>-->
+                                                <td>{$value.id}</td>
+                                                <td>{$value.name}</td>
+                                                <td id="phone">{$value.phone}</td>
+                                                <td>{$value.idnumber}</td>
+                                                <td>{$value.firmname}</td>
+                                                <td>{$value.create_time}</td>
+                                                <td>
+                                                    <button><a href="javascript:;" usermentId="{$value['uid']}" usermentName="{$value['name']}" usermentPhone="{$value['showphone']}" usermentPassword="{$value['password']}"  usermentIdnumber="{$value['showidnumber']}" usermentTime="{$value['create_time']}" onclick="edit(this)">修改</a></button>
+                                                    {if condition="$value.status == -1"/}
+                                                    <button><span  id="{$value.uid}"><a onclick="jiedong({$value.uid})" style="color:#0f80db">解冻</a></span></button>
+
+                                                    {else}
+                                                    <button><span  id="{$value.uid}"><a onclick="dongjie({$value.uid})" style="color:red">冻结</a></span></button>
+                                                    {/if}
+                                                    <button><a href="javascript:confirm('确定删除？',{confirm:function(){location='{:url('Admin/Userment/del_userment',array('id'=>$value['uid']))}'}})">删除</a></button>
+                                                </td>
+                                            </tr>
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                            <tr>
+                               <td  align="center">{$render->render()}</td>
+                            </tr>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 修改判断题模态框开始 -->
+                <div class="modal fade" id="thinkright-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    修改学员
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" id="formAjax" action='{:url("Admin/Userment/editUserment")}' method="post">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="demo-hor-inputemail">姓名</label>
+                                            <div class="col-sm-9">
+                                                <input type="hidden" name="uid">
+                                                <input type="text"  id="demo-hor-inputemail" class="form-control" name="name" required="required">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="demo-hor-inputemail">手机</label>
+                                            <div class="col-sm-9">
+                                                <input type="text"  id="demo-hor-inputemail" class="form-control" name="phone" required="required">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="demo-hor-inputemail">密码</label>
+                                            <div class="col-sm-9">
+                                                <input type="text"  id="demo-hor-inputemail" class="form-control" name="password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="demo-hor-inputemail">身份证</label>
+                                            <div class="col-sm-9">
+                                                <input type="text"  id="demo-hor-inputemail" class="form-control" name="idnumber" required="required">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="demo-hor-inputemail">入职日期</label>
+                                            <div class="col-sm-9">
+                                                <input type="date" class="form-control" name="create_time" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer text-right">
+                                        <button class="btn btn-success" type="submit" >修改</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 修改菜单模态框结束 -->
+
+    </body>
+{/block}

@@ -1,0 +1,378 @@
+{extend name="layout"}
+{block name="title"}分类管理列表{/block}
+{block name="css"}
+<link href="__PUBLIC__/css/upload_picture.css" rel="stylesheet">   <!--//上传图片样式表-->
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/js/picture_verify.js"></script>  <!--//上传图片验证格式-->
+<script type="text/javascript">
+
+    /*添加大分类*/
+    function add() {
+        $("input[name='title'],input[name='name']").val('');
+        $("input[name='pid']").val(0);
+        $("input[name='bag_price']").val();
+        $("input[name='imageUpload']").val();
+        $("#bag_price").show();
+        $("#own_bag_price").show();
+        $("#sign_price").show();
+        $("#teacher_id").hide();
+        $("#description").show();
+        $('#thinkright-add').modal('show');
+
+    }
+
+    // 添加小子类
+    function add_child(obj) {
+        var cateId = $(obj).attr('cateId');
+        $("input[name='pid']").val(cateId);
+        $("input[name='title']").val();
+        $("input[name='name']").val();
+        $("input[name='imageUpload']").val();
+        $("input[name='teacher_id']").val();
+        $('#thinkright-add').modal('show');
+    }
+
+    // 修改子类
+    function edit(obj) {
+        var cateId = $(obj).attr('cateId');
+        var catetitle = $(obj).attr('catetitle');
+        var cateName = $(obj).attr('cateName');
+        var catePid = $(obj).attr('catePid');
+        var cateOid = $(obj).attr('cateOid');
+        var cateSid = $(obj).attr('cateSid');
+        var cateImg = $(obj).attr('cateImg');
+        var cateTeacher = $(obj).attr('cateTeacher');
+        var cateDescription = $(obj).attr('cateDescription');
+
+        $("input[name='id']").val(cateId);
+        $("input[name='title']").val(catetitle);
+        $("input[name='name']").val(cateName);
+        $("input[name='bagEdit']").val(catePid);
+        $("input[name='own_bag_price']").val(cateOid);
+        $("input[name='sign_price']").val(cateSid);
+        $("textarea[name='description']").val(cateDescription);
+//                $("img[name='bag_img']").attr('src', cateImg);
+        $(".imgInput").attr('src',cateImg);
+        $("select[name='teacher_id']").val(cateTeacher);
+        $('#thinkright-edit').modal('show');
+        $(".price-edit").hide();
+
+    }
+
+//    $(function () {
+//        $(".zi").on('click', function () {
+//            $(".form-group").eq(2).hide();  //价格隐藏
+//            $(".form-group").eq(4).show();  //教师显示
+//        });
+//    })
+
+    $(function () {
+        $(".zi").on('click', function () {
+            $("#bag_price").hide();  //价格隐藏
+            $("#own_bag_price").hide();  //价格隐藏
+            $("#sign_price").hide();  //价格隐藏
+            $("#description").hide();  //描述隐藏
+            $("#teacher_id").show();  //教师显示
+        });
+    })
+
+    $(function () {
+        $(".0").on('click', function () {
+            $(".price-edit").show();
+        });
+    })
+
+    //上传图片
+    //    $(function () {
+    //        $(".imgInput").change(uploadImage);
+    //    })
+    //    function uploadImage() {
+    ////  判断是否有选择上传文件
+    //        var imgPath = $("#imageUpload").val();
+    //        var img = $(this).parent().siblings('img');
+    //        var input = $(this).parent().siblings('input[type="hidden"]');
+    //        if (imgPath == "") {
+    //            alert("请选择上传图片！");
+    //            return;
+    //        }
+    //        var formData = new FormData();
+    //        formData.append('imageUpload',this.files[0]);
+    //
+    //        $.ajax({
+    //            type: "POST",
+    //            cache: false,
+    //            url: "{:url('Admin/Category/edit')}",
+    //            data: formData,
+    //            contentType: false,
+    //            processData: false,
+    //            success: function(data) {
+    //                img.attr('src', data);
+    //                input.val(data);
+    //            },
+    //            error: function(XMLHttpRequest, textStatus, errorThrown) {
+    //                alert("上传失败，请检查网络后重试");
+    //            }
+    //        });
+    //    }
+    //     $(function(){
+    //         $(".kc").change(function () {
+    //                var objUrl = getObjectURL(this.files[0]);
+    //                alert(objUrl);
+    //                if (objUrl) {
+    //                   $("#img0").attr("src", objUrl);
+    //                }
+    //            });
+    //    })
+
+    $(function(){
+        $('[type="file"]').change(function(e){
+            var file = e.target.files[0];
+            preview(file);
+        });
+    })
+    function preview(file){
+        var img = new Image();
+        url = img.src=URL.createObjectURL(file);  //创建url
+        var $img = $(img);
+        img.onload = function(e){
+            URL.revokeObjectURL(url);   //将对象与url关联
+            $('#preview').empty().append($img);
+        }
+    }
+
+    $(function() {
+        //        上传图片预览
+        $(".imgInput").change(function () {
+            $(".img").attr("src", URL.createObjectURL($(this)[0].files[0]));
+        });
+
+    });
+
+
+
+</script>
+{/block}
+{block name="content"}
+    <body>
+        <!--===================================================-->
+        <div id="page-content">
+            <!--===================================================-->
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><button class="btn btn-info" onclick="add()">添加分类</button></h3>
+                </div>
+                <div class="panel-body">
+                    <table id="demo-dt-basic" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>名称</th>
+                                <th>企业购买价格</th>
+                                <th>个人购买价格</th>
+                                <th>签约价格</th>
+                                <th class="min-tablet">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach name="data" id="v"}
+                            <tr>
+                                <td>{$v['id']}</td>
+                                <td>{$v['_name']}</td>
+                                <td>{$v['bag_price']?$v['bag_price'].'元':""}</td>
+                                <td>{$v['own_bag_price']?$v['own_bag_price'].'元':""}</td>
+                                <td>{$v['sign_price']?$v['sign_price'].'元':""}</td>
+                                <td>
+                                    <button><a href="javascript:;" cateId="{$v['id']}" onclick="add_child(this)" class="zi ">添加子类</a> </button>
+                                   <button><a href="{:url('Admin/Category/status',array('id'=>$v['id']))}">{$v['status']? "禁止":"开启"}</a> </button>
+
+                                    <button><a href="javascript:;" cateId="{$v['id']}" cateName="{$v['name']}" cateTitle="{$v['title']}" catePid="{$v['bag_price']}" cateOid="{$v['own_bag_price']}" cateSid="{$v['sign_price']}" cateImg="{$v['bag_img']}" cateTeacher="{$v['teacher_id']}" cateDescription="{$v['description']}"  class="{$v['pid']}"  onclick="edit(this)">修改</a> </button>
+                                    <button><a href="javascript:confirm('确定删除？',{confirm:function(){location='{:url('Admin/Category/delete',array('id'=>$v['id']))}'}})">删除</a></button>
+                                </td>
+                                
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--===================================================-->
+        </div>
+        <!--===================================================-->
+        <!-- 添加菜单模态框开始 -->          
+        <div class="modal fade" id="thinkright-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            添加分类
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="{:url('Admin/Category/add')}" method="post" enctype="multipart/form-data" >
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">分类名称</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="pid" value="0">
+                                        <input type="text"   class="form-control" name="title" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">分类标识</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"  class="form-control" name="name" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group" id="bag_price">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">企业购买价格(元)</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"   class="form-control" name="bag_price" rows="10" >
+                                    </div>
+                                </div>
+                                <div class="form-group" id="own_bag_price">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">个人购买价格(元)</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"   class="form-control" name="own_bag_price" rows="10" >
+                                    </div>
+                                </div>
+                                <div class="form-group" id="sign_price">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">签约价格(元)</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"   class="form-control" name="sign_price" rows="10" >
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group" >
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">封面</label>
+                                    <div class="col-sm-9 " >
+                                        <a class="upload_img_add"><input type="file"   class="imgInput" name="imageUpload"  accept=".gif,.jpg,.jpeg,.png" required>点击上传图片</a>
+                                        <img  src="" class="img" alt="" width="160" height="90"  >
+                                        <span class="text-warning imageFileWarning"></span>
+                                        <p style="color: red">上传的图片大小不能超过2M;</p>
+                                    </div>
+                                </div>
+                                 <div class="form-group" id="teacher_id">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">教师</label>
+                                    <div class="col-sm-9">
+                                        <select class="input input-auto" name="teacher_id" >
+                                            <option value="0">请选择教师</option>
+                                            <?php foreach ($teacherData as $key => $vo): ?>
+                                            <option value="{$vo.id}">
+                                                {$vo.name}
+                                            </option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group " id="description">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">课程包描述</label>
+                                    <div class="col-sm-9">
+                                        <textarea  name="description" class="form-control" rows="6" ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button class="btn btn-success" type="submit">提交</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 添加菜单模态框结束 -->
+
+        <!-- 修改菜单模态框开始 -->
+        <div class="modal fade" id="thinkright-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            修改子类
+                        </h4> 
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="{:url('Admin/Category/edit')}" method="post" enctype="multipart/form-data" >
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputemail">分类名称</label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="id">
+                                        <input type="text"  id="demo-hor-inputemail" class="form-control" name="title" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">分类标识</label>
+                                    <div class="col-sm-9">
+                                        <input type="text"  id="demo-hor-inputpass" class="form-control" name="name" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group price-edit">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">企业购买价格(元)</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="bagEdit" rows="10" >
+                                    </div>
+                                </div>
+                                <div class="form-group price-edit">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">个人购买价格(元)</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="own_bag_price" rows="10" >
+                                    </div>
+                                </div>
+                                <div class="form-group price-edit">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">签约价格(元)</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="sign_price" rows="10" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">课程封面</label>
+                                    <div class="col-sm-9 " id="imgForm">
+                                        <a class="upload_img_add"> <input type="file"  class="imgInput" accept=".gif,.jpg,.jpeg,.png" name="imageUpload" />点击更改图片</a>
+                                        <img  src="{$v['bag_img']}" class="img" alt="" width="160" height="90"  >
+                                        <span class="text-warning imageFileWarning"></span>
+                                        <p style="color: red">上传的图片大小不能超过2M;</p>
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">教师</label>
+                                    <div class="col-sm-9">
+                                        <select class="input input-auto" name="teacher_id" >
+                                            <option value="0">请选择教师</option>
+                                            <?php foreach ($teacherData as $key => $vo): ?>
+                                            <option value="{$vo.id}"
+                                                {if condition="$v.teacher_id eq $vo.id"}selected {/if}>{$vo.name}
+                                            </option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group price-edit" >
+                                    <label class="col-sm-3 control-label" for="demo-hor-inputpass">课程包描述</label>
+                                    <div class="col-sm-9">
+                                        <textarea  name="description" class="form-control" rows="6" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button class="btn btn-success" type="submit">修改</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 修改菜单模态框结束 -->
+
+
+
+            
+    </body>
+{/block}

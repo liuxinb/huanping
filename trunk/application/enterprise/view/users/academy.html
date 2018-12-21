@@ -1,0 +1,55 @@
+{extend name="layout"}
+{block name="title"}员工管理{/block}
+{block name="css"}
+<style media="screen">
+    label {
+        font-weight: bold;
+    }
+</style>
+{/block}
+{block name="script"}
+<script>
+    function submitBefore(){
+
+
+        var file = document.getElementById("file").value;
+        var submit = document.getElementById("submit");
+
+        if (file==""){
+            alert('请先选择需要上传的文件');
+            return false;
+        }else{
+            submit.value = "文件上传中，请等待...";
+            submit.disabled = true;
+            submit.style.width = '200px';
+        }
+    }
+
+</script>
+{/block}
+{block name="content"}
+<body>
+<div class="content" style="padding-top: 48px">
+
+    <div class="content_header_red">
+        <div class="content_header_red_text" style="text-align: center;font-size: 36px;line-height: 55px;">请先下载导入模板，并按模板文件填写学生信息后进行导入！<br/>
+            (<a href="__PUBLIC__/xueshengdemo.xlsx" style="text-decoration: underline;color: skyblue;">模板下载</a>)
+        </div>
+    </div>
+    <form action="{:url('enterprise/users/academyBatch')}" method="post" enctype="multipart/form-data" onsubmit="return submitBefore();">
+        <div class="content_jiben" style="text-align:center;">
+            <div class="content_jiben_tou">上传xlsx文件：<input type="file" name="file" id="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                                           style="    border: 1px solid #ccc;width: 500px;"/></div>
+            <input type="submit" id="submit" value="批量上传" style="display: inline;" class="nav1_left_shangchuan">
+
+        </div>
+    </form>
+</div>
+</body>
+<script>
+
+
+</script>
+</html>
+{/block}
+

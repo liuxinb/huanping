@@ -1,0 +1,38 @@
+---------------------- 单个执行
+-- 不清 admin_auth_group -- 后台角色表
+-- 待删除 admin_auth_group_access 用户角色
+-- 不清 admin_auth_rule -- 后台菜单
+truncate table admin_certificate -- 学员证书
+truncate table admin_enterprise_order -- 企业订单
+truncate table admin_evaluation  -- 学员评论
+truncate table admin_firm_hope-- 企业调查问卷-期望课程
+truncate table admin_firmsign -- 企业
+-- 不清 admin_firmsign_survey -- 企业调查问卷
+-- 不清 admin_flv_category  课程表
+-- 不清 admin_flv_movie 视频表
+-- 不清 admin_flv_movie_url 视频地址
+-- 待删除 truncate table admin_flv_picture -- 视频封面
+truncate table admin_invoice -- 订单发票
+truncate table admin_message -- 消息表
+truncate table admin_notice -- 通知
+truncate table admin_opinion-- 学员反馈
+truncate table admin_order_order -- 学员订单
+truncate table admin_order_pay -- 支付流水
+-- 不清 admin_plug_list 首页广告
+-- 待删除 admin_powers  企业菜单
+truncate table admin_record -- 企业信息
+-- 待删除 admin_relation 企业角色菜单
+-- 不清 admin_tea_teacher 老师信息
+-- 不清 admin_test_base 视频题库
+-- truncate table admin_user -- 学员表
+-- truncate table admin_user_detail -- 学员详情
+truncate table admin_user_plan -- 学习进度
+-- truncate table admin_users -- 管理员
+-- truncate table admin_version -- app版本表
+
+
+
+
+
+
+

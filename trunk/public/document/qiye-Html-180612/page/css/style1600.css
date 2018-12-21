@@ -1,0 +1,13 @@
+.img-box {
+    margin: 0 auto;
+    width: 162px;
+    height: 86px;
+    position: relative;
+    background-image: url(../../img/section2-1.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    box-sizing: border-box;
+    padding-top: 11px;
+    margin-bottom: 13px;
+}

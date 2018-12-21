@@ -1,0 +1,70 @@
+{extend name="layout"}
+{block name="title"}支付中心{/block}
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/two/css/pay.css"/>
+
+{/block}
+{block name="script"}
+<script src="__PUBLIC__/two/js/payLogins.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        $("#nav div").click(function(){
+            console.log("sds")
+            $("#nav div").eq($(this).index()).addClass("navdown").siblings().removeClass("navdown");
+        })
+    })
+</script>
+{/block}
+{block name="content"}
+
+<input type="hidden" id="payType"/>
+
+<div class="ad_co_Box_warp" style="padding-top: 40px">
+	<div class="ad_co_Box">
+		<div class="content" style="min-height: 700px;">
+			<div class="container_play" id="nav">
+				<div class="zhifubao navdown" type="alipaysubmit"></div>
+				<div class="wechart" type="wxpaysubmit"></div>
+			</div>
+			<div class="pay-summary clearfix huabei-active">
+				<div class="warning">
+					<i class="imv2-error_c"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span>请在 <b>23小时59分钟</b> 以内支付完成，如未完成此订单将自动关闭。需重新购买！</span>
+				</div>
+
+				<div class="summary">
+					<div class="clearfix total">
+						<div class="label">应付金额：</div>
+						<div class="price">
+							<em>￥</em>
+							<span>{$parameter.total_fee}</span>
+						</div>
+					</div>
+
+					<!--支付宝提交表单-->
+					<form id='alipaysubmit' name='alipaysubmit' action='https://mapi.alipay.com/gateway.do?_input_charset=utf-8' method='get' target="_blank">
+						{foreach $zfbparameter as $k=>$v}
+						<input type='hidden' name='{$k}' value='{$v}'/>
+						{/foreach}
+					</form>
+
+
+					<!--微信提交表单-->
+					<form id='wxpaysubmit' name='alipaysubmit' action='/own/Wxnative/index' method='post'>
+						{foreach $parameter as $k=>$v}
+						<input type='hidden' name='{$k}' value='{$v}'/>
+						{/foreach}
+					</form>
+					<div class="submit-warp clearfix">
+						<span class="js-pay-submit" id="goPay">立即支付</span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+{/block}

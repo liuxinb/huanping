@@ -1,0 +1,237 @@
+{extend name="layout"}
+{block name="title"}企业订单列表{/block}
+{block name="css"}
+<style>
+    .selectStyle{
+        height: 26px;
+        width: 170px ;
+    }
+</style>
+{/block}
+{block name="script"}
+<script>
+    $(function () {
+        $("#cboxAll").CboxAll();
+        //搜索功能
+        $("#search").click(function () {
+            var url = $(this).attr('url');
+            var start_time = $(".start_time").serialize();
+            var end_time = $(".end_time").serialize();
+            var email = $(this).prev().prev().prev().prev('input').serialize();
+            var Payment = $(this).prev().prev().prev('select').serialize();
+            var select = $(this).prev().prev('select').serialize();
+            var query = $(this).prev('input').serialize();
+            query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g, '');
+            query = query.replace(/^&/g, '');
+            if (url.indexOf('?') > 0) {
+                url += '&' + query + ',' + select + ',' + Payment+','+email+','+start_time+','+end_time;
+            } else {
+                url += '?' + query + '&' + select + '&' + Payment+'&'+email+'&'+start_time+'&'+end_time;
+            }
+            window.location.href = url;
+        });
+
+        //批量删除
+        $("#demo-btn-addrow").click(function () {
+            var deleIds = $("input[name=checkall]").CboxVals();  //全选按钮的name值
+            // 判断是否至少选择一项
+            if(deleIds == 0) {
+                alert("请选择至少一项！");
+                return;
+            }
+            confirm('确定删除？',{confirm:function() {
+                Ajax("{:url('admin/order/batchDelete')}", {ids: deleIds});
+            }});
+
+        });
+
+//        批量选中id进行导出订单
+        $("#export").click(function () {
+            var deleIds = $("input[name=checkall]").CboxVals();  //全选按钮的name值
+            $("input[name='ids']").val(deleIds);
+        })
+
+    });
+
+    //修改为线下支付
+    function edit(obj){
+        var orderNum = $(obj).attr('orderNum');
+        var orderPrice = $(obj).attr('orderPrice');
+
+        $("input[name='num']").val(orderNum);
+        $("input[name='price']").val(orderPrice);
+        $('#thinkright-edit').modal('show');
+    }
+
+</script>
+{/block}
+{block name="content"}
+<div id="page-content">
+    <!--===================================================-->
+    <div class="panel">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                企业订单列表
+            </h3>
+        </div>
+        <!--<div class="padding border-bottom">-->
+            <div>
+                <h3 class="panel-title">
+                    <button id="demo-btn-addrow" class="btn btn-info"> 删除</button>
+                </h3>
+            </div>
+            <div class="col-lg-2"></div>
+            <div class="col-lg-10" style="padding: 0 20px 0 20px;">
+                <div >
+                    <label>支付时间:</label>
+                    <input type="date"  name="start_time" class="start_time"/> -
+                    <input type="date"  name="end_time" class="end_time"/>
+                    <input type="text" name="email" class="input search-form"
+                           placeholder="搜索企业账号" data-height="2px"/>
+                    <select class="input search-form selectStyle"  name="Payment">
+                        <option value="">请选择支付方式</option>
+                        <?php foreach ($Pay as $ko => $vo): ?>
+                        <option value="{$ko}">{$vo}</option>
+                        <?php endforeach ?>
+                    </select>
+                    <select class="input search-form selectStyle" name="order_status">
+                        <option value="">请选择支付状态</option>
+                        <?php foreach ($State as $k => $v): ?>
+                        <option value="{$k}">{$v}</option>
+                        <?php endforeach ?>
+                    </select>
+                    <input type="text" name="keyword" class="input search-form"
+                           placeholder="搜索订单号"/>
+                    <input type="button" id="search" url="{:url('enterprise_index')}" class="wq-btn" value="搜索"/>
+                </div>
+            </div>
+        <!--</div>-->
+        <!--<div class="padding border-bottom">-->
+            <div class="col-lg-6"></div>
+            <div class="col-lg-6" style="padding: 0 20px 0 20px;">
+              <!--<h3 class="panel-title">-->
+                  <form method="post" action="{:url('admin/Order/exportcvs')}" id="form">
+                      <input type="hidden" name="ids">
+                      <label><input type="radio" name="type" value="0" checked>导出当前所有订单</label> <label>
+                      <input type="radio" name="type" value="1">导出选定订单</label>
+                      <button class="wq-btn" type="submit" id="export">确认</button>
+                  </form>
+              <!--</h3>-->
+                </div>
+        <!--</div>-->
+
+        <div class="panel-body">
+            <table id="demo-dt-basic" class="table table-striped table-bordered table-hover" cellspacing="0"
+                   width="100%">
+                <thead>
+                <tr>
+                    <th class="all" width="100px">
+                        <label><input type="checkbox" name="checkall" id="cboxAll" value="" >选择</label>
+                    </th>
+                    <th class="email">企业账号</th>
+                    <th class="num">企业订单号</th>
+                    <th class="enterprise_name">企业名称</th>
+                    <!--<th class="title">订购产品</th>-->
+                    <!--<th class="price">成交单价</th>-->
+                    <!--<th class="count">订购数量</th>-->
+                    <!--<th class="addressphone">联系电话</th>-->
+                    <!--<th class="email">企业邮箱</th>-->
+                    <!--<th class="county">详细地址</th>-->
+                    <th class="date">下单时间</th>
+                    <th class="paytime">支付时间</th>
+                    <th class="type">订单角色</th>
+                    <th class="order_states">订单状态</th>
+                    <th class="control" width="300px">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach name="all" id="value"}
+                <tr>
+
+                    <td>
+                        <input type="checkbox" class="child" name="checkall" value="{$value['id']?$value['id']:''}">
+                    </td>
+                    <td>{$value['email']|substr_replace($value['email'],'****',3,4);}</td>
+                    <td>{$value['num']}</td>
+                    <td>{$value['enterprise_name']}</td>
+                    <!--<td>{$value['title']}</td>-->
+                    <!--<td>{$value['price']}元</td>-->
+                    <!--<td>{$value['count']}个课程</td>-->
+                    <!--<td>{$value['addressphone']}</td>-->
+                    <!--<td>{$value['email']}</td>-->
+                    <!--<td>{$value['province']}{$value['city']}{$value['county']}</td>-->
+                    <td>{$value['add_time']}</td>
+                    <td>{$value['paytime']}</td>
+                    <td>
+                        {if condition="$value.type eq 1"}企业
+                        {elseif condition="$value.type eq 2"}院校
+                        {else /} 个人
+                        {/if}
+                    </td>
+                    <td>{$State[$value['order_status']]}({$Pay[$value['pay']]})</td>
+                    <td>
+                        <button><a class="today showIframeDialog" data-href="{:url('Admin/Order/enterprise_detail_order',array('id'=>$value['id']))}" data-title="企业订单详情"  data-width="50"  >详情</a></button>
+                        <!--{if condition="$value['order_status'] neq 0"}-->
+                        <!--<button><a href="javascript:confirm('确定冻结？',{confirm:function(){location='{:url('Admin/Order/recycle',array('id'=>$value['id']))}'}})">冻结</a></button>-->
+                        <!--{else /}-->
+                        <!--<button><a href="" style="color: #FF0000" disabled>冻结</a></button>-->
+                        <!--{/if}-->
+                        <!--{if condition="$value['pay'] eq 3 && $value['order_status'] eq 2"}-->
+                        <!--<button><a  href="javascript:;" orderNum="{$value['num']}" orderPrice="{$value['price']}"  onclick="edit(this)">订单审核</a></button>-->
+                        <!--{else /}-->
+                        <!--{/if}-->
+                    </td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+            <tr>
+                <td align="center">{$all->render()}</td>
+            </tr>
+        </div>
+    </div>
+    <!--===================================================-->
+</div>
+<!-- 修改菜单模态框开始 -->
+<div class="modal fade" id="thinkright-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    添加线下支付信息
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" action="{:url('Admin/Order/orderEdit')}" method="post" enctype="multipart/form-data">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="demo-hor-inputemail">订单号</label>
+                            <div class="col-sm-9">
+                                <input type="hidden" name="num">
+                                <input type="hidden" name="price">
+                                <input type="text"   class="form-control" name="num" disabled >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="demo-hor-inputemail">交易流水号</label>
+                            <div class="col-sm-9">
+                                <input type="text"  class="form-control" name="tradenum" required="required">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer text-right">
+                        <button class="btn btn-success" type="submit">确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 修改菜单模态框结束 -->
+
+{/block}

@@ -1,0 +1,158 @@
+{extend name="layout"}
+{block name="title"}00000000000{/block}
+{block name="css"}
+<style>
+    .click-i {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: block;
+        height: 94%;
+        cursor: pointer;
+
+    }
+
+    .selected {
+        background: url("/static/two/images/sys_item_selected.gif") no-repeat right bottom;
+        border: 2px solid #e4393c;
+    }
+
+</style>
+{/block}
+{block name="script"}
+<script>
+    $(function () {
+        $('.tianjiakecheng_video').each(function () {
+            var p = $(this).find("li");
+            p.click(function () {
+                if ($(this).find(".click-i").hasClass("selected")) {
+                    $(this).find('.click-i').removeClass("selected");
+                    $("#cid").val("");
+                } else {
+                    $(this).find(".click-i").addClass("selected").end().siblings().find('.click-i').removeClass("selected");
+                }
+            })
+        })
+        $(".userList").click(function () {
+            var userIds = $("#userIds").val();
+            IframeDialog.showDialog(
+                {
+                    iframeSrc: $(this).data("href") + "?userIds=" + userIds,
+                    title: $(this).data("title")
+                }
+            );
+        });
+    })
+    function testone(id) {
+        $("#cid").val(id);
+    }
+    function Submission() {
+        var name = $('#addname').val();
+        var create_time = $('#addcreate_time').val();
+        var update_time = $('#addupdate_time').val();
+
+        $flag = true;
+        if (name == '') {
+            $flag = false;
+            alert('培训名称不能为空~');
+        } else if (create_time == '') {
+            alert('开始时间格式不能为空~');
+        } else if (update_time == '') {
+            alert('结束时间格式不能为空~');
+        }
+        if ($flag == false) {
+            return false;
+        }
+        var d = {};
+        var t = $('#formAjax').serializeArray();
+        $.each(t, function () {
+            if (this.name == "uid") {
+                this.value = this.value.substr(2, this.value.length - 3);
+            }
+            d[this.name] = this.value;
+        });
+        $.ajax({
+            url: 'enterprise/train/save',
+            dataType: 'json',
+            data: d,
+            success: function (res) {
+                alert(res, {
+                    callback: function () {
+                        location.href = "train"
+                    }
+                });
+            },
+            error: function (res) {
+                alert(res.responseText);
+            }
+        })
+    }
+    function Quxiao() {
+        window.history.back(-1);
+    }
+</script>
+
+{/block}
+{block name="content"}
+<div class="r_main">
+    <div class="ad_co_Box_warp" >
+        <form id="formAjax" method="post">
+            <input type="hidden" name="uid" value="0," id="userIds">
+            <input type="hidden" name="cid" id="cid" value=""/>
+            <div class="ad_co_Box">
+                <div class="content">
+                    <div class="tjke">
+                        <div>
+                            <div class="tianjiakecheng">培训名称</div>
+                            <input name="name" id="addname" style="width:250px;float: left;margin-right: 10px;"
+                                   type="text"
+                                   class="input" placeholder="添加培训"/>
+                        </div>
+                        <div>
+                            <div class="tianjiakecheng">时间</div>
+                            <input name="create_time" id="addcreate_time" style="width:150px;float: left;" type="date"
+                                   class="input datetimepicker" placeholder="开始时间"/>
+                            <em style="float: left; padding: 0px 10px; line-height: 34px;">--</em>
+                            <input name="update_time" id="addupdate_time"
+                                   style="width:150px;float: left;margin-right: 10px;" type="date"
+                                   class="input datetimepicker" placeholder="截止时间"/>
+                        </div>
+                        {if condition="$adminRole==1"}
+                        <div>
+                            <div class="tianjiakecheng">添加成员</div>
+                            <div class="icon-folder-open-o tianjiachengyuan input-file userList"
+                                 data-href="/enterprise/train/userList" data-title="添加培训成员">
+                            </div>
+                            <div id="userCount" style=" line-height: 35px;padding-left: 30px;">已添加成员<span
+                                    class="wq-red">0</span>人
+                            </div>
+                        </div>
+                        {/if}
+                        <div class="tianjiakecheng">添加课程</div>
+                        <div id="tianjiakecheng_mian">
+                            <div class="tianjiakecheng_video">
+                                <ul>
+                                    {volist name="flvcategoryData" id="vo"}
+                                    <li>
+                                        <div onclick="testone('{$vo.id}')">
+                                            <img src="{$vo.bag_img}" id="{$vo.id}"/>
+                                            <i class="click-i"></i>
+                                        </div>
+                                        <div>{$vo.title}<p>{$vo.name}</p></div>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="tianjiakecheng_btn">
+                            <a class="button" style="cursor:pointer" onclick="Quxiao()">取消</a>
+                            <button type="button" onclick="Submission()" class="button bg-main">添加</button>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+</div>
+{/block}
